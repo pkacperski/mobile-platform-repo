@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TestService {
-    private final TestRepository testRepository; // final!
+    private final TestRepository testRepository; // has to be final for dependency injection!
 
     public List<Test> findAll() {
         return testRepository.findAll();
