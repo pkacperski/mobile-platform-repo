@@ -1,0 +1,31 @@
+package com.mobileplatform.backend.controller;
+
+import com.mobileplatform.backend.model.domain.Location;
+import com.mobileplatform.backend.service.LocationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/locations")
+@RequiredArgsConstructor
+public class LocationController {
+    private final LocationService locationService;
+
+    @GetMapping
+    public List<Location> getAll() {
+        return locationService.findAll();
+    }
+
+    @GetMapping("/newest")
+    public Optional<Location> getNewest() {
+        return locationService.findNewest();
+    }
+
+    @PostMapping
+    public void save(@RequestBody Location location) {
+        locationService.save(location);
+    }
+}
