@@ -1,9 +1,7 @@
 package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.Location;
-import com.mobileplatform.backend.model.domain.Test;
 import com.mobileplatform.backend.model.repository.LocationRepository;
-import com.mobileplatform.backend.model.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

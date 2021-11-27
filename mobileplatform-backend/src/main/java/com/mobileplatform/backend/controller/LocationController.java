@@ -15,12 +15,12 @@ public class LocationController {
     private final LocationService locationService;
 
     @GetMapping
-    public List<Location> getAll() {
+    public List<Location> findAll() {
         return locationService.findAll();
     }
 
     @GetMapping("/newest")
-    public Optional<Location> getNewest() {
+    public Optional<Location> findNewest() {
         return locationService.findNewest();
     }
 
