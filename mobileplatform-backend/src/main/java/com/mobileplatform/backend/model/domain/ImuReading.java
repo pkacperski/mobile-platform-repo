@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "imu_data")
-public class ImuData {
+@Table(name = "imu_reading")
+public class ImuReading {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,7 +1,7 @@
 package com.mobileplatform.backend.service;
 
-import com.mobileplatform.backend.model.domain.ImuData;
-import com.mobileplatform.backend.model.repository.ImuDataRepository;
+import com.mobileplatform.backend.model.domain.ImuReading;
+import com.mobileplatform.backend.model.repository.ImuReadingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,18 +10,18 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ImuDataService {
-    private final ImuDataRepository imuDataRepository;
+public class ImuReadingService {
+    private final ImuReadingRepository imuDataRepository;
 
-    public List<ImuData> findAll() {
+    public List<ImuReading> findAll() {
         return imuDataRepository.findAll();
     }
 
-    public Optional<ImuData> findNewest() {
+    public Optional<ImuReading> findNewest() {
         return imuDataRepository.findTopByOrderByIdDesc();
     }
 
-    public ImuData save(ImuData imuData) {
+    public ImuReading save(ImuReading imuData) {
         return imuDataRepository.save(imuData);
     }
 }

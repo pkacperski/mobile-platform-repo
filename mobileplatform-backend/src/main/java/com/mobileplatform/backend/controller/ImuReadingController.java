@@ -1,7 +1,7 @@
 package com.mobileplatform.backend.controller;
 
-import com.mobileplatform.backend.model.domain.ImuData;
-import com.mobileplatform.backend.service.ImuDataService;
+import com.mobileplatform.backend.model.domain.ImuReading;
+import com.mobileplatform.backend.service.ImuReadingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,21 +11,21 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/imu-data")
 @RequiredArgsConstructor
-public class ImuDataController {
-    private final ImuDataService imuDataService;
+public class ImuReadingController {
+    private final ImuReadingService imuDataService;
 
     @GetMapping
-    public List<ImuData> findAll() {
+    public List<ImuReading> findAll() {
         return imuDataService.findAll();
     }
 
     @GetMapping("/newest")
-    public Optional<ImuData> findNewest() {
+    public Optional<ImuReading> findNewest() {
         return imuDataService.findNewest();
     }
 
     @PostMapping
-    public void save(@RequestBody ImuData imuData) {
+    public void save(@RequestBody ImuReading imuData) {
         imuDataService.save(imuData);
     }
 }
