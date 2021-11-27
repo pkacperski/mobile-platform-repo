@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/imu-data")
+@RequestMapping("/imu-reading")
 @RequiredArgsConstructor
 public class ImuReadingController {
     private final ImuReadingService imuDataService;

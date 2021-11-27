@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/encoder")
+@RequestMapping("/encoder-reading")
 @RequiredArgsConstructor
 public class EncoderReadingController {
     private final EncoderReadingService encoderReadingService;
