@@ -16,15 +16,15 @@ public class Location {
     @Column(name = "reading_date")
     private LocalDateTime readingDate;
 
-    @Column(name = "slam_x")
-    private Double slamX;
-    @Column(name = "slam_y")
-    private Double slamY;
+    @Column(name = "slam_x_coordinate")
+    private Double slamXCoordinate;
+    @Column(name = "slam_y_coordinate")
+    private Double slamYCoordinate;
     @Column(name = "slam_rotation")
     private Double slamRotation;
 
-    @Column(name = "real_x")
-    private Double realX;
-    @Column(name = "real_y")
-    private Double realY;
+    @Column(name = "real_x_coordinate")
+    private Double realXCoordinate;
+    @Column(name = "real_y_coordinate")
+    private Double realYCoordinate;
 }
