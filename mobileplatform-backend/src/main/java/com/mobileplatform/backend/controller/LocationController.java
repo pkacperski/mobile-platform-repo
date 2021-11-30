@@ -5,6 +5,7 @@ import com.mobileplatform.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class LocationController {
     }
 
     @PostMapping
-    public void save(@RequestBody Location location) {
+    public void save(@Valid @RequestBody Location location) {
         locationService.save(location);
     }
 }

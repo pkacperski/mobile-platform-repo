@@ -5,6 +5,7 @@ import com.mobileplatform.backend.service.PointCloudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class PointCloudController {
     }
 
     @PostMapping
-    public void save(@RequestBody PointCloud pointCloud) {
+    public void save(@Valid @RequestBody PointCloud pointCloud) {
         pointCloudService.save(pointCloud);
     }
 }

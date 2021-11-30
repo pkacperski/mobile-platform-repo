@@ -5,6 +5,7 @@ import com.mobileplatform.backend.service.EncoderReadingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public class EncoderReadingController {
     }
 
     @PostMapping
-    public void save(@RequestBody EncoderReading encoderReading) {
+    public void save(@Valid @RequestBody EncoderReading encoderReading) {
         encoderReadingService.save(encoderReading);
     }
 }

@@ -24,5 +24,5 @@ public class LidarReading {
     private LocalDateTime readingDate;
 
     @Column(name = "lidar_distances_reading")
-    private String lidarDistancesReading; // TODO - String i rozbic na liste za pomoca string.split()
+    private String lidarDistancesReading; // traktowac jako String rozdzielony np. srednikami (w BD varchar(10000)), zeby uzywac to rozbic na liste za pomoca string.split()
 }
