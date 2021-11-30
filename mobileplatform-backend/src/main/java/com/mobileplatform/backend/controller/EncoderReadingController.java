@@ -25,7 +25,7 @@ public class EncoderReadingController {
     }
 
     @PostMapping
-    public void save(EncoderReading encoderReading) {
+    public void save(@RequestBody EncoderReading encoderReading) {
         encoderReadingService.save(encoderReading);
     }
 }
