@@ -1,16 +1,12 @@
 package com.mobileplatform.backend.model.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "diagnostic_data")
 public class DiagnosticData {
@@ -21,7 +17,7 @@ public class DiagnosticData {
     @JoinColumn(name="vehicle_id")
     @ManyToOne
     @NotNull(message = "You have to specify the id of a known vehicle which sent data")
-    // TODO - fix! @NotNull nie dziala - mozna dodawac w swaggerze DiagnosticData bez podawania Vehicle i przechodzi - Vehicle jest wtedy nullem
+    // TODO - fix! @NotNull nie dziala - mozna dodawac w swaggerze nowy obiekt bez podawania Vehicle i przechodzi - Vehicle jest wtedy nullem
     private Vehicle vehicle;
 
     @Column(name = "reading_date")
