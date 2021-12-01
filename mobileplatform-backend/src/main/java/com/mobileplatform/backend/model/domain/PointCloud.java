@@ -33,7 +33,7 @@ public class PointCloud {
 
     /*
     * Podobnie jak z LidarReading - traktowac to jako ogromny string rozdzielony przecinkami i srednikami,
-    * (PostgreSQL - text(https://dba.stackexchange.com/questions/189876/size-limit-of-character-varying-postgresql),
+    * (PostgreSQL - varchar(1048576) LUB text(https://dba.stackexchange.com/questions/189876/size-limit-of-character-varying-postgresql),
     * H2 - varchar(1048576) LUB ew. CHARACTER LARGE OBJECT - http://www.h2database.com/html/datatypes.html)
     * a zeby z tego korzystac po odebraniu, to zrobic split() ze Stringa na List<PointCloudSinglePoint>
     * */

@@ -31,12 +31,12 @@ public class DiagnosticData {
     @Column(name = "reading_date")
     private LocalDateTime readingDate;
 
-    @Column(name = "whels_turn_measure")
-    private Integer wheelsTurnMeasure;
+    @Column(name = "wheels_turn_measure")
+    private Float wheelsTurnMeasure;
     @Column(name = "camera_turn_angle")
-    private Integer cameraTurnAngle;
+    private Float cameraTurnAngle;
     @Column(name = "battery_charge_status")
-    private Integer batteryChargeStatus;
+    private Float batteryChargeStatus;
 
     @Override
     public boolean equals(Object o) {
