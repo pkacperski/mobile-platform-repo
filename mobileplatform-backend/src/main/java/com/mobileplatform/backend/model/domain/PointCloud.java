@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity
@@ -24,8 +23,12 @@ public class PointCloud {
     @Column(name = "reading_date")
     private LocalDateTime readingDate;
 
+    /*
+    * Podobnie jak z LidarReading - traktowac to jako ogromny string rozdzielony przecinkami i srednikami,
+    * (PostgreSQL - text(https://dba.stackexchange.com/questions/189876/size-limit-of-character-varying-postgresql),
+    * H2 - varchar(1048576) LUB ew. CHARACTER LARGE OBJECT - http://www.h2database.com/html/datatypes.html)
+    * a zeby z tego korzystac po odebraniu, to zrobic split() ze Stringa na List<PointCloudSinglePoint>
+    * */
     @Column(name = "point_cloud_reading")
-    @ElementCollection
-    private List<Float> pointCloudReading; // TODO - consider transforming this into a List<PCReading> where PCReading is an object having 3 coordinates as doubles and 3 RGB values as ints
-    // TODO - laczenie @OneToMany i wlasny typ PointCloud; Double lub Float
+    private String pointCloudReading;
 }

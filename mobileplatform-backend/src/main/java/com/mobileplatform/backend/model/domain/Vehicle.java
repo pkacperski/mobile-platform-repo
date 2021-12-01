@@ -3,6 +3,7 @@ package com.mobileplatform.backend.model.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -14,4 +15,7 @@ public class Vehicle {
 
     @Column(name = "vehicle_name")
     private String vehicleName;
+
+    @Column(name = "connection_date")
+    private LocalDateTime connectionDate;
 }
