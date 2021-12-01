@@ -1,14 +1,22 @@
 package com.mobileplatform.backend.model.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
 @Entity
 @Table(name = "point_cloud")
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class PointCloud {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +39,17 @@ public class PointCloud {
     * */
     @Column(name = "point_cloud_reading")
     private String pointCloudReading;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        PointCloud that = (PointCloud) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

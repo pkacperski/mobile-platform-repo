@@ -1,14 +1,22 @@
 package com.mobileplatform.backend.model.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
 @Entity
 @Table(name = "lidar_reading")
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 public class LidarReading {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +33,17 @@ public class LidarReading {
 
     @Column(name = "lidar_distances_reading")
     private String lidarDistancesReading; // traktowac jako String rozdzielony np. srednikami (w BD varchar(10000)), zeby uzywac to rozbic na liste za pomoca string.split()
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        LidarReading that = (LidarReading) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
