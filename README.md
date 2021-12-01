@@ -13,4 +13,6 @@ Do testowania działania aplikacji zalecana jest instalacja Swagger Editor - htt
 2. Uruchomienie aplikacji (w głównym folderze projektu)   
 `mvn spring-boot:run`
 3. Testowanie usług aplikacji w przeglądarce pod adresem   
-`http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/`
+`http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/`  
+
+**Przed uruchomieniem aplikacji warto upewnić się, że żaden proces nie zajmuje portu 8080.**
