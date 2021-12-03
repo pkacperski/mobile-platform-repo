@@ -3,8 +3,10 @@ package com.mobileplatform.backend.service;
 import com.mobileplatform.backend.model.domain.Location;
 import com.mobileplatform.backend.model.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,8 @@ public class LocationService {
         return locationRepository.findTopByOrderByIdDesc();
     }
 
-    public Location save(Location location) {
-        return locationRepository.save(location);
+    public ResponseEntity<String> save(@Valid Location location) {
+        locationRepository.save(location);
+        return ResponseEntity.ok("Successfully saved to DB");
     }
 }

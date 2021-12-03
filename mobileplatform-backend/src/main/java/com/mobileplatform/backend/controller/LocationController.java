@@ -3,9 +3,9 @@ package com.mobileplatform.backend.controller;
 import com.mobileplatform.backend.model.domain.Location;
 import com.mobileplatform.backend.service.LocationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class LocationController {
     }
 
     @PostMapping
-    public void save(@Valid @RequestBody Location location) {
-        locationService.save(location);
+    public ResponseEntity<String> save(@RequestBody Location location) {
+        return locationService.save(location);
     }
 }

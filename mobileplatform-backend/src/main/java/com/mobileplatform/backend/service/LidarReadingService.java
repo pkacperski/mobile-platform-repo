@@ -3,8 +3,10 @@ package com.mobileplatform.backend.service;
 import com.mobileplatform.backend.model.domain.LidarReading;
 import com.mobileplatform.backend.model.repository.LidarReadingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,8 @@ public class LidarReadingService {
         return lidarReadingRepository.findTopByOrderByIdDesc();
     }
 
-    public LidarReading save(LidarReading lidarReading) {
-        return lidarReadingRepository.save(lidarReading);
+    public ResponseEntity<String> save(@Valid LidarReading lidarReading) {
+        lidarReadingRepository.save(lidarReading);
+        return ResponseEntity.ok("Successfully saved to DB");
     }
 }

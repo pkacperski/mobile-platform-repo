@@ -3,9 +3,9 @@ package com.mobileplatform.backend.controller;
 import com.mobileplatform.backend.model.domain.ImuReading;
 import com.mobileplatform.backend.service.ImuReadingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class ImuReadingController {
     }
 
     @PostMapping
-    public void save(@Valid @RequestBody ImuReading imuData) {
-        imuDataService.save(imuData);
+    public ResponseEntity<String> save(@RequestBody ImuReading imuData) {
+        return imuDataService.save(imuData);
     }
 }

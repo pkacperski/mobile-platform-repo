@@ -3,9 +3,9 @@ package com.mobileplatform.backend.controller;
 import com.mobileplatform.backend.model.domain.EncoderReading;
 import com.mobileplatform.backend.service.EncoderReadingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class EncoderReadingController {
     }
 
     @PostMapping
-    public void save(@Valid @RequestBody EncoderReading encoderReading) {
-        encoderReadingService.save(encoderReading);
+    public ResponseEntity<String> save(@RequestBody EncoderReading encoderReading) {
+        return encoderReadingService.save(encoderReading);
     }
 }

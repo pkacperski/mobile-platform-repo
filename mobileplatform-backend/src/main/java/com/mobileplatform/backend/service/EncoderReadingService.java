@@ -3,8 +3,10 @@ package com.mobileplatform.backend.service;
 import com.mobileplatform.backend.model.domain.EncoderReading;
 import com.mobileplatform.backend.model.repository.EncoderReadingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,8 @@ public class EncoderReadingService {
         return encoderReadingRepository.findTopByOrderByIdDesc();
     }
 
-    public EncoderReading save(EncoderReading encoderReading) {
-        return encoderReadingRepository.save(encoderReading);
+    public ResponseEntity<String> save(@Valid EncoderReading encoderReading) {
+        encoderReadingRepository.save(encoderReading);
+        return ResponseEntity.ok("Successfully saved to DB");
     }
 }

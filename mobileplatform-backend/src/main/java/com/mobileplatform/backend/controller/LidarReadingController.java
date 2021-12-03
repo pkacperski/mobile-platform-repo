@@ -3,9 +3,9 @@ package com.mobileplatform.backend.controller;
 import com.mobileplatform.backend.model.domain.LidarReading;
 import com.mobileplatform.backend.service.LidarReadingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public class LidarReadingController {
     }
 
     @PostMapping
-    public void save(@Valid @RequestBody LidarReading lidarReading) {
-        lidarReadingService.save(lidarReading);
+    public ResponseEntity<String> save(@RequestBody LidarReading lidarReading) {
+        return lidarReadingService.save(lidarReading);
     }
 }

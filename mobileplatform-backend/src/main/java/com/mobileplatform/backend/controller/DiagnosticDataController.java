@@ -3,9 +3,9 @@ package com.mobileplatform.backend.controller;
 import com.mobileplatform.backend.model.domain.DiagnosticData;
 import com.mobileplatform.backend.service.DiagnosticDataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +25,13 @@ public class DiagnosticDataController {
         return diagnosticDataService.findNewest();
     }
 
+    @GetMapping("/newest/{vehicleId}")
+    public Optional<DiagnosticData> findNewest(@PathVariable Long vehicleId) {
+        return diagnosticDataService.findNewest(vehicleId);
+    }
+
     @PostMapping
-    public void save(@Valid @RequestBody DiagnosticData diagnosticData) {
-        diagnosticDataService.save(diagnosticData);
+    public ResponseEntity<String> save(@RequestBody DiagnosticData diagnosticData) {
+        return diagnosticDataService.save(diagnosticData);
     }
 }

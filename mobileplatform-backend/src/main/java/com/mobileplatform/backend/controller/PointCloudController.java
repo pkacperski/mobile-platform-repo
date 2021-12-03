@@ -3,6 +3,7 @@ package com.mobileplatform.backend.controller;
 import com.mobileplatform.backend.model.domain.PointCloud;
 import com.mobileplatform.backend.service.PointCloudService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +27,7 @@ public class PointCloudController {
     }
 
     @PostMapping
-    public void save(@Valid @RequestBody PointCloud pointCloud) {
-        pointCloudService.save(pointCloud);
+    public ResponseEntity<String> save(@RequestBody PointCloud pointCloud) {
+        return pointCloudService.save(pointCloud);
     }
 }

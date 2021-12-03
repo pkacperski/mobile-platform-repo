@@ -3,8 +3,10 @@ package com.mobileplatform.backend.service;
 import com.mobileplatform.backend.model.domain.ImuReading;
 import com.mobileplatform.backend.model.repository.ImuReadingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +23,8 @@ public class ImuReadingService {
         return imuDataRepository.findTopByOrderByIdDesc();
     }
 
-    public ImuReading save(ImuReading imuData) {
-        return imuDataRepository.save(imuData);
+    public ResponseEntity<String> save(@Valid ImuReading imuData) {
+        imuDataRepository.save(imuData);
+        return ResponseEntity.ok("Successfully saved to DB");
     }
 }
