@@ -1,5 +1,6 @@
 package com.mobileplatform.backend.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,17 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class RestResponseEntityExceptionHandler
-        extends ResponseEntityExceptionHandler {
+public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
-    protected ResponseEntity<Object> handleConflict(
-            ConstraintViolationException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleConflict(ConstraintViolationException ex, WebRequest request) {
         final List<String> errors = new ArrayList<>();
         for (final ConstraintViolation<?> violation : ex.getConstraintViolations()) {
             errors.add(violation.getMessage());
         }
-        return handleExceptionInternal(ex, errors,
-                new HttpHeaders(), HttpStatus.CONFLICT, request);
+        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.CONFLICT, request);
+    }
+
+    @ExceptionHandler(value = {DataIntegrityViolationException.class})
+    protected ResponseEntity<Object> handleConflict(DataIntegrityViolationException ex, WebRequest request) {
+        final String error = ex.getMessage();
+        return handleExceptionInternal(ex, error, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }
