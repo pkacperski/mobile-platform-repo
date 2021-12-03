@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +23,11 @@ public class PointCloudController {
     @GetMapping("/newest")
     public Optional<PointCloud> findNewest() {
         return pointCloudService.findNewest();
+    }
+
+    @GetMapping("/newest/{vehicleId}")
+    public Optional<PointCloud> findNewestByVehicleId(@PathVariable Long vehicleId) {
+        return pointCloudService.findNewestByVehicleId(vehicleId);
     }
 
     @PostMapping

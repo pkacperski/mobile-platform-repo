@@ -23,6 +23,10 @@ public class LocationService {
         return locationRepository.findTopByOrderByIdDesc();
     }
 
+    public Optional<Location> findNewestByVehicleId(Long vehicleId) {
+        return locationRepository.findTopByOrderByIdDesc(vehicleId);
+    }
+
     public ResponseEntity<String> save(@Valid Location location) {
         locationRepository.save(location);
         return ResponseEntity.ok("Successfully saved to DB");

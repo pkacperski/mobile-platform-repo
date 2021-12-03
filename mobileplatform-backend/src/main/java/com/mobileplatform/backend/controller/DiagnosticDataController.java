@@ -26,8 +26,8 @@ public class DiagnosticDataController {
     }
 
     @GetMapping("/newest/{vehicleId}")
-    public Optional<DiagnosticData> findNewest(@PathVariable Long vehicleId) {
-        return diagnosticDataService.findNewest(vehicleId);
+    public Optional<DiagnosticData> findNewestByVehicleId(@PathVariable Long vehicleId) {
+        return diagnosticDataService.findNewestByVehicleId(vehicleId);
     }
 
     @PostMapping

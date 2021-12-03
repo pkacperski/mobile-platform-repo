@@ -25,6 +25,11 @@ public class LidarReadingController {
         return lidarReadingService.findNewest();
     }
 
+    @GetMapping("/newest/{vehicleId}")
+    public Optional<LidarReading> findNewestByVehicleId(@PathVariable Long vehicleId) {
+        return lidarReadingService.findNewestByVehicleId(vehicleId);
+    }
+
     @PostMapping
     public ResponseEntity<String> save(@RequestBody LidarReading lidarReading) {
         return lidarReadingService.save(lidarReading);

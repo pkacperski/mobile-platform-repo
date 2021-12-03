@@ -23,6 +23,10 @@ public class PointCloudService {
         return pointCloudRepository.findTopByOrderByIdDesc();
     }
 
+    public Optional<PointCloud> findNewestByVehicleId(Long vehicleId) {
+        return pointCloudRepository.findTopByOrderByIdDesc(vehicleId);
+    }
+
     public ResponseEntity<String> save(@Valid PointCloud pointCloud) {
         pointCloudRepository.save(pointCloud);
         return ResponseEntity.ok("Successfully saved to DB");

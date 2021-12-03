@@ -25,6 +25,11 @@ public class LocationController {
         return locationService.findNewest();
     }
 
+    @GetMapping("/newest/{vehicleId}")
+    public Optional<Location> findNewestByVehicleId(@PathVariable Long vehicleId) {
+        return locationService.findNewestByVehicleId(vehicleId);
+    }
+
     @PostMapping
     public ResponseEntity<String> save(@RequestBody Location location) {
         return locationService.save(location);

@@ -25,6 +25,11 @@ public class ImuReadingController {
         return imuDataService.findNewest();
     }
 
+    @GetMapping("/newest/{vehicleId}")
+    public Optional<ImuReading> findNewest(@PathVariable Long vehicleId) {
+        return imuDataService.findNewestByVehicleId(vehicleId);
+    }
+
     @PostMapping
     public ResponseEntity<String> save(@RequestBody ImuReading imuData) {
         return imuDataService.save(imuData);

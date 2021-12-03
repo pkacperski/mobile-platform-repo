@@ -23,7 +23,7 @@ public class DiagnosticDataService {
         return diagnosticDataRepository.findTopByOrderByIdDesc();
     }
 
-    public Optional<DiagnosticData> findNewest(Long vehicleId) {
+    public Optional<DiagnosticData> findNewestByVehicleId(Long vehicleId) {
         return diagnosticDataRepository.findTopByOrderByIdDesc(vehicleId);
     }
 

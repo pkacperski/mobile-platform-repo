@@ -23,6 +23,10 @@ public class ImuReadingService {
         return imuDataRepository.findTopByOrderByIdDesc();
     }
 
+    public Optional<ImuReading> findNewestByVehicleId(Long vehicleId) {
+        return imuDataRepository.findTopByOrderByIdDesc(vehicleId);
+    }
+
     public ResponseEntity<String> save(@Valid ImuReading imuData) {
         imuDataRepository.save(imuData);
         return ResponseEntity.ok("Successfully saved to DB");

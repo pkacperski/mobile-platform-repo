@@ -23,6 +23,10 @@ public class LidarReadingService {
         return lidarReadingRepository.findTopByOrderByIdDesc();
     }
 
+    public Optional<LidarReading> findNewestByVehicleId(Long vehicleId) {
+        return lidarReadingRepository.findTopByOrderByIdDesc(vehicleId);
+    }
+
     public ResponseEntity<String> save(@Valid LidarReading lidarReading) {
         lidarReadingRepository.save(lidarReading);
         return ResponseEntity.ok("Successfully saved to DB");

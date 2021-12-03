@@ -23,6 +23,10 @@ public class EncoderReadingService {
         return encoderReadingRepository.findTopByOrderByIdDesc();
     }
 
+    public Optional<EncoderReading> findNewestByVehicleId(Long vehicleId) {
+        return encoderReadingRepository.findTopByOrderByIdDesc(vehicleId);
+    }
+
     public ResponseEntity<String> save(@Valid EncoderReading encoderReading) {
         encoderReadingRepository.save(encoderReading);
         return ResponseEntity.ok("Successfully saved to DB");

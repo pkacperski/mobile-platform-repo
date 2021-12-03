@@ -25,6 +25,11 @@ public class EncoderReadingController {
         return encoderReadingService.findNewest();
     }
 
+    @GetMapping("/newest/{vehicleId}")
+    public Optional<EncoderReading> findNewestByVehicleId(@PathVariable Long vehicleId) {
+        return encoderReadingService.findNewestByVehicleId(vehicleId);
+    }
+
     @PostMapping
     public ResponseEntity<String> save(@RequestBody EncoderReading encoderReading) {
         return encoderReadingService.save(encoderReading);
