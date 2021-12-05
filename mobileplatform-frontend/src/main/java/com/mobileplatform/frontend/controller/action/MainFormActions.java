@@ -3,11 +3,10 @@ package com.mobileplatform.frontend.controller.action;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
-import com.mobileplatform.frontend.dto.TestDto;
+import com.mobileplatform.frontend.dto.PointCloudDto;
 import com.mobileplatform.frontend.form.MainForm;
 import lombok.extern.java.Log;
 
-import java.util.Map;
 import java.util.stream.Stream;
 
 @Log
@@ -15,7 +14,7 @@ public class MainFormActions implements Actions {
     private static MainFormActions mainFormActions;
 
     private MainForm mainForm;
-    private RestHandler<TestDto> restHandlerTestDtos;
+    private RestHandler<PointCloudDto> pointCloudDtoRestHandler; // TODO reszta
 
     private MainFormActions() {
     }
@@ -31,7 +30,7 @@ public class MainFormActions implements Actions {
         mainForm = new MainForm();
         mainForm.getFrame().setVisible(true);
 
-        restHandlerTestDtos = new RestHandler<>(TestDto.class);
+        pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class); // TODO reszta
 
         mainForm.getBtnRestCall().addActionListener(e -> onClickBtnRestCall());
     }
@@ -43,9 +42,9 @@ public class MainFormActions implements Actions {
 
     private void onClickBtnRestCall() {
         try {
-            TestDto tests = restHandlerTestDtos.performPost("/test",  mainForm.getTextFieldBody().getText(),"application/json");
+            PointCloudDto result = pointCloudDtoRestHandler.performGet("/point-cloud/newest");
             StringBuilder stringBuilder = new StringBuilder();
-            Stream.of(tests).forEach(e -> stringBuilder.append(e));
+            Stream.of(result).forEach(e -> stringBuilder.append(e));
             mainForm.getLblCallContent().setText(stringBuilder.toString());
         } catch (UnirestException e) {
             log.severe(e.getMessage());
