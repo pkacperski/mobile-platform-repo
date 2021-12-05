@@ -2,14 +2,12 @@ package com.mobileplatform.frontend.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
-@ToString
 public class PointCloudDto implements Serializable  {
 
     private Long id;
