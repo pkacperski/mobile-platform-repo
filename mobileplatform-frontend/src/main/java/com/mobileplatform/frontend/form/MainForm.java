@@ -9,9 +9,15 @@ public class MainForm {
     private JFrame frame;
     private JPanel panel;
     private JButton btnRestCall;
-    private JTextField textFieldId;
-    private JTextField textFieldBody;
     private JLabel lblCallContent;
+    private JLabel lblVehicleName;
+    private JLabel lblDiagnosticData;
+    private JLabel lblEncoderReading;
+    private JLabel lblImuReading;
+    private JLabel lblLidarReading;
+    private JLabel lblPointCloudReading;
+    private JLabel lblLocation;
+    private JLabel lblVideoStream;
 
     public MainForm() {
         frame = new JFrame("MainForm");

@@ -22,7 +22,6 @@ public class RestHandler<T> {
     }
 
     public T performGet(String path) throws UnirestException {
-        System.out.println(Unirest.get(apiPath.concat(path)).asJson().getBody().toString());
         return gson.fromJson(Unirest.get(apiPath.concat(path)).asJson().getBody().toString(), typeParameterClass);
     }
 
