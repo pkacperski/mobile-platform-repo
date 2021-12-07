@@ -20,6 +20,16 @@ public class MainFormActions implements Actions {
     private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
 
+    final String VEHICLE_PATH = "/vehicle";
+    final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
+    final String ENCODER_READING_NEWEST_PATH = "/encoder-reading/newest";
+    final String IMU_READING_NEWEST_PATH = "/imu-reading/newest";
+    final String LIDAR_READING_NEWEST_PATH = "/lidar-reading/newest";
+    final String LOCATION_NEWEST_PATH = "/location/newest";
+    final String POINT_CLOUD_NEWEST_PATH = "/point-cloud/newest";
+    final String ID_1 = "1";
+    final String NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE = "JSONArray text must start with '['";
+
     private MainFormActions() {}
 
     public static synchronized MainFormActions getInstance() {
@@ -50,77 +60,91 @@ public class MainFormActions implements Actions {
     }
 
     private void onClickBtnRestCall() {
-        final String VEHICLE_PATH = "/vehicle";
-        final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
-        final String ENCODER_READING_NEWEST_PATH = "/encoder-reading/newest";
-        final String IMU_READING_NEWEST_PATH = "/imu-reading/newest";
-        final String LIDAR_READING_NEWEST_PATH = "/lidar-reading/newest";
-        final String LOCATION_NEWEST_PATH = "/location/newest";
-        final String POINT_CLOUD_NEWEST_PATH = "/point-cloud/newest";
-        final String ID_1 = "1";
+        refreshDataInMainPanel();
+    }
 
-        VehicleDto vehicleDto;
+    // TODO - reformat (duplikacja kodu!)
+    public void refreshDataInMainPanel() {
+        VehicleDto vehicleDto = null;
+        DiagnosticDataDto diagnosticDataDto = null;
+        EncoderReadingDto encoderReadingDto = null;
+        ImuReadingDto imuReadingDto = null;
+        LidarReadingDto lidarReadingDto = null;
+        LocationDto locationDto = null;
+        PointCloudDto pointCloudDto = null;
+
         try {
             vehicleDto = vehicleDtoRestHandler.performGet(VEHICLE_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            vehicleDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
-        DiagnosticDataDto diagnosticDataDto;
         try {
             diagnosticDataDto = diagnosticDataDtoRestHandler.performGet(DIAGNOSTIC_DATA_NEWEST_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            diagnosticDataDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
-        EncoderReadingDto encoderReadingDto;
         try {
             encoderReadingDto = encoderReadingDtoRestHandler.performGet(ENCODER_READING_NEWEST_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            encoderReadingDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
-        ImuReadingDto imuReadingDto;
         try {
             imuReadingDto = imuReadingDtoRestHandler.performGet(IMU_READING_NEWEST_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            imuReadingDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON, throws a UnirestException and null is returned
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
-        LidarReadingDto lidarReadingDto;
         try {
             lidarReadingDto = lidarReadingDtoRestHandler.performGet(LIDAR_READING_NEWEST_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            lidarReadingDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON, throws a UnirestException and null is returned
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
-        LocationDto locationDto;
         try {
             locationDto = locationDtoRestHandler.performGet(LOCATION_NEWEST_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            locationDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON, throws a UnirestException and null is returned
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
-        PointCloudDto pointCloudDto;
         try {
             pointCloudDto = pointCloudDtoRestHandler.performGet(POINT_CLOUD_NEWEST_PATH, ID_1);
         } catch (UnirestException exception) {
-            log.warning(exception.getMessage());
-            pointCloudDto = null; // when no object is found under specified URL, Unirest cannot parse the response as JSON, throws a UnirestException and null is returned
+            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
+            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
+                log.severe(exception.getMessage());
+            }
         }
 
         mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getVehicleName() : "No vehicle found");
-        mainForm.getLblDiagnosticData().setText(diagnosticDataDto != null ? diagnosticDataDto.toString() : "No diagnostic data received");
-        mainForm.getLblEncoderReading().setText(encoderReadingDto != null ? encoderReadingDto.toString() : "No encoder readings received");
-        mainForm.getLblImuReading().setText(imuReadingDto != null ? imuReadingDto.toString() : "No IMU readings received");
-        mainForm.getLblLidarReading().setText(lidarReadingDto != null ? lidarReadingDto.toString() : "No lidar readings received");
-        mainForm.getLblLocation().setText(locationDto != null ? locationDto.toString() : "No location data received");
-        mainForm.getLblPointCloudReading().setText(pointCloudDto != null ? pointCloudDto.toString() : "No point cloud reading received");
+        mainForm.getLblDiagnosticData().setText(diagnosticDataDto != null ? "Battery status: " + diagnosticDataDto.getBatteryChargeStatus()
+                + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure() : "No diagnostic data received");
+        mainForm.getLblEncoderReading().setText(encoderReadingDto != null ? "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed()
+                + "..." : "No encoder readings received");
+        mainForm.getLblImuReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
+        mainForm.getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
+        mainForm.getLblLocation().setText(locationDto != null ? "Location: real X: " + locationDto.getRealXCoordinate()
+                + ", real Y: " + locationDto.getRealYCoordinate() : "No location data received");
+        mainForm.getLblPointCloudReading().setText(pointCloudDto != null ? "Point cloud reading: " + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
     }
 }
