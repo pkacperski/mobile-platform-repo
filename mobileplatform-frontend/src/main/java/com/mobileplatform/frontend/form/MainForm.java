@@ -9,7 +9,6 @@ public class MainForm {
     private JFrame frame;
     private JPanel panel;
     private JButton btnRestCall;
-    private JLabel lblCallContent;
     private JLabel lblVehicleName;
     private JLabel lblDiagnosticData;
     private JLabel lblEncoderReading;
@@ -18,6 +17,10 @@ public class MainForm {
     private JLabel lblPointCloudReading;
     private JLabel lblLocation;
     private JLabel lblVideoStream;
+    private JTabbedPane tabbedPane;
+    private JPanel panelVehicle1;
+    private JPanel panelAddNewVehicle;
+    private JPanel panelVehicle2;
 
     public MainForm() {
         frame = new JFrame("MainForm");
