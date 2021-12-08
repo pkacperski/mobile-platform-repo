@@ -1,6 +1,8 @@
 package com.mobileplatform.frontend.controller.api;
 
+import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
@@ -10,7 +12,8 @@ import com.mobileplatform.frontend.controller.common.SystemProperties;
 import java.util.Map;
 
 public class RestHandler<T> {
-    private final Gson gson = new Gson();
+    private final Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create(); // to solve a problem with deserializing java.time.LocalDateTime by gson
+
     private final Class<T> typeParameterClass;
     private final String apiPath = SystemProperties.properties.getProperty("app.api");
 
@@ -18,7 +21,7 @@ public class RestHandler<T> {
         this.typeParameterClass = typeParameterClass;
     }
 
-    public T performGet(String path) throws UnirestException { // wywolanie restowej metogy GET (w kodzie jak recznie w swaggerze)
+    public T performGet(String path) throws UnirestException {
         return gson.fromJson(Unirest.get(apiPath.concat(path)).asJson().getBody().toString(), typeParameterClass);
     }
 
