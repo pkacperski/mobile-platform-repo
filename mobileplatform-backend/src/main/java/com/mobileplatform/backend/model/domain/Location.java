@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table(name = "location")
@@ -22,11 +20,9 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name="vehicle_id")
-    @ManyToOne
+    @Column(name="vehicle_id")
     @NotNull(message = "You have to specify the id of a known vehicle which sent data")
-    // TODO - fix! @NotNull nie dziala - mozna dodawac w swaggerze nowy obiekt bez podawania Vehicle i przechodzi - Vehicle jest wtedy nullem
-    private Vehicle vehicle;
+    private Long vehicleId;
 
     @Column(name = "reading_date")
     private LocalDateTime readingDate;
@@ -42,17 +38,4 @@ public class Location {
     private Double realXCoordinate;
     @Column(name = "real_y_coordinate")
     private Double realYCoordinate;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Location location = (Location) o;
-        return id != null && Objects.equals(id, location.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
