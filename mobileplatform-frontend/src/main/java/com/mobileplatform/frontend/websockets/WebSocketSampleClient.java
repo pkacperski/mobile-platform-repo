@@ -1,11 +1,12 @@
 package com.mobileplatform.frontend.websockets;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
 
 /**
  * This example demonstrates how to create a websocket connection to a server. Only the most
@@ -28,7 +29,7 @@ public class WebSocketSampleClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        send("Hello, it is me, Client :)");
+        send("Hello, it is me, Client");
         System.out.println("opened connection");
         // if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
     }
@@ -53,10 +54,9 @@ public class WebSocketSampleClient extends WebSocketClient {
         // if the error is fatal then onClose will be called additionally
     }
 
-    public static void main(String[] args) throws URISyntaxException {
-        WebSocketSampleClient c = new WebSocketSampleClient(new URI(
-                "ws://localhost:8080/chat")); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-        c.connect();
+    public static void initialize() throws URISyntaxException {
+        WebSocketSampleClient webSocketSampleClient = new WebSocketSampleClient(new URI(
+                "ws://localhost:8081/chat")); // more about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
+        webSocketSampleClient.connect();
     }
-
 }

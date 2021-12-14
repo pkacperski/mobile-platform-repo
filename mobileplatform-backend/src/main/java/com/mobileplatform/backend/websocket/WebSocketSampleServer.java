@@ -1,15 +1,14 @@
 package com.mobileplatform.backend.websocket;
 
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-
-import org.apache.tomcat.jni.Time;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+
 /**
- * https://github.com/TooTallNate/Java-WebSocket/wiki#client-example
+ * https://github.com/TooTallNate/Java-WebSocket/wiki#server-example
  */
 public class WebSocketSampleServer extends WebSocketServer {
 
@@ -31,7 +30,7 @@ public class WebSocketSampleServer extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+        System.out.println("received message from "	+ conn.getRemoteSocketAddress() + ": " + message); // TODO: zamiast String message - docelowe obiekty domenowe
     }
 
     @Override
@@ -49,10 +48,9 @@ public class WebSocketSampleServer extends WebSocketServer {
         System.out.println("server started successfully");
     }
 
-
-    public static void main(String[] args) {
-        String host = "localhost";
-        int port = 8080;
+    public static void initialize() {
+        final String host = "localhost";
+        final int port = 8081;
 
         WebSocketServer server = new WebSocketSampleServer(new InetSocketAddress(host, port));
         server.run();
