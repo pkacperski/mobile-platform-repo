@@ -5,13 +5,14 @@ import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.form.MainForm;
+import lombok.Getter;
 import lombok.extern.java.Log;
 
 @Log
 public class MainFormActions implements Actions {
     private static MainFormActions mainFormActions;
 
-    private MainForm mainForm;
+    private @Getter MainForm mainForm;
     private RestHandler<DiagnosticDataDto> diagnosticDataDtoRestHandler;
     private RestHandler<EncoderReadingDto> encoderReadingDtoRestHandler;
     private RestHandler<ImuReadingDto> imuReadingDtoRestHandler;
