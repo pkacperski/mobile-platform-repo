@@ -13,28 +13,25 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * This example demonstrates how to create a websocket connection to a server. Only the most
- * important callbacks are overloaded.
  * https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/ExampleClient.java
  */
 public class WebSocketSampleClient extends WebSocketClient {
 
-    private final Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create(); // to solve a problem with deserializing java.time.LocalDateTime by gson
+    private final Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create(); // To solve a problem with deserializing java.time.LocalDateTime by gson
 
     public WebSocketSampleClient(URI serverURI) {
         super(serverURI);
     }
 
     @Override
-    public void onOpen(ServerHandshake handshakedata) {
-        // If you plan to refuse connection based on ip or http fields overload: onWebsocketHandshakeReceivedAsClient
-        send("Hello, this is Client");
-        System.out.println("opened connection");
+    public void onOpen(ServerHandshake handshakeData) {
+        send("Hello, this is frontend");
+        System.out.println("Opened connection");
     }
 
     @Override
     public void onMessage(String message) {
-        System.out.println("received: " + message);
+        System.out.println("Received message: " + message);
 
         if(isDiagnosticData(message))
             handleMessageWithDiagnosticData(message);
@@ -65,7 +62,10 @@ public class WebSocketSampleClient extends WebSocketClient {
 
     public static void initialize() throws URISyntaxException {
         // More about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-        WebSocketSampleClient webSocketSampleClient = new WebSocketSampleClient(new URI("ws://localhost:8081/chat"));
+        final String host = "localhost";
+        final int port = 8081;
+        final String clientName = "frontend";
+        WebSocketSampleClient webSocketSampleClient = new WebSocketSampleClient(new URI("ws://" + host + ":" + port + "/" + clientName));
         webSocketSampleClient.connect();
     }
 
