@@ -2,6 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.Vehicle;
 import com.mobileplatform.backend.model.repository.VehicleRepository;
+import com.mobileplatform.backend.websocket.WebSocketSampleServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,10 @@ public class VehicleService {
     }
 
     public Long save(Vehicle vehicle) {
+
+        // TODO - handle adding new vehicle - send data to a new address(?), display data in a new tab
+        WebSocketSampleServer.getInstance().send(WebSocketSampleServer.getGson().toJson(vehicle));
+
         return vehicleRepository.save(vehicle).getId();
     }
 }

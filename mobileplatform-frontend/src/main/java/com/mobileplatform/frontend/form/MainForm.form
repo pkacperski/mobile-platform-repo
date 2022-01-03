@@ -33,7 +33,7 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;imu reading&gt;"/>
+                  <text value="No IMU readings received"/>
                 </properties>
               </component>
               <component id="ee77b" class="javax.swing.JLabel" binding="lblEncoderReading">
@@ -41,7 +41,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;encoder reading&gt;"/>
+                  <text value="No encoder readings received"/>
                 </properties>
               </component>
               <component id="35a56" class="javax.swing.JLabel" binding="lblVehicleName">
@@ -49,7 +49,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;vehicle name&gt;"/>
+                  <text value="No vehicle connected"/>
                 </properties>
               </component>
               <component id="e799f" class="javax.swing.JLabel" binding="lblDiagnosticData">
@@ -57,7 +57,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;diagnostic data&gt;"/>
+                  <text value="No diagnostic data received"/>
                 </properties>
               </component>
               <component id="e8282" class="javax.swing.JLabel" binding="lblLidarReading">
@@ -65,7 +65,7 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;lidar reading&gt;"/>
+                  <text value="No lidar readings received"/>
                 </properties>
               </component>
               <component id="a6d5a" class="javax.swing.JLabel" binding="lblPointCloudReading">
@@ -73,7 +73,7 @@
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;point cloud reading&gt;"/>
+                  <text value="No point cloud reading received"/>
                 </properties>
               </component>
               <component id="380cb" class="javax.swing.JButton" binding="btnRestCall">
@@ -90,7 +90,7 @@
                   <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;location&gt;"/>
+                  <text value="No location data received"/>
                 </properties>
               </component>
               <component id="457" class="javax.swing.JLabel" binding="lblVideoStream">
@@ -102,7 +102,7 @@
                 <properties>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="&lt;video stream&gt;"/>
+                  <text value="No video stream received"/>
                   <verticalAlignment value="0"/>
                 </properties>
               </component>
@@ -121,7 +121,7 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;imu reading&gt;"/>
+                  <text value="No IMU readings received"/>
                 </properties>
               </component>
               <component id="d2de7" class="javax.swing.JLabel">
@@ -129,7 +129,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;encoder reading&gt;"/>
+                  <text value="No encoder readings received"/>
                 </properties>
               </component>
               <component id="4e7f6" class="javax.swing.JLabel">
@@ -137,7 +137,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;vehicle name&gt;"/>
+                  <text value="No vehicle connected"/>
                 </properties>
               </component>
               <component id="29127" class="javax.swing.JLabel">
@@ -145,7 +145,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;diagnostic data&gt;"/>
+                  <text value="No diagnostic data received"/>
                 </properties>
               </component>
               <component id="6428d" class="javax.swing.JLabel">
@@ -153,7 +153,7 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;lidar reading&gt;"/>
+                  <text value="No lidar readings received"/>
                 </properties>
               </component>
               <component id="5445c" class="javax.swing.JLabel">
@@ -161,7 +161,7 @@
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;point cloud reading&gt;"/>
+                  <text value="No point cloud readings received"/>
                 </properties>
               </component>
               <component id="1c445" class="javax.swing.JButton">
@@ -178,7 +178,7 @@
                   <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&lt;location&gt;"/>
+                  <text value="No location data received"/>
                 </properties>
               </component>
               <component id="83e68" class="javax.swing.JLabel">
@@ -190,7 +190,7 @@
                 <properties>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="&lt;video stream&gt;"/>
+                  <text value="No video stream received"/>
                   <verticalAlignment value="0"/>
                 </properties>
               </component>

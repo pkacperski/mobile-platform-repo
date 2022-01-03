@@ -1,5 +1,6 @@
 package com.mobileplatform.backend;
 
+import com.mobileplatform.backend.websocket.WebSocketSampleServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,5 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MobileplatformBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MobileplatformBackendApplication.class, args);
+		WebSocketSampleServer.initialize();
 	}
 }

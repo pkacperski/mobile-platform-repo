@@ -2,6 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.DiagnosticData;
 import com.mobileplatform.backend.model.repository.DiagnosticDataRepository;
+import com.mobileplatform.backend.websocket.WebSocketSampleServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class DiagnosticDataService {
     }
 
     public ResponseEntity<String> save(@Valid DiagnosticData diagnosticData) {
+
+        WebSocketSampleServer.getInstance().send(WebSocketSampleServer.getGson().toJson(diagnosticData));
+
         diagnosticDataRepository.save(diagnosticData);
         return ResponseEntity.ok("Successfully saved to DB");
     }
