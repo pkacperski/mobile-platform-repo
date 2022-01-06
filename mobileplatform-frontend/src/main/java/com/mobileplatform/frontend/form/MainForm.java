@@ -8,7 +8,7 @@ import javax.swing.*;
 public class MainForm {
     private JFrame frame;
     private JPanel panel;
-    private JButton btnRestCall;
+    private JButton btnFetchData;
     private JLabel lblVehicleName;
     private JLabel lblDiagnosticData;
     private JLabel lblEncoderReading;
@@ -21,6 +21,10 @@ public class MainForm {
     private JPanel panelVehicle1;
     private JPanel panelAddNewVehicle;
     private JPanel panelVehicle2;
+    private JButton btnEmergencyStop;
+    private JButton btnEmergencyAbort;
+    private JButton btnAutonomousDrivingMode;
+    private JButton btnManualSteeringMode;
 
     public MainForm() {
         frame = new JFrame("MainForm");

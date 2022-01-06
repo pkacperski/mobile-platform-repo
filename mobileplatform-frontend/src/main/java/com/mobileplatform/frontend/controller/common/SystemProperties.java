@@ -14,7 +14,8 @@ public class SystemProperties {
 
     static {
         try(InputStream inputStream = SystemProperties.class.getClassLoader().getResourceAsStream("application.properties")) {
-            if(inputStream == null) log.warning("Unable to find application.properties file");
+            if(inputStream == null)
+                log.warning("Unable to find application.properties file");
             properties.load(inputStream);
         } catch (IOException e) {
             log.severe(e.getMessage());

@@ -1,19 +1,31 @@
 package com.mobileplatform.frontend.controller.action;
 
+import com.fatboyindustrial.gsonjavatime.Converters;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
+import com.mobileplatform.frontend.dto.steering.*;
 import com.mobileplatform.frontend.form.MainForm;
 import lombok.Getter;
 import lombok.extern.java.Log;
+
+import java.time.LocalDateTime;
 
 @Log
 public class MainFormActions implements Actions {
     private static MainFormActions mainFormActions;
 
     private @Getter MainForm mainForm;
+    private Gson gson;
+
     private RestHandler<DiagnosticDataDto> diagnosticDataDtoRestHandler;
+    private RestHandler<DrivingModeDataDto> drivingModeDataDtoRestHandler;
+    private RestHandler<DrivingModeSteeringResponse> drivingModeSteeringResponseRestHandler;
+    private RestHandler<EmergencyModeDataDto> emergencyModeDataDtoRestHandler;
+    private RestHandler<EmergencyModeSteeringResponse> emergencyModeSteeringResponseRestHandler;
     private RestHandler<EncoderReadingDto> encoderReadingDtoRestHandler;
     private RestHandler<ImuReadingDto> imuReadingDtoRestHandler;
     private RestHandler<LidarReadingDto> lidarReadingDtoRestHandler;
@@ -23,6 +35,8 @@ public class MainFormActions implements Actions {
 
     final String VEHICLE_PATH = "/vehicle";
     final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
+    final String DRIVING_MODE_DATA_PATH = "/driving-mode-data";
+    final String EMERGENCY_MODE_DATA_PATH = "/emergency-mode-data";
     final String ENCODER_READING_NEWEST_PATH = "/encoder-reading/newest";
     final String IMU_READING_NEWEST_PATH = "/imu-reading/newest";
     final String LIDAR_READING_NEWEST_PATH = "/lidar-reading/newest";
@@ -30,6 +44,7 @@ public class MainFormActions implements Actions {
     final String POINT_CLOUD_NEWEST_PATH = "/point-cloud/newest";
     final String ID_1 = "1";
     final String NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE = "JSONArray text must start with '['";
+    final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
 
     private MainFormActions() {}
 
@@ -43,8 +58,13 @@ public class MainFormActions implements Actions {
     public void initialize() {
         mainForm = new MainForm();
         mainForm.getFrame().setVisible(true);
+        gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
 
         diagnosticDataDtoRestHandler = new RestHandler<>(DiagnosticDataDto.class);
+        drivingModeDataDtoRestHandler = new RestHandler<>(DrivingModeDataDto.class);
+        drivingModeSteeringResponseRestHandler = new RestHandler<>(DrivingModeSteeringResponse.class);
+        emergencyModeDataDtoRestHandler = new RestHandler<>(EmergencyModeDataDto.class);
+        emergencyModeSteeringResponseRestHandler = new RestHandler<>(EmergencyModeSteeringResponse.class);
         encoderReadingDtoRestHandler = new RestHandler<>(EncoderReadingDto.class);
         imuReadingDtoRestHandler = new RestHandler<>(ImuReadingDto.class);
         lidarReadingDtoRestHandler = new RestHandler<>(LidarReadingDto.class);
@@ -52,7 +72,11 @@ public class MainFormActions implements Actions {
         pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
 
-        mainForm.getBtnRestCall().addActionListener(e -> onClickBtnRestCall());
+        mainForm.getBtnFetchData().addActionListener(e -> refreshDataInMainPanel());
+        mainForm.getBtnEmergencyStop().addActionListener(e -> sendEmergencySignal(EmergencyMode.STOP));
+        mainForm.getBtnEmergencyAbort().addActionListener(e -> sendEmergencySignal(EmergencyMode.ABORT_MISSION_AND_RETURN));
+        mainForm.getBtnAutonomousDrivingMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS));
+        mainForm.getBtnManualSteeringMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING));
     }
 
     @Override
@@ -60,8 +84,42 @@ public class MainFormActions implements Actions {
         initialize();
     }
 
-    private void onClickBtnRestCall() {
-        refreshDataInMainPanel();
+    private void sendEmergencySignal(EmergencyMode emergencyMode) {
+        EmergencyModeDataDto emergencyModeDataDto = EmergencyModeDataDto.builder()
+                .vehicleId(/* TODO vehicleId*/ 1L)
+                .signalSendingDate(LocalDateTime.now())
+                .emergencyMode(emergencyMode)
+                .build();
+        EmergencyModeSteeringRequest emergencyModeSteeringRequest = EmergencyModeSteeringRequest.builder()
+                .ea(emergencyMode.equals(EmergencyMode.STOP) ? 1 : 2)
+                .vid(/* TODO vehicleId*/ 0)
+                .mgc(31460)
+                .build();
+        try {
+            emergencyModeDataDtoRestHandler.performPost(EMERGENCY_MODE_DATA_PATH, gson.toJson(emergencyModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
+            emergencyModeSteeringResponseRestHandler.performPost(/* TODO: path W = adres IP ktory byl podany przy wywolaniu "connect" */ "http://localhost:5000/api/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendDrivingModeSignal(DrivingMode drivingMode) {
+        DrivingModeDataDto drivingModeDataDto = DrivingModeDataDto.builder()
+                .vehicleId(/* TODO vehicle id */ 1L)
+                .signalSendingDate(LocalDateTime.now())
+                .drivingMode(drivingMode)
+                .build();
+        DrivingModeSteeringRequest drivingModeSteeringRequest = DrivingModeSteeringRequest.builder()
+                .mode(drivingMode.equals(DrivingMode.AUTONOMOUS) ? 1 : 2)
+                .vid(/* TODO vehicleId */ 0)
+                .mgc(32129)
+                .build();
+        try {
+            drivingModeDataDtoRestHandler.performPost(DRIVING_MODE_DATA_PATH, gson.toJson(drivingModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
+            drivingModeSteeringResponseRestHandler.performPost(/* TODO: path W = adres IP ktory byl podany przy wywolaniu "connect" */ "http://localhost:5000/api/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
     }
 
     // TODO - reformat (duplikacja kodu!)
@@ -137,7 +195,7 @@ public class MainFormActions implements Actions {
             }
         }
 
-        mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getVehicleName() : "No vehicle found");
+        mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getVehicleName() : "Vehicle not connected");
         mainForm.getLblDiagnosticData().setText(diagnosticDataDto != null ? "Battery status: " + diagnosticDataDto.getBatteryChargeStatus()
                 + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure() : "No diagnostic data received");
         mainForm.getLblEncoderReading().setText(encoderReadingDto != null ? "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed()

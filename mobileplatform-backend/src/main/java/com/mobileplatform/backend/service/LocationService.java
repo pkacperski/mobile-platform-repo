@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.Location;
 import com.mobileplatform.backend.model.repository.LocationRepository;
-import com.mobileplatform.backend.websocket.WebSocketSampleServer;
+import com.mobileplatform.backend.websocket.WebSocketBackendServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class LocationService {
 
     public ResponseEntity<String> save(@Valid Location location) {
 
-        WebSocketSampleServer.getInstance().send(WebSocketSampleServer.getGson().toJson(location));
+        WebSocketBackendServer.getInstance().send(WebSocketBackendServer.getGson().toJson(location));
 
         locationRepository.save(location);
         return ResponseEntity.ok("Successfully saved to DB");

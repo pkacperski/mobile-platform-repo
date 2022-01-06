@@ -15,11 +15,12 @@ import java.net.URISyntaxException;
 /**
  * https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/ExampleClient.java
  */
-public class WebSocketSampleClient extends WebSocketClient {
+public class WebSocketFrontendClient extends WebSocketClient {
 
-    private final Gson gson = Converters.registerLocalDateTime(new GsonBuilder()).create(); // To solve a problem with deserializing java.time.LocalDateTime by gson
+    private static WebSocketFrontendClient webSocketFrontendClient;
+    private static Gson gson; // To solve a problem with deserializing java.time.LocalDateTime by gson
 
-    public WebSocketSampleClient(URI serverURI) {
+    public WebSocketFrontendClient(URI serverURI) {
         super(serverURI);
     }
 
@@ -62,13 +63,34 @@ public class WebSocketSampleClient extends WebSocketClient {
 
     public static void initialize() throws URISyntaxException {
         // More about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-        final String host = "localhost";
+        final String host = "localhost"; // Host and port have to be the same as in backend server
         final int port = 8081;
         final String clientName = "frontend";
-        WebSocketSampleClient webSocketSampleClient = new WebSocketSampleClient(new URI("ws://" + host + ":" + port + "/" + clientName));
-        webSocketSampleClient.connect();
+
+        gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
+        webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + clientName));
+        webSocketFrontendClient.connect();
     }
 
+    public static WebSocketFrontendClient getInstance() throws URISyntaxException {
+        if(webSocketFrontendClient == null) {
+            initialize();
+        }
+        return webSocketFrontendClient;
+    }
+
+    public static Gson getGson() {
+        if(gson == null) {
+            gson = Converters.registerLocalDateTime(new GsonBuilder()).create(); // To solve a problem with deserializing java.time.LocalDateTime by gson
+        }
+        return gson;
+    }
+
+    public void sendMessage(String message) {
+        send(message);
+    }
+
+    // TODO zmienic to sprawdzanie - pola sa opcjonalne = dane moga przychodzic niekompletne i takie sprawdzanie nie przejdzie. rozw = obowiazkowa flaga z typem danej?
     private boolean isDiagnosticData(String message) {
         return message.contains("batteryChargeStatus");
     }
