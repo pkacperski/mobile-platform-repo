@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Builder
 public class VehicleConnectRequest implements Serializable {
 
-    private String address;
+    private String addr;
     private int port;
     private int vid;
     private int mgc;

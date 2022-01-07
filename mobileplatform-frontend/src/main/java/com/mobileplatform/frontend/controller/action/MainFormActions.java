@@ -47,6 +47,10 @@ public class MainFormActions implements Actions {
     final String ID_1 = "1";
     final String NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE = "JSONArray text must start with '['";
     final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
+    final int DRIVING_MODE_AUTONOMOUS_API_CONST = 1;
+    final int DRIVING_MODE_MANUAL_API_CONST = 2;
+    final int EMERGENCY_MODE_STOP_API_CONST = 1;
+    final int EMERGENCY_MODE_ABORT_API_CONST = 2;
 
     private MainFormActions() {}
 
@@ -96,74 +100,81 @@ public class MainFormActions implements Actions {
                 .connectionDate(LocalDateTime.now())
                 .build();
         try {
-            vehicleDto = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
-            if(vehicleDto.getId() != null) {
+            VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
+            if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-//                        .vid(vehicleDto.getId().intValue())
-                        .address(vehicleDto.getIpAddress()) // TODO - to ma byc IP serwera do ktorego wysylac dane; IP pojazdu wziac z okienka na froncie
-                        .port(/* TODO */ 8080)
+                        .addr("localhost") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
+                        .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080?
+                        .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
                         .build();
-                VehicleConnectResponse v = vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
-                /* TODO: PUT Http method instead of POST */
+                vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+
                 VehicleActivateConnectionRequest vehicleActivateConnectionRequest = VehicleActivateConnectionRequest.builder()
-                        .vid(vehicleConnectRequest.getVid())
                         .activ(true)
+                        .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(23589)
                         .build();
-                VehicleActivateConnectionResponse r = vehicleActivateConnectionResponseRestHandler.performPost(vehicleIp + "/connect/activate", gson.toJson(vehicleActivateConnectionRequest), APPLICATION_JSON_CONTENT_TYPE);
-                // TODO - if(r.activ != true) ... -> obsluga bledu
-                // odswiezenie widoku:
-                mainForm.getLblVehicleId().setText("IDs - DB: " + vehicleDto.getId() + " steering API: " + v.getVid()); // TODO
-                mainForm.getLblVehicleIp().setText(vehicleDto.getIpAddress()); // TODO - to ma byc IP serwera do ktorego wysylac dane; IP pojazdu wziac z okienka na froncie
-                mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDto.getName());
+                // TODO - change MPcomms like in https://github.com/Szewoj/MPcomms/issues/1 OR change below to PUT Http method instead of POST
+                VehicleActivateConnectionResponse v = vehicleActivateConnectionResponseRestHandler.performPost(vehicleIp + "/connect/activate", gson.toJson(vehicleActivateConnectionRequest), APPLICATION_JSON_CONTENT_TYPE);
+                // TODO - if(v.activ != true) ... -> obsluga bledu
+                // Update the labels in the view:
+                mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleDtoResponse.getId());
+                mainForm.getLblVehicleIp().setText("Vehicle IP address: " + vehicleIp);
+                mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDtoResponse.getName());
             }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-
-
     }
 
     private void sendEmergencySignal(EmergencyMode emergencyMode) {
+        Long storedVehicleId = Long.parseLong(mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)); /* TODO vehicleId drugiego pojazdu */
+        String storedVehicleIp = mainForm.getLblVehicleIp().getText().substring(mainForm.getLblVehicleIp().getText().indexOf(':') + 2); /* TODO vehicleIp drugiego pojazdu */
+        if(storedVehicleId < 0 || storedVehicleIp.equals(""))
+            return;
         EmergencyModeDataDto emergencyModeDataDto = EmergencyModeDataDto.builder()
-                .vehicleId(/* TODO vehicleId*/ 1L)
+                .vehicleId(storedVehicleId)
                 .signalSendingDate(LocalDateTime.now())
                 .emergencyMode(emergencyMode)
                 .build();
         EmergencyModeSteeringRequest emergencyModeSteeringRequest = EmergencyModeSteeringRequest.builder()
-                .ea(emergencyMode.equals(EmergencyMode.STOP) ? 1 : 2)
-                .vid(/* TODO vehicleId*/ 0)
+                .ea(emergencyMode.equals(EmergencyMode.STOP) ? EMERGENCY_MODE_STOP_API_CONST : EMERGENCY_MODE_ABORT_API_CONST)
+                .vid(storedVehicleId.intValue())
                 .mgc(31460)
                 .build();
         try {
             emergencyModeDataDtoRestHandler.performPost(EMERGENCY_MODE_DATA_PATH, gson.toJson(emergencyModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
-            emergencyModeSteeringResponseRestHandler.performPost(/* TODO: path W = adres IP ktory byl podany przy wywolaniu "connect" */ "http://localhost:5000/api/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
+            emergencyModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
         } catch (UnirestException e) {
             e.printStackTrace();
         }
     }
 
     private void sendDrivingModeSignal(DrivingMode drivingMode) {
+        Long storedVehicleId = Long.parseLong(mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)); /* TODO vehicleId drugiego pojazdu */
+        String storedVehicleIp = mainForm.getLblVehicleIp().getText().substring(mainForm.getLblVehicleIp().getText().indexOf(':') + 2); /* TODO vehicleIp drugiego pojazdu */
+        if(storedVehicleId < 0 || storedVehicleIp.equals(""))
+            return;
         DrivingModeDataDto drivingModeDataDto = DrivingModeDataDto.builder()
-                .vehicleId(/* TODO vehicle id */ 1L)
+                .vehicleId(storedVehicleId)
                 .signalSendingDate(LocalDateTime.now())
                 .drivingMode(drivingMode)
                 .build();
         DrivingModeSteeringRequest drivingModeSteeringRequest = DrivingModeSteeringRequest.builder()
-                .mode(drivingMode.equals(DrivingMode.AUTONOMOUS) ? 1 : 2)
-                .vid(/* TODO vehicleId */ 0)
+                .mode(drivingMode.equals(DrivingMode.AUTONOMOUS) ? DRIVING_MODE_AUTONOMOUS_API_CONST : DRIVING_MODE_MANUAL_API_CONST)
+                .vid(storedVehicleId.intValue())
                 .mgc(32129)
                 .build();
         try {
             drivingModeDataDtoRestHandler.performPost(DRIVING_MODE_DATA_PATH, gson.toJson(drivingModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
-            drivingModeSteeringResponseRestHandler.performPost(/* TODO: path W = adres IP ktory byl podany przy wywolaniu "connect" */ "http://localhost:5000/api/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
+            drivingModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
         } catch (UnirestException e) {
             e.printStackTrace();
         }
     }
 
-    // TODO - reformat (duplikacja kodu!)
+    // TODO - reformat (duplikacja kodu!) + docelowo przycisk "Refresh data" niepotrzebny
     public void refreshDataInMainPanel() {
         VehicleDto vehicleDto = null;
         DiagnosticDataDto diagnosticDataDto = null;

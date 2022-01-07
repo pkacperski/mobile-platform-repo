@@ -19,7 +19,6 @@ public class MainForm {
     private JLabel lblVideoStream;
     private JTabbedPane tabbedPane;
     private JPanel panelVehicle1;
-    private JPanel panelAddNewVehicle;
     private JPanel panelVehicle2;
     private JButton btnEmergencyStop;
     private JButton btnEmergencyAbort;
