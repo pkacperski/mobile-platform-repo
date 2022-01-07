@@ -32,6 +32,8 @@ public class MainFormActions implements Actions {
     private RestHandler<LocationDto> locationDtoRestHandler;
     private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
+    private RestHandler<VehicleConnectResponse> vehicleConnectResponseRestHandler;
+    private RestHandler<VehicleActivateConnectionResponse> vehicleActivateConnectionResponseRestHandler;
 
     final String VEHICLE_PATH = "/vehicle";
     final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
@@ -55,6 +57,11 @@ public class MainFormActions implements Actions {
     }
 
     @Override
+    public void control() {
+        initialize();
+    }
+
+    @Override
     public void initialize() {
         mainForm = new MainForm();
         mainForm.getFrame().setVisible(true);
@@ -71,17 +78,51 @@ public class MainFormActions implements Actions {
         locationDtoRestHandler = new RestHandler<>(LocationDto.class);
         pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
+        vehicleConnectResponseRestHandler = new RestHandler<>(VehicleConnectResponse.class);
+        vehicleActivateConnectionResponseRestHandler = new RestHandler<>(VehicleActivateConnectionResponse.class);
 
-        mainForm.getBtnFetchData().addActionListener(e -> refreshDataInMainPanel());
+        mainForm.getBtnConnectVehicle().addActionListener(e -> sendConnectVehicleSignal(mainForm.getTxtVehicleIp().getText(), mainForm.getTxtVehicleName().getText()));
         mainForm.getBtnEmergencyStop().addActionListener(e -> sendEmergencySignal(EmergencyMode.STOP));
         mainForm.getBtnEmergencyAbort().addActionListener(e -> sendEmergencySignal(EmergencyMode.ABORT_MISSION_AND_RETURN));
         mainForm.getBtnAutonomousDrivingMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS));
         mainForm.getBtnManualSteeringMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING));
+        mainForm.getBtnFetchData().addActionListener(e -> refreshDataInMainPanel());
     }
 
-    @Override
-    public void control() {
-        initialize();
+    private void sendConnectVehicleSignal(String vehicleIp, String vehicleName) {
+        VehicleDto vehicleDto = VehicleDto.builder()
+                .ipAddress(vehicleIp)
+                .name(vehicleName)
+                .connectionDate(LocalDateTime.now())
+                .build();
+        try {
+            vehicleDto = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
+            if(vehicleDto.getId() != null) {
+                VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
+//                        .vid(vehicleDto.getId().intValue())
+                        .address(vehicleDto.getIpAddress()) // TODO - to ma byc IP serwera do ktorego wysylac dane; IP pojazdu wziac z okienka na froncie
+                        .port(/* TODO */ 8080)
+                        .mgc(60949)
+                        .build();
+                VehicleConnectResponse v = vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+                /* TODO: PUT Http method instead of POST */
+                VehicleActivateConnectionRequest vehicleActivateConnectionRequest = VehicleActivateConnectionRequest.builder()
+                        .vid(vehicleConnectRequest.getVid())
+                        .activ(true)
+                        .mgc(23589)
+                        .build();
+                VehicleActivateConnectionResponse r = vehicleActivateConnectionResponseRestHandler.performPost(vehicleIp + "/connect/activate", gson.toJson(vehicleActivateConnectionRequest), APPLICATION_JSON_CONTENT_TYPE);
+                // TODO - if(r.activ != true) ... -> obsluga bledu
+                // odswiezenie widoku:
+                mainForm.getLblVehicleId().setText("IDs - DB: " + vehicleDto.getId() + " steering API: " + v.getVid()); // TODO
+                mainForm.getLblVehicleIp().setText(vehicleDto.getIpAddress()); // TODO - to ma byc IP serwera do ktorego wysylac dane; IP pojazdu wziac z okienka na froncie
+                mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDto.getName());
+            }
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void sendEmergencySignal(EmergencyMode emergencyMode) {
@@ -195,7 +236,9 @@ public class MainFormActions implements Actions {
             }
         }
 
-        mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getVehicleName() : "Vehicle not connected");
+        mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");
+        mainForm.getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
+        mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
         mainForm.getLblDiagnosticData().setText(diagnosticDataDto != null ? "Battery status: " + diagnosticDataDto.getBatteryChargeStatus()
                 + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure() : "No diagnostic data received");
         mainForm.getLblEncoderReading().setText(encoderReadingDto != null ? "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed()

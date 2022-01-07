@@ -186,7 +186,11 @@ public class WebSocketFrontendClient extends WebSocketClient {
         try {
             VehicleDto vehicleDto = gson.fromJson(message, VehicleDto.class);
             MainFormActions.getInstance().getMainForm().getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: "
-                    + vehicleDto.getVehicleName() : "No vehicle found");
+                    + vehicleDto.getName() : "Vehicle not connected");
+            MainFormActions.getInstance().getMainForm().getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: "
+                    + vehicleDto.getIpAddress() : "Vehicle not connected");
+            MainFormActions.getInstance().getMainForm().getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " // TODO - oddzielnie ID z BD i z API sterujacego
+                    + vehicleDto.getId() : "Vehicle not connected");
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class VehicleDto implements Serializable {
 
     private Long id;
-    private String vehicleName;
+    private String name;
+    private String ipAddress;
     private LocalDateTime connectionDate;
 }

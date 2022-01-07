@@ -22,11 +22,11 @@ public class VehicleService {
         return vehicleRepository.findById(id);
     }
 
-    public Long save(Vehicle vehicle) {
+    public Vehicle save(Vehicle vehicle) {
 
         // TODO - handle adding new vehicle - send data to a new address(?), display data in a new tab
         WebSocketBackendServer.getInstance().send(WebSocketBackendServer.getGson().toJson(vehicle));
 
-        return vehicleRepository.save(vehicle).getId();
+        return vehicleRepository.save(vehicle);
     }
 }

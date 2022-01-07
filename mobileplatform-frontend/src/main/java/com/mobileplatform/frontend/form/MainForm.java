@@ -25,6 +25,11 @@ public class MainForm {
     private JButton btnEmergencyAbort;
     private JButton btnAutonomousDrivingMode;
     private JButton btnManualSteeringMode;
+    private JButton btnConnectVehicle;
+    private JFormattedTextField txtVehicleIp;
+    private JFormattedTextField txtVehicleName;
+    private JLabel lblVehicleIp;
+    private JLabel lblVehicleId;
 
     public MainForm() {
         frame = new JFrame("MainForm");

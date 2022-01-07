@@ -10,7 +10,8 @@ DROP TABLE IF EXISTS public.vehicle;
 
 CREATE TABLE public.vehicle (
     id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    vehicle_name varchar(255),
+    name varchar(255),
+    ip_address varchar(255),
     connection_date timestamp without time zone
 );
 
