@@ -27,4 +27,7 @@ public class Vehicle {
 
     @Column(name = "connection_date")
     private LocalDateTime connectionDate;
+
+    @Column(name = "connection_status")
+    private VehicleConnectionStatus connectionStatus;
 }

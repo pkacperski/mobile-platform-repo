@@ -14,4 +14,5 @@ public class VehicleDto implements Serializable {
     private String name;
     private String ipAddress;
     private LocalDateTime connectionDate;
+    private VehicleConnectionStatus connectionStatus;
 }

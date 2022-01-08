@@ -67,6 +67,7 @@ public class MainFormActions implements Actions {
 
     @Override
     public void initialize() {
+
         mainForm = new MainForm();
         mainForm.getFrame().setVisible(true);
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
@@ -86,6 +87,7 @@ public class MainFormActions implements Actions {
         vehicleActivateConnectionResponseRestHandler = new RestHandler<>(VehicleActivateConnectionResponse.class);
 
         mainForm.getBtnConnectVehicle().addActionListener(e -> sendConnectVehicleSignal(mainForm.getTxtVehicleIp().getText(), mainForm.getTxtVehicleName().getText()));
+        mainForm.getBtnDisconnectVehicle().addActionListener(e -> sendDisconnectVehicleSignal());
         mainForm.getBtnEmergencyStop().addActionListener(e -> sendEmergencySignal(EmergencyMode.STOP));
         mainForm.getBtnEmergencyAbort().addActionListener(e -> sendEmergencySignal(EmergencyMode.ABORT_MISSION_AND_RETURN));
         mainForm.getBtnAutonomousDrivingMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS));
@@ -94,10 +96,12 @@ public class MainFormActions implements Actions {
     }
 
     private void sendConnectVehicleSignal(String vehicleIp, String vehicleName) {
+
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(vehicleIp)
                 .name(vehicleName)
                 .connectionDate(LocalDateTime.now())
+                .connectionStatus(VehicleConnectionStatus.CONNECTED)
                 .build();
         try {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
@@ -115,13 +119,46 @@ public class MainFormActions implements Actions {
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(23589)
                         .build();
-                // TODO - change MPcomms like in https://github.com/Szewoj/MPcomms/issues/1 OR change below to PUT Http method instead of POST
                 VehicleActivateConnectionResponse v = vehicleActivateConnectionResponseRestHandler.performPost(vehicleIp + "/connect/activate", gson.toJson(vehicleActivateConnectionRequest), APPLICATION_JSON_CONTENT_TYPE);
-                // TODO - if(v.activ != true) ... -> obsluga bledu
                 // Update the labels in the view:
                 mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleDtoResponse.getId());
                 mainForm.getLblVehicleIp().setText("Vehicle IP address: " + vehicleIp);
                 mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDtoResponse.getName());
+                mainForm.getBtnConnectVehicle().setEnabled(false);
+                mainForm.getBtnDisconnectVehicle().setEnabled(true);
+            }
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendDisconnectVehicleSignal() {
+
+        int storedVehicleId = Integer.parseInt(mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)); /* TODO vehicleId drugiego pojazdu */
+        String storedVehicleIp = mainForm.getLblVehicleIp().getText().substring(mainForm.getLblVehicleIp().getText().indexOf(':') + 2); /* TODO vehicleIp drugiego pojazdu */
+        String storedVehicleName = mainForm.getLblVehicleName().getText().substring(mainForm.getLblVehicleName().getText().indexOf(':') + 2); /* TODO vehicleName drugiego pojazdu */
+        if(storedVehicleId < 0 || storedVehicleIp.equals(""))
+            return;
+        VehicleDto vehicleDto = VehicleDto.builder()
+                .ipAddress(storedVehicleIp)
+                .name(storedVehicleName)
+                .connectionDate(LocalDateTime.now())
+                .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
+                .build();
+        VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // dopoki endpoint DELETE /connect ma takie samo body jak POST /connect, nie trzeba tworzyc nowego Dto na obsluge requesta ani nowego RestHandlera
+                .addr("localhost") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej - niepotrzebny w tym endpoincie
+                .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080? - niepotrzebny w tym endpoincie
+                .vid(storedVehicleId)
+                .mgc(15061)
+                .build();
+
+        try {
+            vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
+            // TODO - czy potrzeba najpierw deaktywowac polaczenie = strzelac pod /connect/activate?
+            VehicleConnectResponse v = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+            if(v.getVid() == storedVehicleId) {
+                mainForm.getBtnConnectVehicle().setEnabled(true);
+                mainForm.getBtnDisconnectVehicle().setEnabled(false);
             }
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -129,6 +166,7 @@ public class MainFormActions implements Actions {
     }
 
     private void sendEmergencySignal(EmergencyMode emergencyMode) {
+
         Long storedVehicleId = Long.parseLong(mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)); /* TODO vehicleId drugiego pojazdu */
         String storedVehicleIp = mainForm.getLblVehicleIp().getText().substring(mainForm.getLblVehicleIp().getText().indexOf(':') + 2); /* TODO vehicleIp drugiego pojazdu */
         if(storedVehicleId < 0 || storedVehicleIp.equals(""))
@@ -152,6 +190,7 @@ public class MainFormActions implements Actions {
     }
 
     private void sendDrivingModeSignal(DrivingMode drivingMode) {
+
         Long storedVehicleId = Long.parseLong(mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)); /* TODO vehicleId drugiego pojazdu */
         String storedVehicleIp = mainForm.getLblVehicleIp().getText().substring(mainForm.getLblVehicleIp().getText().indexOf(':') + 2); /* TODO vehicleIp drugiego pojazdu */
         if(storedVehicleId < 0 || storedVehicleIp.equals(""))
@@ -176,6 +215,7 @@ public class MainFormActions implements Actions {
 
     // TODO - reformat (duplikacja kodu!) + docelowo przycisk "Refresh data" niepotrzebny
     public void refreshDataInMainPanel() {
+
         VehicleDto vehicleDto = null;
         DiagnosticDataDto diagnosticDataDto = null;
         EncoderReadingDto encoderReadingDto = null;

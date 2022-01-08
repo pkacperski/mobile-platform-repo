@@ -41,4 +41,11 @@ public class RestHandler<T> {
         httpRequestWithBody.body(body);
         return gson.fromJson(httpRequestWithBody.asJson().getBody().toString(), typeParameterClass);
     }
+
+    public T performDelete(String path, String body, String contentType) throws UnirestException {
+        HttpRequestWithBody httpRequestWithBody = Unirest.delete(path.contains("http") ? path : apiPath.concat(path));
+        httpRequestWithBody.header("Content-Type", contentType);
+        httpRequestWithBody.body(body);
+        return gson.fromJson(httpRequestWithBody.asJson().getBody().toString(), typeParameterClass);
+    }
 }

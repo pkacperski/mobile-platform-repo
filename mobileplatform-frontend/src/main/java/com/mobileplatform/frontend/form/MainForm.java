@@ -29,6 +29,7 @@ public class MainForm {
     private JFormattedTextField txtVehicleName;
     private JLabel lblVehicleIp;
     private JLabel lblVehicleId;
+    private JButton btnDisconnectVehicle;
 
     public MainForm() {
         frame = new JFrame("MainForm");
