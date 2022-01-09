@@ -25,7 +25,7 @@ public class VehicleController {
     }
 
     @PostMapping
-    public Long save(@RequestBody Vehicle vehicle) {
+    public Vehicle save(@RequestBody Vehicle vehicle) {
         return vehicleService.save(vehicle);
     }
 }

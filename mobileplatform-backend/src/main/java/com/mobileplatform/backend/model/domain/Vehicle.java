@@ -19,9 +19,15 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "vehicle_name")
-    private String vehicleName;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "ip_address")
+    private String ipAddress;
 
     @Column(name = "connection_date")
     private LocalDateTime connectionDate;
+
+    @Column(name = "connection_status")
+    private VehicleConnectionStatus connectionStatus;
 }

@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS public.diagnostic_data;
+DROP TABLE IF EXISTS public.driving_mode_data;
+DROP TABLE IF EXISTS public.emergency_mode_data;
 DROP TABLE IF EXISTS public.encoder_reading;
 DROP TABLE IF EXISTS public.imu_reading;
 DROP TABLE IF EXISTS public.lidar_reading;
@@ -8,8 +10,10 @@ DROP TABLE IF EXISTS public.vehicle;
 
 CREATE TABLE public.vehicle (
     id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    vehicle_name varchar(255),
-    connection_date timestamp without time zone
+    name varchar(255),
+    ip_address varchar(255),
+    connection_date timestamp without time zone,
+    connection_status varchar(32) -- VehicleConnectionStatus class is an enum, but storing the value in a string seems to work
 );
 
 CREATE TABLE public.diagnostic_data (
@@ -19,6 +23,22 @@ CREATE TABLE public.diagnostic_data (
     battery_charge_status real,
     camera_turn_angle real,
     wheels_turn_measure real,
+    foreign key (vehicle_id) references public.vehicle(id)
+);
+
+CREATE TABLE public.driving_mode_data (
+    id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    vehicle_id bigint,
+    signal_sending_date timestamp without time zone,
+    driving_mode varchar(255), -- DrivingMode class is an enum, but storing the value in a string seems to work
+    foreign key (vehicle_id) references public.vehicle(id)
+);
+
+CREATE TABLE public.emergency_mode_data (
+    id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    vehicle_id bigint,
+    signal_sending_date timestamp without time zone,
+    emergency_mode varchar(255), -- EmergencyMode class is an enum, but storing the value in a string seems to work
     foreign key (vehicle_id) references public.vehicle(id)
 );
 

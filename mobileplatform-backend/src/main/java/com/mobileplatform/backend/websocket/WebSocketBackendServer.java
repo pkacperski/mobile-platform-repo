@@ -3,6 +3,9 @@ package com.mobileplatform.backend.websocket;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import com.mobileplatform.backend.model.domain.steering.DrivingModeData;
+import com.mobileplatform.backend.model.domain.steering.EmergencyModeData;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -13,12 +16,12 @@ import java.nio.ByteBuffer;
 /**
  * https://github.com/TooTallNate/Java-WebSocket/wiki#server-example
  */
-public class WebSocketSampleServer extends WebSocketServer {
+public class WebSocketBackendServer extends WebSocketServer {
 
-    private static WebSocketSampleServer webSocketSampleServer;
+    private static WebSocketBackendServer webSocketBackendServer;
     private static Gson gson;
 
-    public WebSocketSampleServer(InetSocketAddress address) {
+    public WebSocketBackendServer(InetSocketAddress address) {
         super(address);
     }
 
@@ -58,16 +61,16 @@ public class WebSocketSampleServer extends WebSocketServer {
         final String host = "localhost";
         final int port = 8081;
 
-        webSocketSampleServer = new WebSocketSampleServer(new InetSocketAddress(host, port));
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
-        webSocketSampleServer.run();
+        webSocketBackendServer = new WebSocketBackendServer(new InetSocketAddress(host, port));
+        webSocketBackendServer.run();
     }
 
-    public static WebSocketSampleServer getInstance() {
-        if(webSocketSampleServer == null) {
+    public static WebSocketBackendServer getInstance() {
+        if(webSocketBackendServer == null) {
             initialize();
         }
-        return webSocketSampleServer;
+        return webSocketBackendServer;
     }
 
     public static Gson getGson() {
