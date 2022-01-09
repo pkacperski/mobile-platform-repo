@@ -11,6 +11,7 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 /**
  * https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/ExampleClient.java
@@ -119,13 +120,27 @@ public class WebSocketFrontendClient extends WebSocketClient {
         return message.contains("vehicleName");
     }
 
+    private int findOnWhichTabIsVehicle(Long receivedVehicleId) {
+        String firstTabVehicleIdText = MainFormActions.getInstance().getMainForm().getLblVehicleId().getText();
+        Long firstTabVehicleId = !firstTabVehicleIdText.contains("not connected") ? Long.parseLong(firstTabVehicleIdText.substring(firstTabVehicleIdText.indexOf(':') + 2)) : -1;
+        String secondTabVehicleIdText = MainFormActions.getInstance().getMainForm().getLblVehicleIdVehicle2().getText();
+        Long secondTabVehicleId = !secondTabVehicleIdText.contains("not connected") ? Long.parseLong(secondTabVehicleIdText.substring(secondTabVehicleIdText.indexOf(':') + 2)) : -1;
+        return (Objects.equals(receivedVehicleId, firstTabVehicleId) ? 1 : (Objects.equals(receivedVehicleId, secondTabVehicleId) ? 2 : -1));
+    }
+
     private void handleMessageWithDiagnosticData(String message) {
         try {
             DiagnosticDataDto diagnosticDataDto = gson.fromJson(message, DiagnosticDataDto.class);
-            MainFormActions.getInstance().getMainForm().getLblDiagnosticData().setText(diagnosticDataDto != null ?
-                    "Battery status: " + diagnosticDataDto.getBatteryChargeStatus() + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure()
-                    : "No diagnostic data received");
-        } catch (JsonSyntaxException e) {
+            if(diagnosticDataDto != null) {
+                int whichTabVehicle = findOnWhichTabIsVehicle(diagnosticDataDto.getVehicleId());
+                String diagnosticDataText = "Battery status: " + diagnosticDataDto.getBatteryChargeStatus() + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure();
+
+                if(whichTabVehicle == 1)
+                    MainFormActions.getInstance().getMainForm().getLblDiagnosticData().setText(diagnosticDataText);
+                else if(whichTabVehicle == 2)
+                    MainFormActions.getInstance().getMainForm().getLblDiagnosticDataVehicle2().setText(diagnosticDataText);
+            }
+        } catch (JsonSyntaxException | NullPointerException e) {
             e.printStackTrace();
         }
     }
@@ -133,9 +148,15 @@ public class WebSocketFrontendClient extends WebSocketClient {
     private void handleMessageWithEncoderReading(String message) {
         try {
             EncoderReadingDto encoderReadingDto = gson.fromJson(message, EncoderReadingDto.class);
-            MainFormActions.getInstance().getMainForm().getLblEncoderReading().setText(encoderReadingDto != null ?
-                    "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed() + "..."
-                    : "No encoder readings received");
+            if(encoderReadingDto != null) {
+                int whichTabVehicle = findOnWhichTabIsVehicle(encoderReadingDto.getVehicleId());
+                String encoderReadingText = "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed() + "...";
+
+                if(whichTabVehicle == 1)
+                    MainFormActions.getInstance().getMainForm().getLblEncoderReading().setText(encoderReadingText);
+                else if(whichTabVehicle == 2)
+                    MainFormActions.getInstance().getMainForm().getLblEncoderReadingVehicle2().setText(encoderReadingText);
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
@@ -144,8 +165,15 @@ public class WebSocketFrontendClient extends WebSocketClient {
     private void handleMessageWithImuReading(String message) {
         try {
             ImuReadingDto imuReadingDto = gson.fromJson(message, ImuReadingDto.class);
-            MainFormActions.getInstance().getMainForm().getLblImuReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: "
-                    + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
+            if(imuReadingDto != null) {
+                int whichTabVehicle = findOnWhichTabIsVehicle(imuReadingDto.getVehicleId());
+                String imuReadingText = "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ...";
+
+                if(whichTabVehicle == 1)
+                    MainFormActions.getInstance().getMainForm().getLblImuReading().setText(imuReadingText);
+                else if(whichTabVehicle == 2)
+                    MainFormActions.getInstance().getMainForm().getLblImuReadingVehicle2().setText(imuReadingText);
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
@@ -154,8 +182,15 @@ public class WebSocketFrontendClient extends WebSocketClient {
     private void handleMessageWithLidarReading(String message) {
         try {
             LidarReadingDto lidarReadingDto = gson.fromJson(message, LidarReadingDto.class);
-            MainFormActions.getInstance().getMainForm().getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: "
-                    + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
+            if(lidarReadingDto != null) {
+                int whichTabVehicle = findOnWhichTabIsVehicle(lidarReadingDto.getVehicleId());
+                String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading();
+
+                if(whichTabVehicle == 1)
+                    MainFormActions.getInstance().getMainForm().getLblLidarReading().setText(lidarReadingText);
+                else if(whichTabVehicle == 2)
+                    MainFormActions.getInstance().getMainForm().getLblLidarReadingVehicle2().setText(lidarReadingText);
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
@@ -164,8 +199,15 @@ public class WebSocketFrontendClient extends WebSocketClient {
     private void handleMessageWithLocationData(String message) {
         try {
             LocationDto locationDto = gson.fromJson(message, LocationDto.class);
-            MainFormActions.getInstance().getMainForm().getLblLocation().setText(locationDto != null ? "Location: real X: "
-                    + locationDto.getRealXCoordinate() + ", real Y: " + locationDto.getRealYCoordinate() : "No location data received");
+            if(locationDto != null) {
+                int whichTabVehicle = findOnWhichTabIsVehicle(locationDto.getVehicleId());
+                String locationText = "Location: real X: " + locationDto.getRealXCoordinate() + ", real Y: " + locationDto.getRealYCoordinate();
+
+                if(whichTabVehicle == 1)
+                    MainFormActions.getInstance().getMainForm().getLblLocation().setText(locationText);
+                else if(whichTabVehicle == 2)
+                    MainFormActions.getInstance().getMainForm().getLblLocationVehicle2().setText(locationText);
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
@@ -174,23 +216,24 @@ public class WebSocketFrontendClient extends WebSocketClient {
     private void handleMessageWithPointCloudReading(String message) {
         try {
             PointCloudDto pointCloudDto = gson.fromJson(message, PointCloudDto.class);
-            MainFormActions.getInstance().getMainForm().getLblPointCloudReading().setText(pointCloudDto != null ? "Point cloud reading: "
-                    + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
+            if(pointCloudDto != null) {
+                int whichTabVehicle = findOnWhichTabIsVehicle(pointCloudDto.getVehicleId());
+                String pointCloudText = "Point cloud reading: " + pointCloudDto.getPointCloudReading();
+
+                if(whichTabVehicle == 1)
+                    MainFormActions.getInstance().getMainForm().getLblPointCloudReading().setText(pointCloudText);
+                else if(whichTabVehicle == 2)
+                    MainFormActions.getInstance().getMainForm().getLblPointCloudReadingVehicle2().setText(pointCloudText);
+            }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
     }
 
     private void handleMessageWithVehicleData(String message) {
-        // TODO - handle adding new vehicle - send data to a new address(?), display data in a new tab
         try {
             VehicleDto vehicleDto = gson.fromJson(message, VehicleDto.class);
-            MainFormActions.getInstance().getMainForm().getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: "
-                    + vehicleDto.getName() : "Vehicle not connected");
-            MainFormActions.getInstance().getMainForm().getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: "
-                    + vehicleDto.getIpAddress() : "Vehicle not connected");
-            MainFormActions.getInstance().getMainForm().getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " // TODO - oddzielnie ID z BD i z API sterujacego
-                    + vehicleDto.getId() : "Vehicle not connected");
+            System.out.println(vehicleDto); // TODO - remove handling message with vehicle data if not necessary (vehicle connection status updated in MainFormActions)
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }

@@ -19,7 +19,6 @@ public class MainForm {
     private JLabel lblVideoStream;
     private JTabbedPane tabbedPane;
     private JPanel panelVehicle1;
-    private JPanel panelVehicle2;
     private JButton btnEmergencyStop;
     private JButton btnEmergencyAbort;
     private JButton btnAutonomousDrivingMode;
@@ -30,6 +29,26 @@ public class MainForm {
     private JLabel lblVehicleIp;
     private JLabel lblVehicleId;
     private JButton btnDisconnectVehicle;
+    private JPanel panelVehicle2;
+    private JLabel lblEncoderReadingVehicle2;
+    private JButton btnFetchDataVehicle2;
+    private JLabel lblVideoStreamVehicle2;
+    private JLabel lblVehicleNameVehicle2;
+    private JLabel lblVehicleIpVehicle2;
+    private JLabel lblLocationVehicle2;
+    private JLabel lblPointCloudReadingVehicle2;
+    private JLabel lblLidarReadingVehicle2;
+    private JLabel lblDiagnosticDataVehicle2;
+    private JLabel lblVehicleIdVehicle2;
+    private JButton btnConnectVehicle2;
+    private JFormattedTextField txtVehicleNameVehicle2;
+    private JFormattedTextField txtVehicleIpVehicle2;
+    private JButton btnEmergencyStopVehicle2;
+    private JButton btnEmergencyAbortVehicle2;
+    private JButton btnAutonomousDrivingModeVehicle2;
+    private JButton btnManualSteeringModeVehicle2;
+    private JLabel lblImuReadingVehicle2;
+    private JButton btnDisconnectVehicle2;
 
     public MainForm() {
         frame = new JFrame("MainForm");
