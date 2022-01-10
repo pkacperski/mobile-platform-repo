@@ -50,8 +50,8 @@
               <component id="457" class="javax.swing.JLabel" binding="lblVideoStream">
                 <constraints>
                   <grid row="3" column="1" row-span="4" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <minimum-size width="150" height="150"/>
-                    <preferred-size width="150" height="150"/>
+                    <minimum-size width="400" height="300"/>
+                    <preferred-size width="400" height="300"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -249,8 +249,8 @@
               <component id="8cad5" class="javax.swing.JLabel" binding="lblVideoStreamVehicle2">
                 <constraints>
                   <grid row="3" column="1" row-span="4" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <minimum-size width="150" height="150"/>
-                    <preferred-size width="150" height="150"/>
+                    <minimum-size width="400" height="300"/>
+                    <preferred-size width="400" height="300"/>
                   </grid>
                 </constraints>
                 <properties>

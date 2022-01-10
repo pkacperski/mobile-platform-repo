@@ -8,10 +8,19 @@ import com.mobileplatform.frontend.controller.action.MainFormActions;
 import com.mobileplatform.frontend.dto.*;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.imgcodecs.Imgcodecs;
 
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.ByteBuffer;
 import java.util.Objects;
+
+import static com.mobileplatform.frontend.opencv.OpenCvHandler.mat2BufferedImage;
+import static org.opencv.imgcodecs.Imgcodecs.IMREAD_UNCHANGED;
 
 /**
  * https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/ExampleClient.java
@@ -52,6 +61,39 @@ public class WebSocketFrontendClient extends WebSocketClient {
     }
 
     @Override
+    public void onMessage(ByteBuffer message) {
+        System.out.println("Received message: " + message);
+
+        // TODO - odbior roznych streamow w oddzielnych WebSocketach w oddzielnych watkach
+        MatOfByte matOfByte;
+        byte[] bytes = message.array();
+        if(bytes[0] == 0x01) {
+            // grayscale
+            matOfByte = new MatOfByte(1, bytes.length-1, bytes);
+            Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
+            if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
+                System.out.println("frame captured");
+                BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
+                ImageIcon icon = new ImageIcon(bufferedImage);
+                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
+                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setText("");
+            }
+        }
+        else {
+            // rgb
+            matOfByte = new MatOfByte(0, bytes.length, bytes);
+            Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
+            if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
+                System.out.println("frame captured");
+                BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
+                ImageIcon icon = new ImageIcon(bufferedImage);
+                MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
+                MainFormActions.getInstance().getMainForm().getLblVideoStream().setText("");
+            }
+        }
+    }
+
+    @Override
     public void onClose(int code, String reason, boolean remote) {
         // The close codes are documented in class org.java_websocket.framing.CloseFrame
         System.out.println("Connection closed by " + (remote ? "remote peer" : "us") + " Code: " + code + " Reason: " + reason);
@@ -62,15 +104,20 @@ public class WebSocketFrontendClient extends WebSocketClient {
         ex.printStackTrace(); // If the error is fatal then onClose will be called additionally
     }
 
-    public static void initialize() throws URISyntaxException {
+    public static void initialize() {
         // More about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
         final String host = "localhost"; // Host and port have to be the same as in backend server
         final int port = 8081;
         final String clientName = "frontend";
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
-        webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + clientName));
-        webSocketFrontendClient.connect();
+        // TODO - obsluzyc niepowodzenie w tworzeniu klienta i polaczeniu WS
+        try {
+            webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + clientName));
+            webSocketFrontendClient.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     public static WebSocketFrontendClient getInstance() throws URISyntaxException {

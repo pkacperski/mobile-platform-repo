@@ -33,7 +33,6 @@ public class MainFormActions implements Actions {
     private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
     private RestHandler<VehicleConnectResponse> vehicleConnectResponseRestHandler;
-    private RestHandler<VehicleActivateConnectionResponse> vehicleActivateConnectionResponseRestHandler;
 
     final String VEHICLE_PATH = "/vehicle";
     final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
@@ -44,7 +43,6 @@ public class MainFormActions implements Actions {
     final String LIDAR_READING_NEWEST_PATH = "/lidar-reading/newest";
     final String LOCATION_NEWEST_PATH = "/location/newest";
     final String POINT_CLOUD_NEWEST_PATH = "/point-cloud/newest";
-    final String ID_1 = "1";
     final String NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE = "JSONArray text must start with '['";
     final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
     final int DRIVING_MODE_AUTONOMOUS_API_CONST = 1;
@@ -86,7 +84,6 @@ public class MainFormActions implements Actions {
         pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
         vehicleConnectResponseRestHandler = new RestHandler<>(VehicleConnectResponse.class);
-        vehicleActivateConnectionResponseRestHandler = new RestHandler<>(VehicleActivateConnectionResponse.class);
 
         mainForm.getBtnConnectVehicle().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_1));
         mainForm.getBtnDisconnectVehicle().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_1));
@@ -119,19 +116,12 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr("localhost") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
+                        .addr(/*"localhost"*/ "192.168.0.221") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
                         .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080?
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
                         .build();
                 vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
-
-                VehicleActivateConnectionRequest vehicleActivateConnectionRequest = VehicleActivateConnectionRequest.builder()
-                        .activ(true)
-                        .vid(vehicleDtoResponse.getId().intValue())
-                        .mgc(23589)
-                        .build();
-                vehicleActivateConnectionResponseRestHandler.performPost(vehicleIp + "/connect/activate", gson.toJson(vehicleActivateConnectionRequest), APPLICATION_JSON_CONTENT_TYPE);
 
                 if (whichVehicle == VEHICLE_1) {
                     mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleDtoResponse.getId());
@@ -178,6 +168,7 @@ public class MainFormActions implements Actions {
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 if(whichVehicle == VEHICLE_1) {
+                    // TODO - zmienic labelki tez na Vehicle not connected itd
                     mainForm.getBtnConnectVehicle().setEnabled(true);
                     mainForm.getBtnDisconnectVehicle().setEnabled(false);
                 }

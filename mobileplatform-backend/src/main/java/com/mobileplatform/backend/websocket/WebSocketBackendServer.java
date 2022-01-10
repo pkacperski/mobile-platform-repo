@@ -3,9 +3,6 @@ package com.mobileplatform.backend.websocket;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.mobileplatform.backend.model.domain.steering.DrivingModeData;
-import com.mobileplatform.backend.model.domain.steering.EmergencyModeData;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -81,6 +78,10 @@ public class WebSocketBackendServer extends WebSocketServer {
     }
 
     public void send(String message) {
-        broadcast(message); // TODO - only send the message to appropriate clients (e.g. only send the data from vehicle 2 to a client which presents data from this vehicle)
+        broadcast(message); // TODO - only send the message to appropriate clients
+    }
+
+    public void send(byte[] message) {
+        broadcast(message);
     }
 }
