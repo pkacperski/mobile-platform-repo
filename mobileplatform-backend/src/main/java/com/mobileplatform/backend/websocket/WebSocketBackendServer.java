@@ -17,8 +17,13 @@ public class WebSocketBackendServer extends WebSocketServer {
 
     private static WebSocketBackendServer webSocketBackendServer;
     private static Gson gson;
+    private WebSocket connectedClient;
 
-    public WebSocketBackendServer(InetSocketAddress address) {
+    public WebSocketBackendServer(String ipAddress, int port) {
+        super(new InetSocketAddress(ipAddress, port));
+    }
+
+    private WebSocketBackendServer(InetSocketAddress address) {
         super(address);
     }
 
@@ -27,11 +32,13 @@ public class WebSocketBackendServer extends WebSocketServer {
         conn.send("Welcome to backend WebSocket server");
         broadcast( "New connection: " + handshake.getResourceDescriptor());
         System.out.println("New connection to " + conn.getRemoteSocketAddress());
+        this.connectedClient = conn;
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         System.out.println("Closed connection to " + conn.getRemoteSocketAddress() + " with exit code " + code + " additional info: " + reason);
+        this.connectedClient = null;
     }
 
     @Override
@@ -78,10 +85,12 @@ public class WebSocketBackendServer extends WebSocketServer {
     }
 
     public void send(String message) {
-        broadcast(message); // TODO - only send the message to appropriate clients
+        if(this.connectedClient != null) // TODO check -> wysylanie tylko do klienta z ktorym jest polaczenie, a nie broadcast do wsyzstkich
+            this.connectedClient.send(message);
     }
 
     public void send(byte[] message) {
-        broadcast(message);
+        if(this.connectedClient != null)
+            this.connectedClient.send(message);
     }
 }
