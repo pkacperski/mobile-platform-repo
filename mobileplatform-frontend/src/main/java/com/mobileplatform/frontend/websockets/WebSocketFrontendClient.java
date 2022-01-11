@@ -30,7 +30,11 @@ public class WebSocketFrontendClient extends WebSocketClient {
     private static WebSocketFrontendClient webSocketFrontendClient;
     private static Gson gson; // To solve a problem with deserializing java.time.LocalDateTime by gson
 
-    public WebSocketFrontendClient(URI serverURI) {
+    public WebSocketFrontendClient(String ipAddress, int port, String serverName) throws URISyntaxException {
+        super(new URI("ws://" + ipAddress + ":" + port + "/" + serverName));
+    }
+
+    private WebSocketFrontendClient(URI serverURI) {
         super(serverURI);
     }
 
@@ -62,33 +66,21 @@ public class WebSocketFrontendClient extends WebSocketClient {
 
     @Override
     public void onMessage(ByteBuffer message) {
-        System.out.println("Received message: " + message);
+        final int ONE_BYTE_OFFSET = 1;
 
-        // TODO - odbior roznych streamow w oddzielnych WebSocketach w oddzielnych watkach
-        MatOfByte matOfByte;
-        byte[] bytes = message.array();
-        if(bytes[0] == 0x01) {
-            // grayscale
-            matOfByte = new MatOfByte(1, bytes.length-1, bytes);
-            Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
-            if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
-                System.out.println("frame captured");
-                BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
-                ImageIcon icon = new ImageIcon(bufferedImage);
-                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
-                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setText("");
-            }
-        }
-        else {
-            // rgb
-            matOfByte = new MatOfByte(0, bytes.length, bytes);
-            Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
-            if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
-                System.out.println("frame captured");
-                BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
-                ImageIcon icon = new ImageIcon(bufferedImage);
+        // TODO - odbior roznych streamow w oddzielnych WebSocketach w oddzielnych watkach (spr. pierwszy bajt z wiadomosci)
+        MatOfByte matOfByte = new MatOfByte(ONE_BYTE_OFFSET, message.array().length-1, message.array());
+        Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
+        if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
+            BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
+            ImageIcon icon = new ImageIcon(bufferedImage);
+            if(message.array()[0] == 0x01) {
+                // first stream
                 MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
-                MainFormActions.getInstance().getMainForm().getLblVideoStream().setText("");
+            }
+            else if(message.array()[0] == 0x02) {
+                // second tab
+                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
             }
         }
     }
@@ -108,12 +100,12 @@ public class WebSocketFrontendClient extends WebSocketClient {
         // More about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
         final String host = "localhost"; // Host and port have to be the same as in backend server
         final int port = 8081;
-        final String clientName = "frontend";
+        final String serverName = "telemetry";
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
         // TODO - obsluzyc niepowodzenie w tworzeniu klienta i polaczeniu WS
         try {
-            webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + clientName));
+            webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + serverName));
             webSocketFrontendClient.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();

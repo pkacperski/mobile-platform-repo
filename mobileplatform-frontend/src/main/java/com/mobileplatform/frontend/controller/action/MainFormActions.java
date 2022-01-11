@@ -116,7 +116,7 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr(/*"localhost"*/ "192.168.0.221") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
+                        .addr("localhost" /*"192.168.0.221"*/) // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
                         .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080?
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
@@ -125,13 +125,13 @@ public class MainFormActions implements Actions {
 
                 if (whichVehicle == VEHICLE_1) {
                     mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleDtoResponse.getId());
-                    mainForm.getLblVehicleIp().setText("Vehicle IP address: " + vehicleIp);
+                    mainForm.getLblVehicleIp().setText("Vehicle IP: " + vehicleIp);
                     mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDtoResponse.getName());
                     mainForm.getBtnConnectVehicle().setEnabled(false);
                     mainForm.getBtnDisconnectVehicle().setEnabled(true);
                 } else if (whichVehicle == VEHICLE_2) {
                     mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleDtoResponse.getId());
-                    mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP address: " + vehicleIp);
+                    mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
                     mainForm.getLblVehicleNameVehicle2().setText("Vehicle name: " + vehicleDtoResponse.getName());
                     mainForm.getBtnConnectVehicle2().setEnabled(false);
                     mainForm.getBtnDisconnectVehicle2().setEnabled(true);
@@ -166,9 +166,10 @@ public class MainFormActions implements Actions {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             // TODO - czy potrzeba najpierw deaktywowac polaczenie = strzelac pod /connect/activate?
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+            // TODO - rozw. problem z disdconnectem! (mwciskanie przycisku na FE ale pponizszy if nie przechodzi =cos nie tak przy disconnectie)
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 if(whichVehicle == VEHICLE_1) {
-                    // TODO - zmienic labelki tez na Vehicle not connected itd
+                    // TODO - zmienic reszte labeleki tez na Vehicle not connected itd
                     mainForm.getBtnConnectVehicle().setEnabled(true);
                     mainForm.getBtnDisconnectVehicle().setEnabled(false);
                 }

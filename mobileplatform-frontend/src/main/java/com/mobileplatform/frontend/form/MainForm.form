@@ -57,7 +57,7 @@
                 <properties>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="No video stream received"/>
+                  <text value=""/>
                   <verticalAlignment value="0"/>
                 </properties>
               </component>
@@ -256,7 +256,7 @@
                 <properties>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="No video stream received"/>
+                  <text value=""/>
                   <verticalAlignment value="0"/>
                 </properties>
               </component>
