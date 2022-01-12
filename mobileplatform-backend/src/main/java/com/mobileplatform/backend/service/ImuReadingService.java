@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.ImuReading;
 import com.mobileplatform.backend.model.repository.ImuReadingRepository;
-import com.mobileplatform.backend.websocket.WebSocketBackendServer;
+import com.mobileplatform.backend.websocket.WebSocketTelemetryServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class ImuReadingService {
 
     public ResponseEntity<String> save(@Valid ImuReading imuReading) {
 
-        WebSocketBackendServer.getInstance().send(WebSocketBackendServer.getGson().toJson(imuReading));
+        WebSocketTelemetryServer.getInstance().send(WebSocketTelemetryServer.getGson().toJson(imuReading));
 
         imuDataRepository.save(imuReading);
         return ResponseEntity.ok("Successfully saved to DB");

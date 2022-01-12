@@ -1,6 +1,6 @@
 package com.mobileplatform.backend.opencv;
 
-import com.mobileplatform.backend.websocket.WebSocketBackendServer;
+import com.mobileplatform.backend.websocket.WebSocketVideoServer;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -26,12 +26,12 @@ public class OpenCvStreamCapture implements Runnable {
 
     private final String streamAddress;
     private final int streamIndex;
-    private final WebSocketBackendServer webSocketBackendServer;
+    private final WebSocketVideoServer webSocketVideoServer;
 
-    public OpenCvStreamCapture(String streamAddress, int streamIndex, WebSocketBackendServer webSocketBackendServer) {
+    public OpenCvStreamCapture(String streamAddress, int streamIndex, WebSocketVideoServer webSocketVideoServer) {
         this.streamAddress = streamAddress;
         this.streamIndex = streamIndex;
-        this.webSocketBackendServer = webSocketBackendServer;
+        this.webSocketVideoServer = webSocketVideoServer;
     }
 
     public static void initialize() {
@@ -42,8 +42,8 @@ public class OpenCvStreamCapture implements Runnable {
 
     public void run() {
         final String BMP_FILE_EXTENSION = ".bmp";
-//        VideoCapture videoCapture = new VideoCapture(this.streamAddress, Videoio.CAP_FFMPEG); // TODO delete - webcam test
-        VideoCapture videoCapture = (this.streamIndex == 1) ? new VideoCapture(0) : new VideoCapture(this.streamAddress, Videoio.CAP_FFMPEG); // TODO delete - webcam test
+        // TODO - remove webcam test:
+        VideoCapture videoCapture = this.streamAddress.equals("0") ? new VideoCapture(0) : new VideoCapture(this.streamAddress, Videoio.CAP_FFMPEG);
         Mat frame = new Mat();
 
         while(videoCapture.read(frame)) {
@@ -52,13 +52,13 @@ public class OpenCvStreamCapture implements Runnable {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
                 Imgcodecs.imencode(BMP_FILE_EXTENSION, frame, frameOfByte);
-                byteArrayOutputStream.write((byte) this.streamIndex); // TODO - teraz pierwszy bajt mowi gdzie (na ktora karte) wysylac stream - to juz chyba niepotrzebne skoro wysylanie zawsze tylko do odp. klienta WebSocketowego?
+                byteArrayOutputStream.write((byte) this.streamIndex); // TODO - gdzie na FE ma byc wyswietlony dany stream? teraz pierwszy bajt mowi gdzie (na ktora karte) wysylac stream - to juz chyba niepotrzebne skoro wysylanie zawsze tylko do odp. klienta WebSocketowego?
                 try {
                     byteArrayOutputStream.write(frameOfByte.toArray());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                this.webSocketBackendServer.send(byteArrayOutputStream.toByteArray());
+                this.webSocketVideoServer.send(byteArrayOutputStream.toByteArray());
             }
         }
         videoCapture.release();

@@ -3,6 +3,7 @@ package com.mobileplatform.backend.websocket;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mobileplatform.backend.MobileplatformBackendApplication;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -13,24 +14,20 @@ import java.nio.ByteBuffer;
 /**
  * https://github.com/TooTallNate/Java-WebSocket/wiki#server-example
  */
-public class WebSocketBackendServer extends WebSocketServer {
+public class WebSocketTelemetryServer extends WebSocketServer {
 
-    private static WebSocketBackendServer webSocketBackendServer;
-    private static Gson gson;
-    private WebSocket connectedClient;
+    private static WebSocketTelemetryServer webSocketTelemetryServer; // singleton for sending telemetry data from appropriate services
+    private static Gson gson; // for serializing telemetry data objects before sending them via WebSocket to the client
+    private WebSocket connectedClient; // maintaining only one open connection per server
 
-    public WebSocketBackendServer(String ipAddress, int port) {
-        super(new InetSocketAddress(ipAddress, port));
-    }
-
-    private WebSocketBackendServer(InetSocketAddress address) {
+    private WebSocketTelemetryServer(InetSocketAddress address) {
         super(address);
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        conn.send("Welcome to backend WebSocket server");
-        broadcast( "New connection: " + handshake.getResourceDescriptor());
+        conn.send("Welcome to WebSocket telemetry data server");
+        conn.send( "New connection: " + handshake.getResourceDescriptor());
         System.out.println("New connection to " + conn.getRemoteSocketAddress());
         this.connectedClient = conn;
     }
@@ -62,19 +59,20 @@ public class WebSocketBackendServer extends WebSocketServer {
     }
 
     public static void initialize() {
-        final String host = "localhost";
-        final int port = 8081;
+        final String host = MobileplatformBackendApplication.WEBSOCKET_SERVER_IP_ADDRESS;
+        final int port = MobileplatformBackendApplication.FIRST_FREE_PORT_NUMBER;
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
-        webSocketBackendServer = new WebSocketBackendServer(new InetSocketAddress(host, port));
-        webSocketBackendServer.run();
+        webSocketTelemetryServer = new WebSocketTelemetryServer(new InetSocketAddress(host, port));
+        MobileplatformBackendApplication.FIRST_FREE_PORT_NUMBER += 1;
+        webSocketTelemetryServer.run();
     }
 
-    public static WebSocketBackendServer getInstance() {
-        if(webSocketBackendServer == null) {
+    public static WebSocketTelemetryServer getInstance() {
+        if(webSocketTelemetryServer == null) {
             initialize();
         }
-        return webSocketBackendServer;
+        return webSocketTelemetryServer;
     }
 
     public static Gson getGson() {
@@ -86,11 +84,6 @@ public class WebSocketBackendServer extends WebSocketServer {
 
     public void send(String message) {
         if(this.connectedClient != null) // TODO check -> wysylanie tylko do klienta z ktorym jest polaczenie, a nie broadcast do wsyzstkich
-            this.connectedClient.send(message);
-    }
-
-    public void send(byte[] message) {
-        if(this.connectedClient != null)
             this.connectedClient.send(message);
     }
 }

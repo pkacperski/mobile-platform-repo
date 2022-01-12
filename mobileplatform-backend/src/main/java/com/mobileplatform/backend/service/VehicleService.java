@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.Vehicle;
 import com.mobileplatform.backend.model.repository.VehicleRepository;
-import com.mobileplatform.backend.websocket.WebSocketBackendServer;
+import com.mobileplatform.backend.websocket.WebSocketTelemetryServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class VehicleService {
     public Vehicle save(Vehicle vehicle) {
 
         // TODO - handle adding new vehicle - send data to a new address(?), display data in a new tab
-        WebSocketBackendServer.getInstance().send(WebSocketBackendServer.getGson().toJson(vehicle));
+        WebSocketTelemetryServer.getInstance().send(WebSocketTelemetryServer.getGson().toJson(vehicle));
 
         return vehicleRepository.save(vehicle);
     }
