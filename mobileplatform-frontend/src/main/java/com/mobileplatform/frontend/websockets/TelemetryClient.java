@@ -138,9 +138,9 @@ public class TelemetryClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(diagnosticDataDto.getVehicleId());
                 String diagnosticDataText = "Battery status: " + diagnosticDataDto.getBatteryChargeStatus() + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled()) // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
                     MainFormActions.getInstance().getMainForm().getLblDiagnosticData().setText(diagnosticDataText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblDiagnosticDataVehicle2().setText(diagnosticDataText);
             }
         } catch (JsonSyntaxException | NullPointerException e) {
@@ -155,9 +155,9 @@ public class TelemetryClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(encoderReadingDto.getVehicleId());
                 String encoderReadingText = "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed() + "...";
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblEncoderReading().setText(encoderReadingText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblEncoderReadingVehicle2().setText(encoderReadingText);
             }
         } catch (JsonSyntaxException e) {
@@ -172,9 +172,9 @@ public class TelemetryClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(imuReadingDto.getVehicleId());
                 String imuReadingText = "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ...";
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblImuReading().setText(imuReadingText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblImuReadingVehicle2().setText(imuReadingText);
             }
         } catch (JsonSyntaxException e) {
@@ -189,9 +189,9 @@ public class TelemetryClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(lidarReadingDto.getVehicleId());
                 String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLidarReading().setText(lidarReadingText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLidarReadingVehicle2().setText(lidarReadingText);
             }
         } catch (JsonSyntaxException e) {
@@ -206,9 +206,9 @@ public class TelemetryClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(locationDto.getVehicleId());
                 String locationText = "Location: real X: " + locationDto.getRealXCoordinate() + ", real Y: " + locationDto.getRealYCoordinate();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLocation().setText(locationText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLocationVehicle2().setText(locationText);
             }
         } catch (JsonSyntaxException e) {
@@ -223,9 +223,9 @@ public class TelemetryClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(pointCloudDto.getVehicleId());
                 String pointCloudText = "Point cloud reading: " + pointCloudDto.getPointCloudReading();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblPointCloudReading().setText(pointCloudText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblPointCloudReadingVehicle2().setText(pointCloudText);
             }
         } catch (JsonSyntaxException e) {

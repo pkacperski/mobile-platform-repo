@@ -13,6 +13,7 @@ import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
+import javax.swing.*;
 import java.time.LocalDateTime;
 
 @Log
@@ -181,17 +182,45 @@ public class MainFormActions implements Actions {
             // TODO - rozw. problem z disdconnectem! (mwciskanie przycisku na FE ale pponizszy if nie przechodzi =cos nie tak przy disconnectie)
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 if(whichVehicle == VEHICLE_1) {
-                    // TODO - zmienic reszte labeleki tez na Vehicle not connected itd + nie ustawiac nowych odczytow po rozlaczeniu sie
-                    mainForm.getBtnConnectVehicle().setEnabled(true);
-                    mainForm.getBtnDisconnectVehicle().setEnabled(false);
+                    setAllLabelsAfterDisconnect(VEHICLE_1);
                 }
                 else if(whichVehicle == VEHICLE_2) {
-                    mainForm.getBtnConnectVehicle2().setEnabled(true);
-                    mainForm.getBtnDisconnectVehicle2().setEnabled(false);
+                    setAllLabelsAfterDisconnect(VEHICLE_2);
                 }
             }
         } catch (UnirestException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setAllLabelsAfterDisconnect(int whichVehicle) {
+        if(whichVehicle == VEHICLE_1) {
+            mainForm.getBtnConnectVehicle().setEnabled(true);
+            mainForm.getBtnDisconnectVehicle().setEnabled(false);
+            mainForm.getLblVehicleId().setText("Vehicle not connected");
+            mainForm.getLblVehicleIp().setText("Vehicle not connected");
+            mainForm.getLblVehicleName().setText("Vehicle not connected");
+            mainForm.getLblPointCloudReading().setText("No point cloud reading received");
+            mainForm.getLblLocation().setText("No location data received");
+            mainForm.getLblLidarReading().setText("No lidar readings received");
+            mainForm.getLblImuReading().setText("No IMU readings received");
+            mainForm.getLblEncoderReading().setText("No encoder readings received");
+            mainForm.getLblDiagnosticData().setText("No diagnostic data received");
+            mainForm.getLblVideoStream().setIcon(new ImageIcon());
+        }
+        else if(whichVehicle == VEHICLE_2) {
+            mainForm.getBtnConnectVehicle2().setEnabled(true);
+            mainForm.getBtnDisconnectVehicle2().setEnabled(false);
+            mainForm.getLblVehicleIdVehicle2().setText("Vehicle not connected");
+            mainForm.getLblVehicleIpVehicle2().setText("Vehicle not connected");
+            mainForm.getLblVehicleNameVehicle2().setText("Vehicle not connected");
+            mainForm.getLblPointCloudReadingVehicle2().setText("No point cloud reading received");
+            mainForm.getLblLocationVehicle2().setText("No location data received");
+            mainForm.getLblLidarReadingVehicle2().setText("No lidar readings received");
+            mainForm.getLblImuReadingVehicle2().setText("No IMU readings received");
+            mainForm.getLblEncoderReadingVehicle2().setText("No encoder readings received");
+            mainForm.getLblDiagnosticDataVehicle2().setText("No diagnostic data received");
+            mainForm.getLblVideoStreamVehicle2().setIcon(new ImageIcon());
         }
     }
 
