@@ -9,9 +9,11 @@ import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
 import com.mobileplatform.frontend.form.MainForm;
+import com.mobileplatform.frontend.websockets.WebSocketFrontendClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 @Log
@@ -51,6 +53,12 @@ public class MainFormActions implements Actions {
     final int EMERGENCY_MODE_ABORT_API_CONST = 2;
     final int VEHICLE_1 = 1;
     final int VEHICLE_2 = 2;
+    final int STREAM_1 = 1;
+    final int STREAM_2 = 2;
+    final int STREAM_3 = 3;
+    final int STREAM_4 = 4;
+    final int STREAM_5 = 5;
+    final int STREAM_6 = 6;
 
     private MainFormActions() {}
 
@@ -92,6 +100,9 @@ public class MainFormActions implements Actions {
         mainForm.getBtnAutonomousDrivingMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_1));
         mainForm.getBtnManualSteeringMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_1));
         mainForm.getBtnFetchData().addActionListener(e -> refreshDataInMainPanel(VEHICLE_1));
+        mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
+        mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
+        mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -100,6 +111,9 @@ public class MainFormActions implements Actions {
         mainForm.getBtnAutonomousDrivingModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_2));
         mainForm.getBtnManualSteeringModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_2));
         mainForm.getBtnFetchDataVehicle2().addActionListener(e -> refreshDataInMainPanel(VEHICLE_2));
+        mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_4));
+        mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_5));
+        mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_6));
     }
 
     private void sendConnectVehicleSignal(int whichVehicle) {
@@ -227,6 +241,14 @@ public class MainFormActions implements Actions {
             drivingModeDataDtoRestHandler.performPost(DRIVING_MODE_DATA_PATH, gson.toJson(drivingModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             drivingModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
         } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
+        try {
+            WebSocketFrontendClient.getInstance().send("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }

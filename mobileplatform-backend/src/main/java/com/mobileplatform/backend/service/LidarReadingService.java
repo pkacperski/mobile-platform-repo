@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.LidarReading;
 import com.mobileplatform.backend.model.repository.LidarReadingRepository;
-import com.mobileplatform.backend.websocket.WebSocketTelemetryServer;
+import com.mobileplatform.backend.websocket.TelemetryServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class LidarReadingService {
 
     public ResponseEntity<String> save(@Valid LidarReading lidarReading) {
 
-        WebSocketTelemetryServer.getInstance().send(WebSocketTelemetryServer.getGson().toJson(lidarReading));
+        TelemetryServer.getInstance().send(TelemetryServer.getGson().toJson(lidarReading));
 
         lidarReadingRepository.save(lidarReading);
         return ResponseEntity.ok("Successfully saved to DB");

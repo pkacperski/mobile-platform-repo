@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.DiagnosticData;
 import com.mobileplatform.backend.model.repository.DiagnosticDataRepository;
-import com.mobileplatform.backend.websocket.WebSocketTelemetryServer;
+import com.mobileplatform.backend.websocket.TelemetryServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class DiagnosticDataService {
 
     public ResponseEntity<String> save(@Valid DiagnosticData diagnosticData) {
 
-        WebSocketTelemetryServer.getInstance().send(WebSocketTelemetryServer.getGson().toJson(diagnosticData));
+        TelemetryServer.getInstance().send(TelemetryServer.getGson().toJson(diagnosticData));
 
         diagnosticDataRepository.save(diagnosticData);
         return ResponseEntity.ok("Successfully saved to DB");

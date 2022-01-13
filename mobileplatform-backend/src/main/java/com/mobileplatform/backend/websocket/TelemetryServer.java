@@ -4,6 +4,7 @@ import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mobileplatform.backend.MobileplatformBackendApplication;
+import com.mobileplatform.backend.opencv.VideoCaptureHandler;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -14,13 +15,13 @@ import java.nio.ByteBuffer;
 /**
  * https://github.com/TooTallNate/Java-WebSocket/wiki#server-example
  */
-public class WebSocketTelemetryServer extends WebSocketServer {
+public class TelemetryServer extends WebSocketServer {
 
-    private static WebSocketTelemetryServer webSocketTelemetryServer; // singleton for sending telemetry data from appropriate services
+    private static TelemetryServer telemetryServer; // singleton for sending telemetry data from appropriate services
     private static Gson gson; // for serializing telemetry data objects before sending them via WebSocket to the client
     private WebSocket connectedClient; // maintaining only one open connection per server
 
-    private WebSocketTelemetryServer(InetSocketAddress address) {
+    private TelemetryServer(InetSocketAddress address) {
         super(address);
     }
 
@@ -41,6 +42,12 @@ public class WebSocketTelemetryServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
+        // receiving a message about which stream to activate - turn off all streams for the particular vehicle and then turn on the one from the message
+        if(message.contains("stream") && message.contains("vehicle")) {
+            int whichVehicle = Integer.parseInt(message.substring(message.indexOf(':') + 2, message.indexOf(':') + 3));
+            int whichStream = Integer.parseInt(message.substring(message.indexOf('.') - 1, message.indexOf('.')));
+            VideoCaptureHandler.handleChangingActiveStream(whichVehicle, whichStream);
+        }
     }
 
     @Override
@@ -63,16 +70,16 @@ public class WebSocketTelemetryServer extends WebSocketServer {
         final int port = MobileplatformBackendApplication.FIRST_FREE_PORT_NUMBER;
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
-        webSocketTelemetryServer = new WebSocketTelemetryServer(new InetSocketAddress(host, port));
+        telemetryServer = new TelemetryServer(new InetSocketAddress(host, port));
         MobileplatformBackendApplication.FIRST_FREE_PORT_NUMBER += 1;
-        webSocketTelemetryServer.run();
+        telemetryServer.run();
     }
 
-    public static WebSocketTelemetryServer getInstance() {
-        if(webSocketTelemetryServer == null) {
+    public static TelemetryServer getInstance() {
+        if(telemetryServer == null) {
             initialize();
         }
-        return webSocketTelemetryServer;
+        return telemetryServer;
     }
 
     public static Gson getGson() {

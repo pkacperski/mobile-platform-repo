@@ -17,6 +17,7 @@ public class MobileplatformFrontend {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             Objects.requireNonNull(ActionsFactory.getActions("MainForm")).control();
 
+            // TODO - taka konfiguracja jak na BE
             Thread webSocketClientThread = new Thread(WebSocketFrontendClient::initialize); // WS na telemetrie - localhost:8081
             webSocketClientThread.start();
 

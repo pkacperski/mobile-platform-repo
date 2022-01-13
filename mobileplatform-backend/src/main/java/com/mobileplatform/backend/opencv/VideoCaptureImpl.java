@@ -1,6 +1,6 @@
 package com.mobileplatform.backend.opencv;
 
-import com.mobileplatform.backend.websocket.WebSocketVideoServer;
+import com.mobileplatform.backend.websocket.VideoServer;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -22,16 +22,18 @@ import java.io.IOException;
  * This configuration was tested with IntelliJ IDEA 2021.2.3 under Windows 10 64-bit.
  * */
 
-public class OpenCvStreamCapture implements Runnable {
+public class VideoCaptureImpl implements Runnable {
 
     private final String streamAddress;
-    private final int streamIndex;
-    private final WebSocketVideoServer webSocketVideoServer;
+    private final int whichVehicle;
+    private final VideoServer videoServer;
+    private boolean isStreamActive;
 
-    public OpenCvStreamCapture(String streamAddress, int streamIndex, WebSocketVideoServer webSocketVideoServer) {
+    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, int whichVehicle, boolean isStreamActive) {
         this.streamAddress = streamAddress;
-        this.streamIndex = streamIndex;
-        this.webSocketVideoServer = webSocketVideoServer;
+        this.videoServer = videoServer;
+        this.whichVehicle = whichVehicle;
+        this.isStreamActive = isStreamActive;
     }
 
     public static void initialize() {
@@ -47,20 +49,26 @@ public class OpenCvStreamCapture implements Runnable {
         Mat frame = new Mat();
 
         while(videoCapture.read(frame)) {
-            if(frame.width() > 0 && frame.height() > 0) {
-                MatOfByte frameOfByte = new MatOfByte();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            if(isStreamActive) {
+                if(frame.width() > 0 && frame.height() > 0) {
+                    MatOfByte frameOfByte = new MatOfByte();
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
-                Imgcodecs.imencode(BMP_FILE_EXTENSION, frame, frameOfByte);
-                byteArrayOutputStream.write((byte) this.streamIndex); // TODO - gdzie na FE ma byc wyswietlony dany stream? teraz pierwszy bajt mowi gdzie (na ktora karte) wysylac stream - to juz chyba niepotrzebne skoro wysylanie zawsze tylko do odp. klienta WebSocketowego?
-                try {
-                    byteArrayOutputStream.write(frameOfByte.toArray());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    Imgcodecs.imencode(BMP_FILE_EXTENSION, frame, frameOfByte);
+                    byteArrayOutputStream.write((byte) this.whichVehicle); // TODO - send to websocket directly writing to screen 1 (then no need for coding the first byte)
+                    try {
+                        byteArrayOutputStream.write(frameOfByte.toArray());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    this.videoServer.send(byteArrayOutputStream.toByteArray());
                 }
-                this.webSocketVideoServer.send(byteArrayOutputStream.toByteArray());
             }
         }
         videoCapture.release();
+    }
+
+    public void setStreamActive(boolean isStreamActive) {
+        this.isStreamActive = isStreamActive;
     }
 }

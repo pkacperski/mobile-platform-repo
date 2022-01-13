@@ -49,6 +49,12 @@ public class MainForm {
     private JButton btnManualSteeringModeVehicle2;
     private JLabel lblImuReadingVehicle2;
     private JButton btnDisconnectVehicle2;
+    private JButton btnStream2;
+    private JButton btnStream1;
+    private JButton btnStream3;
+    private JButton btnStream1Vehicle2;
+    private JButton btnStream2Vehicle2;
+    private JButton btnStream3Vehicle2;
 
     public MainForm() {
         frame = new JFrame("MainForm");

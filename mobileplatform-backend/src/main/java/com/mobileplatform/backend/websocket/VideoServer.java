@@ -7,11 +7,11 @@ import org.java_websocket.server.WebSocketServer;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-public class WebSocketVideoServer extends WebSocketServer {
+public class VideoServer extends WebSocketServer {
 
     private WebSocket connectedClient; // maintaining only one open connection per server
 
-    public WebSocketVideoServer(String ipAddress, int port) {
+    public VideoServer(String ipAddress, int port) {
         super(new InetSocketAddress(ipAddress, port));
     }
 

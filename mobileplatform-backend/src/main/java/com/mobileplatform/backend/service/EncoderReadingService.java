@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.EncoderReading;
 import com.mobileplatform.backend.model.repository.EncoderReadingRepository;
-import com.mobileplatform.backend.websocket.WebSocketTelemetryServer;
+import com.mobileplatform.backend.websocket.TelemetryServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class EncoderReadingService {
 
     public ResponseEntity<String> save(@Valid EncoderReading encoderReading) {
 
-        WebSocketTelemetryServer.getInstance().send(WebSocketTelemetryServer.getGson().toJson(encoderReading));
+        TelemetryServer.getInstance().send(TelemetryServer.getGson().toJson(encoderReading));
 
         encoderReadingRepository.save(encoderReading);
         return ResponseEntity.ok("Successfully saved to DB");

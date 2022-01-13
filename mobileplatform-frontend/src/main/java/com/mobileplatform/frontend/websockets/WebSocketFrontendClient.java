@@ -68,18 +68,17 @@ public class WebSocketFrontendClient extends WebSocketClient {
     public void onMessage(ByteBuffer message) {
         final int ONE_BYTE_OFFSET = 1;
 
-        // TODO - odbior roznych streamow w oddzielnych WebSocketach w oddzielnych watkach (spr. pierwszy bajt z wiadomosci)
         MatOfByte matOfByte = new MatOfByte(ONE_BYTE_OFFSET, message.array().length-1, message.array());
         Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
         if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
             BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
             ImageIcon icon = new ImageIcon(bufferedImage);
-            if(message.array()[0] == 0x01) {
-                // first stream
+            if(message.array()[0] == 0x01) { // first byte of message with video frame determines where this stream should be handled
+                // first stream - TODO - send to websocket directly writing to screen 1 (then no need for coding the first byte)
                 MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
             }
             else if(message.array()[0] == 0x02) {
-                // second tab
+                // second stream
                 MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
             }
         }
