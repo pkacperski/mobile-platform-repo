@@ -67,11 +67,10 @@ public class TelemetryServer extends WebSocketServer {
 
     public static void initialize() {
         final String host = MobileplatformBackendApplication.WEBSOCKET_SERVER_IP_ADDRESS;
-        final int port = MobileplatformBackendApplication.FIRST_FREE_PORT_NUMBER;
+        final int port = MobileplatformBackendApplication.TELEMETRY_SERVER_PORT_NUMBER;
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
         telemetryServer = new TelemetryServer(new InetSocketAddress(host, port));
-        MobileplatformBackendApplication.FIRST_FREE_PORT_NUMBER += 1;
         telemetryServer.run();
     }
 
@@ -90,7 +89,7 @@ public class TelemetryServer extends WebSocketServer {
     }
 
     public void send(String message) {
-        if(this.connectedClient != null) // TODO check -> wysylanie tylko do klienta z ktorym jest polaczenie, a nie broadcast do wsyzstkich
+        if(this.connectedClient != null)
             this.connectedClient.send(message);
     }
 }

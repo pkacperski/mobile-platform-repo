@@ -4,12 +4,11 @@ import com.mobileplatform.backend.websocket.VideoServer;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 /*
  * Test of OpenCV module dependencies added manually to IntelliJ instead of importing a Maven dependency.
@@ -25,20 +24,17 @@ import java.io.IOException;
 public class VideoCaptureImpl implements Runnable {
 
     private final String streamAddress;
-    private final int whichVehicle;
     private final VideoServer videoServer;
     private boolean isStreamActive;
 
-    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, int whichVehicle, boolean isStreamActive) {
+    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, boolean isStreamActive) {
         this.streamAddress = streamAddress;
         this.videoServer = videoServer;
-        this.whichVehicle = whichVehicle;
         this.isStreamActive = isStreamActive;
     }
 
     public static void initialize() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        System.out.println("OpenCV test");
         System.out.println("Loaded OpenCV: " + Core.getVersionString());
     }
 
@@ -51,17 +47,13 @@ public class VideoCaptureImpl implements Runnable {
         while(videoCapture.read(frame)) {
             if(isStreamActive) {
                 if(frame.width() > 0 && frame.height() > 0) {
-                    MatOfByte frameOfByte = new MatOfByte();
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    Mat resizedFrame = new Mat();
+                    Size size = new Size(400,300); // TODO - set correct size of images before sending to FE?
+                    Imgproc.resize(frame, resizedFrame, size);
 
-                    Imgcodecs.imencode(BMP_FILE_EXTENSION, frame, frameOfByte);
-                    byteArrayOutputStream.write((byte) this.whichVehicle); // TODO - send to websocket directly writing to screen 1 (then no need for coding the first byte)
-                    try {
-                        byteArrayOutputStream.write(frameOfByte.toArray());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    this.videoServer.send(byteArrayOutputStream.toByteArray());
+                    MatOfByte frameOfByte = new MatOfByte();
+                    Imgcodecs.imencode(BMP_FILE_EXTENSION, resizedFrame, frameOfByte);
+                    this.videoServer.send(frameOfByte.toArray());
                 }
             }
         }

@@ -8,33 +8,22 @@ import com.mobileplatform.frontend.controller.action.MainFormActions;
 import com.mobileplatform.frontend.dto.*;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.imgcodecs.Imgcodecs;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.ByteBuffer;
 import java.util.Objects;
 
-import static com.mobileplatform.frontend.opencv.OpenCvHandler.mat2BufferedImage;
-import static org.opencv.imgcodecs.Imgcodecs.IMREAD_UNCHANGED;
+import static com.mobileplatform.frontend.MobileplatformFrontend.*;
 
 /**
  * https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/ExampleClient.java
  */
-public class WebSocketFrontendClient extends WebSocketClient {
+public class TelemetryClient extends WebSocketClient {
 
-    private static WebSocketFrontendClient webSocketFrontendClient;
+    private static TelemetryClient telemetryClient;
     private static Gson gson; // To solve a problem with deserializing java.time.LocalDateTime by gson
 
-    public WebSocketFrontendClient(String ipAddress, int port, String serverName) throws URISyntaxException {
-        super(new URI("ws://" + ipAddress + ":" + port + "/" + serverName));
-    }
-
-    private WebSocketFrontendClient(URI serverURI) {
+    private TelemetryClient(URI serverURI) {
         super(serverURI);
     }
 
@@ -65,26 +54,6 @@ public class WebSocketFrontendClient extends WebSocketClient {
     }
 
     @Override
-    public void onMessage(ByteBuffer message) {
-        final int ONE_BYTE_OFFSET = 1;
-
-        MatOfByte matOfByte = new MatOfByte(ONE_BYTE_OFFSET, message.array().length-1, message.array());
-        Mat receivedFrame = Imgcodecs.imdecode(matOfByte, IMREAD_UNCHANGED);
-        if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
-            BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
-            ImageIcon icon = new ImageIcon(bufferedImage);
-            if(message.array()[0] == 0x01) { // first byte of message with video frame determines where this stream should be handled
-                // first stream - TODO - send to websocket directly writing to screen 1 (then no need for coding the first byte)
-                MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
-            }
-            else if(message.array()[0] == 0x02) {
-                // second stream
-                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
-            }
-        }
-    }
-
-    @Override
     public void onClose(int code, String reason, boolean remote) {
         // The close codes are documented in class org.java_websocket.framing.CloseFrame
         System.out.println("Connection closed by " + (remote ? "remote peer" : "us") + " Code: " + code + " Reason: " + reason);
@@ -96,26 +65,22 @@ public class WebSocketFrontendClient extends WebSocketClient {
     }
 
     public static void initialize() {
-        // More about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-        final String host = "localhost"; // Host and port have to be the same as in backend server
-        final int port = 8081;
-        final String serverName = "telemetry";
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
         // TODO - obsluzyc niepowodzenie w tworzeniu klienta i polaczeniu WS
         try {
-            webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + serverName));
-            webSocketFrontendClient.connect();
+            telemetryClient = new TelemetryClient(new URI("ws://" + WEBSOCKET_SERVER_IP_ADDRESS + ":" + TELEMETRY_SERVER_PORT_NUMBER + "/" + TELEMETRY_SERVER_NAME));
+            telemetryClient.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    public static WebSocketFrontendClient getInstance() throws URISyntaxException {
-        if(webSocketFrontendClient == null) {
+    public static TelemetryClient getInstance() {
+        if(telemetryClient == null) {
             initialize();
         }
-        return webSocketFrontendClient;
+        return telemetryClient;
     }
 
     public static Gson getGson() {

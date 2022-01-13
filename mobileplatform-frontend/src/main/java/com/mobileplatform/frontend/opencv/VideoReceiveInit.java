@@ -2,13 +2,9 @@ package com.mobileplatform.frontend.opencv;
 
 import lombok.Data;
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 
 @Data
-public class OpenCvHandler {
+public class VideoReceiveInit {
     /*
      * Test of OpenCV module dependencies added manually to IntelliJ instead of importing a Maven dependency.
      * Configuration steps (following https://www.youtube.com/watch?v=vLf3ZcFotyA):
@@ -22,22 +18,6 @@ public class OpenCvHandler {
 
     public static void initialize() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
-
-    public static BufferedImage mat2BufferedImage(Mat mat){
-        // Source: http://answers.opencv.org/question/10344/opencv-java-load-image-to-gui/
-        // The output can be assigned either to a BufferedImage or to an Image
-
-        int type = BufferedImage.TYPE_BYTE_GRAY;
-        if(mat.channels() > 1) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-        int bufferSize = mat.channels() * mat.cols() * mat.rows();
-        byte[] b = new byte[bufferSize];
-        mat.get(0, 0, b);
-        BufferedImage image = new BufferedImage(mat.cols(), mat.rows(), type);
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        System.arraycopy(b, 0, targetPixels, 0, b.length);
-        return image;
+        System.out.println("Loaded OpenCV: " + Core.getVersionString());
     }
 }

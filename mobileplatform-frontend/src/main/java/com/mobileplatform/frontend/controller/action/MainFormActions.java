@@ -9,11 +9,10 @@ import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
 import com.mobileplatform.frontend.form.MainForm;
-import com.mobileplatform.frontend.websockets.WebSocketFrontendClient;
+import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 
 @Log
@@ -130,8 +129,8 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr("localhost" /*"192.168.0.221"*/) // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
-                        .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080?
+                        .addr("localhost") // TODO - check: adres IP serwera (BE) do ktorego wysylac dane w sieci lokalnej
+                        .port(8080)
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
                         .build();
@@ -178,12 +177,11 @@ public class MainFormActions implements Actions {
 
         try {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
-            // TODO - czy potrzeba najpierw deaktywowac polaczenie = strzelac pod /connect/activate?
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             // TODO - rozw. problem z disdconnectem! (mwciskanie przycisku na FE ale pponizszy if nie przechodzi =cos nie tak przy disconnectie)
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 if(whichVehicle == VEHICLE_1) {
-                    // TODO - zmienic reszte labeleki tez na Vehicle not connected itd
+                    // TODO - zmienic reszte labeleki tez na Vehicle not connected itd + nie ustawiac nowych odczytow po rozlaczeniu sie
                     mainForm.getBtnConnectVehicle().setEnabled(true);
                     mainForm.getBtnDisconnectVehicle().setEnabled(false);
                 }
@@ -246,11 +244,7 @@ public class MainFormActions implements Actions {
     }
 
     private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
-        try {
-            WebSocketFrontendClient.getInstance().send("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
     }
 
     private long getVehicleId(int whichVehicle) {
@@ -272,7 +266,6 @@ public class MainFormActions implements Actions {
     }
 
     // TODO - reformat (duplikacja kodu!) + docelowo przycisk "Refresh data" niepotrzebny
-    // TODO - brac ID z odp. ekranu
     public void refreshDataInMainPanel(int whichVehicle) {
 
         VehicleDto vehicleDto = null;
