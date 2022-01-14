@@ -20,6 +20,10 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
+    public List<Location> findAllByVehicleId(Long vehicleId) {
+        return locationRepository.findAllByVehicleId(vehicleId);
+    }
+
     public Optional<Location> findNewest() {
         return locationRepository.findTopByOrderByIdDesc();
     }
