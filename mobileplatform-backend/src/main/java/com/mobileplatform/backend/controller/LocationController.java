@@ -20,6 +20,11 @@ public class LocationController {
         return locationService.findAll();
     }
 
+    @GetMapping("/{vehicleId}")
+    public List<Location> findAllByVehicleId(@PathVariable Long vehicleId) {
+        return locationService.findAllByVehicleId(vehicleId);
+    }
+
     @GetMapping("/newest")
     public Optional<Location> findNewest() {
         return locationService.findNewest();

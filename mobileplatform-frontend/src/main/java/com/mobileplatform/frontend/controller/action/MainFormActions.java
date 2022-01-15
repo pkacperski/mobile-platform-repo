@@ -9,10 +9,14 @@ import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
 import com.mobileplatform.frontend.form.MainForm;
+import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
+import javax.swing.*;
 import java.time.LocalDateTime;
+
+import static com.mobileplatform.frontend.MobileplatformFrontend.*;
 
 @Log
 public class MainFormActions implements Actions {
@@ -33,7 +37,6 @@ public class MainFormActions implements Actions {
     private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
     private RestHandler<VehicleConnectResponse> vehicleConnectResponseRestHandler;
-    private RestHandler<VehicleActivateConnectionResponse> vehicleActivateConnectionResponseRestHandler;
 
     final String VEHICLE_PATH = "/vehicle";
     final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
@@ -44,7 +47,6 @@ public class MainFormActions implements Actions {
     final String LIDAR_READING_NEWEST_PATH = "/lidar-reading/newest";
     final String LOCATION_NEWEST_PATH = "/location/newest";
     final String POINT_CLOUD_NEWEST_PATH = "/point-cloud/newest";
-    final String ID_1 = "1";
     final String NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE = "JSONArray text must start with '['";
     final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
     final int DRIVING_MODE_AUTONOMOUS_API_CONST = 1;
@@ -53,6 +55,12 @@ public class MainFormActions implements Actions {
     final int EMERGENCY_MODE_ABORT_API_CONST = 2;
     final int VEHICLE_1 = 1;
     final int VEHICLE_2 = 2;
+    final int STREAM_1 = 1;
+    final int STREAM_2 = 2;
+    final int STREAM_3 = 3;
+    final int STREAM_4 = 4;
+    final int STREAM_5 = 5;
+    final int STREAM_6 = 6;
 
     private MainFormActions() {}
 
@@ -86,7 +94,6 @@ public class MainFormActions implements Actions {
         pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
         vehicleConnectResponseRestHandler = new RestHandler<>(VehicleConnectResponse.class);
-        vehicleActivateConnectionResponseRestHandler = new RestHandler<>(VehicleActivateConnectionResponse.class);
 
         mainForm.getBtnConnectVehicle().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_1));
         mainForm.getBtnDisconnectVehicle().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_1));
@@ -95,6 +102,9 @@ public class MainFormActions implements Actions {
         mainForm.getBtnAutonomousDrivingMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_1));
         mainForm.getBtnManualSteeringMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_1));
         mainForm.getBtnFetchData().addActionListener(e -> refreshDataInMainPanel(VEHICLE_1));
+        mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
+        mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
+        mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -103,6 +113,9 @@ public class MainFormActions implements Actions {
         mainForm.getBtnAutonomousDrivingModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_2));
         mainForm.getBtnManualSteeringModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_2));
         mainForm.getBtnFetchDataVehicle2().addActionListener(e -> refreshDataInMainPanel(VEHICLE_2));
+        mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_4));
+        mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_5));
+        mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_6));
     }
 
     private void sendConnectVehicleSignal(int whichVehicle) {
@@ -119,29 +132,22 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr("localhost") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej
-                        .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080?
+                        .addr(IS_TEST_ENV ? WEBSOCKET_SERVER_IP_ADDRESS_TEST : WEBSOCKET_SERVER_IP_ADDRESS_PROD)
+                        .port(TELEMETRY_API_PORT_NUMBER)
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
                         .build();
                 vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
 
-                VehicleActivateConnectionRequest vehicleActivateConnectionRequest = VehicleActivateConnectionRequest.builder()
-                        .activ(true)
-                        .vid(vehicleDtoResponse.getId().intValue())
-                        .mgc(23589)
-                        .build();
-                vehicleActivateConnectionResponseRestHandler.performPost(vehicleIp + "/connect/activate", gson.toJson(vehicleActivateConnectionRequest), APPLICATION_JSON_CONTENT_TYPE);
-
                 if (whichVehicle == VEHICLE_1) {
                     mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleDtoResponse.getId());
-                    mainForm.getLblVehicleIp().setText("Vehicle IP address: " + vehicleIp);
+                    mainForm.getLblVehicleIp().setText("Vehicle IP: " + vehicleIp);
                     mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDtoResponse.getName());
                     mainForm.getBtnConnectVehicle().setEnabled(false);
                     mainForm.getBtnDisconnectVehicle().setEnabled(true);
                 } else if (whichVehicle == VEHICLE_2) {
                     mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleDtoResponse.getId());
-                    mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP address: " + vehicleIp);
+                    mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
                     mainForm.getLblVehicleNameVehicle2().setText("Vehicle name: " + vehicleDtoResponse.getName());
                     mainForm.getBtnConnectVehicle2().setEnabled(false);
                     mainForm.getBtnDisconnectVehicle2().setEnabled(true);
@@ -166,28 +172,56 @@ public class MainFormActions implements Actions {
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
         VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // dopoki endpoint DELETE /connect ma takie samo body jak POST /connect, nie trzeba tworzyc nowego Dto na obsluge requesta ani nowego RestHandlera
-                .addr("localhost") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej - niepotrzebny w tym endpoincie
-                .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080? - niepotrzebny w tym endpoincie
+                .addr(IS_TEST_ENV ? WEBSOCKET_SERVER_IP_ADDRESS_TEST : WEBSOCKET_SERVER_IP_ADDRESS_PROD)
+                .port(TELEMETRY_API_PORT_NUMBER)
                 .vid(storedVehicleId)
                 .mgc(15061)
                 .build();
 
         try {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
-            // TODO - czy potrzeba najpierw deaktywowac polaczenie = strzelac pod /connect/activate?
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 if(whichVehicle == VEHICLE_1) {
-                    mainForm.getBtnConnectVehicle().setEnabled(true);
-                    mainForm.getBtnDisconnectVehicle().setEnabled(false);
+                    setAllLabelsAfterDisconnect(VEHICLE_1);
                 }
                 else if(whichVehicle == VEHICLE_2) {
-                    mainForm.getBtnConnectVehicle2().setEnabled(true);
-                    mainForm.getBtnDisconnectVehicle2().setEnabled(false);
+                    setAllLabelsAfterDisconnect(VEHICLE_2);
                 }
             }
         } catch (UnirestException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void setAllLabelsAfterDisconnect(int whichVehicle) {
+        if(whichVehicle == VEHICLE_1) {
+            mainForm.getBtnConnectVehicle().setEnabled(true);
+            mainForm.getBtnDisconnectVehicle().setEnabled(false);
+            mainForm.getLblVehicleId().setText("Vehicle not connected");
+            mainForm.getLblVehicleIp().setText("Vehicle not connected");
+            mainForm.getLblVehicleName().setText("Vehicle not connected");
+            mainForm.getLblPointCloudReading().setText("No point cloud reading received");
+            mainForm.getLblLocation().setText("No location data received");
+            mainForm.getLblLidarReading().setText("No lidar readings received");
+            mainForm.getLblImuReading().setText("No IMU readings received");
+            mainForm.getLblEncoderReading().setText("No encoder readings received");
+            mainForm.getLblDiagnosticData().setText("No diagnostic data received");
+            mainForm.getLblVideoStream().setIcon(new ImageIcon());
+        }
+        else if(whichVehicle == VEHICLE_2) {
+            mainForm.getBtnConnectVehicle2().setEnabled(true);
+            mainForm.getBtnDisconnectVehicle2().setEnabled(false);
+            mainForm.getLblVehicleIdVehicle2().setText("Vehicle not connected");
+            mainForm.getLblVehicleIpVehicle2().setText("Vehicle not connected");
+            mainForm.getLblVehicleNameVehicle2().setText("Vehicle not connected");
+            mainForm.getLblPointCloudReadingVehicle2().setText("No point cloud reading received");
+            mainForm.getLblLocationVehicle2().setText("No location data received");
+            mainForm.getLblLidarReadingVehicle2().setText("No lidar readings received");
+            mainForm.getLblImuReadingVehicle2().setText("No IMU readings received");
+            mainForm.getLblEncoderReadingVehicle2().setText("No encoder readings received");
+            mainForm.getLblDiagnosticDataVehicle2().setText("No diagnostic data received");
+            mainForm.getLblVideoStreamVehicle2().setIcon(new ImageIcon());
         }
     }
 
@@ -239,6 +273,10 @@ public class MainFormActions implements Actions {
         }
     }
 
+    private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
+        TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
+    }
+
     private long getVehicleId(int whichVehicle) {
         return Long.parseLong((whichVehicle == 1)
                 ? mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)
@@ -258,7 +296,6 @@ public class MainFormActions implements Actions {
     }
 
     // TODO - reformat (duplikacja kodu!) + docelowo przycisk "Refresh data" niepotrzebny
-    // TODO - brac ID z odp. ekranu
     public void refreshDataInMainPanel(int whichVehicle) {
 
         VehicleDto vehicleDto = null;

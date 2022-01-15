@@ -13,15 +13,17 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Objects;
 
+import static com.mobileplatform.frontend.MobileplatformFrontend.*;
+
 /**
  * https://github.com/TooTallNate/Java-WebSocket/blob/master/src/main/example/ExampleClient.java
  */
-public class WebSocketFrontendClient extends WebSocketClient {
+public class TelemetryClient extends WebSocketClient {
 
-    private static WebSocketFrontendClient webSocketFrontendClient;
+    private static TelemetryClient telemetryClient;
     private static Gson gson; // To solve a problem with deserializing java.time.LocalDateTime by gson
 
-    public WebSocketFrontendClient(URI serverURI) {
+    private TelemetryClient(URI serverURI) {
         super(serverURI);
     }
 
@@ -62,22 +64,23 @@ public class WebSocketFrontendClient extends WebSocketClient {
         ex.printStackTrace(); // If the error is fatal then onClose will be called additionally
     }
 
-    public static void initialize() throws URISyntaxException {
-        // More about drafts here: http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-        final String host = "localhost"; // Host and port have to be the same as in backend server
-        final int port = 8081;
-        final String clientName = "frontend";
+    public static void initialize() {
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
-        webSocketFrontendClient = new WebSocketFrontendClient(new URI("ws://" + host + ":" + port + "/" + clientName));
-        webSocketFrontendClient.connect();
+        // TODO - obsluzyc niepowodzenie w tworzeniu klienta i polaczeniu WS
+        try {
+            telemetryClient = new TelemetryClient(new URI("ws://" + WEBSOCKET_SERVER_IP_ADDRESS_TEST + ":" + TELEMETRY_SERVER_PORT_NUMBER + "/" + TELEMETRY_SERVER_NAME));
+            telemetryClient.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static WebSocketFrontendClient getInstance() throws URISyntaxException {
-        if(webSocketFrontendClient == null) {
+    public static TelemetryClient getInstance() {
+        if(telemetryClient == null) {
             initialize();
         }
-        return webSocketFrontendClient;
+        return telemetryClient;
     }
 
     public static Gson getGson() {
@@ -135,9 +138,9 @@ public class WebSocketFrontendClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(diagnosticDataDto.getVehicleId());
                 String diagnosticDataText = "Battery status: " + diagnosticDataDto.getBatteryChargeStatus() + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled()) // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
                     MainFormActions.getInstance().getMainForm().getLblDiagnosticData().setText(diagnosticDataText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblDiagnosticDataVehicle2().setText(diagnosticDataText);
             }
         } catch (JsonSyntaxException | NullPointerException e) {
@@ -152,9 +155,9 @@ public class WebSocketFrontendClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(encoderReadingDto.getVehicleId());
                 String encoderReadingText = "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed() + "...";
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblEncoderReading().setText(encoderReadingText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblEncoderReadingVehicle2().setText(encoderReadingText);
             }
         } catch (JsonSyntaxException e) {
@@ -169,9 +172,9 @@ public class WebSocketFrontendClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(imuReadingDto.getVehicleId());
                 String imuReadingText = "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ...";
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblImuReading().setText(imuReadingText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblImuReadingVehicle2().setText(imuReadingText);
             }
         } catch (JsonSyntaxException e) {
@@ -184,11 +187,11 @@ public class WebSocketFrontendClient extends WebSocketClient {
             LidarReadingDto lidarReadingDto = gson.fromJson(message, LidarReadingDto.class);
             if(lidarReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(lidarReadingDto.getVehicleId());
-                String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading();
+                String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading().substring(0, 15) + " ..."; // TODO - display full lidar reading
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLidarReading().setText(lidarReadingText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLidarReadingVehicle2().setText(lidarReadingText);
             }
         } catch (JsonSyntaxException e) {
@@ -203,9 +206,9 @@ public class WebSocketFrontendClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(locationDto.getVehicleId());
                 String locationText = "Location: real X: " + locationDto.getRealXCoordinate() + ", real Y: " + locationDto.getRealYCoordinate();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLocation().setText(locationText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLocationVehicle2().setText(locationText);
             }
         } catch (JsonSyntaxException e) {
@@ -220,9 +223,9 @@ public class WebSocketFrontendClient extends WebSocketClient {
                 int whichTabVehicle = findOnWhichTabIsVehicle(pointCloudDto.getVehicleId());
                 String pointCloudText = "Point cloud reading: " + pointCloudDto.getPointCloudReading();
 
-                if(whichTabVehicle == 1)
+                if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblPointCloudReading().setText(pointCloudText);
-                else if(whichTabVehicle == 2)
+                else if(whichTabVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblPointCloudReadingVehicle2().setText(pointCloudText);
             }
         } catch (JsonSyntaxException e) {

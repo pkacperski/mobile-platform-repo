@@ -2,7 +2,7 @@ package com.mobileplatform.backend.service;
 
 import com.mobileplatform.backend.model.domain.Location;
 import com.mobileplatform.backend.model.repository.LocationRepository;
-import com.mobileplatform.backend.websocket.WebSocketBackendServer;
+import com.mobileplatform.backend.websocket.TelemetryServer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +20,10 @@ public class LocationService {
         return locationRepository.findAll();
     }
 
+    public List<Location> findAllByVehicleId(Long vehicleId) {
+        return locationRepository.findAllByVehicleId(vehicleId);
+    }
+
     public Optional<Location> findNewest() {
         return locationRepository.findTopByOrderByIdDesc();
     }
@@ -30,7 +34,7 @@ public class LocationService {
 
     public ResponseEntity<String> save(@Valid Location location) {
 
-        WebSocketBackendServer.getInstance().send(WebSocketBackendServer.getGson().toJson(location));
+        TelemetryServer.getInstance().send(TelemetryServer.getGson().toJson(location));
 
         locationRepository.save(location);
         return ResponseEntity.ok("Successfully saved to DB");
