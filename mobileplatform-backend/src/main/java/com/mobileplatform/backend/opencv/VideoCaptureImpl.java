@@ -11,8 +11,9 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.File;
+
+import static com.mobileplatform.backend.MobileplatformBackendApplication.*;
 
 /*
  * Test of OpenCV module dependencies added manually to IntelliJ instead of importing a Maven dependency.
@@ -29,15 +30,18 @@ public class VideoCaptureImpl implements Runnable {
 
     private final String streamAddress;
     private final VideoServer videoServer;
+    private final int vehicleNumber;
+    private final int streamNumber;
     private boolean isStreamActive;
-    private static String dateTimeNow; // TODO - stworzyc folder z data w nazwie: https://stackoverflow.com/questions/28947250/create-a-directory-if-it-does-not-exist-and-then-create-the-files-in-that-direct
+    private final String dateTimeNow;
 
-    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, boolean isStreamActive) {
+    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, int vehicleNumber, int streamNumber, boolean isStreamActive, String dateTimeNow) {
         this.streamAddress = streamAddress;
         this.videoServer = videoServer;
+        this.vehicleNumber = vehicleNumber;
+        this.streamNumber = streamNumber;
         this.isStreamActive = isStreamActive;
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm:ss");
-        dateTimeNow = dateTimeFormatter.format(LocalDateTime.now());
+        this.dateTimeNow = dateTimeNow;
     }
 
     public static void initialize() {
@@ -48,28 +52,34 @@ public class VideoCaptureImpl implements Runnable {
 
     public void run() {
         final String BMP_FILE_EXTENSION = ".bmp";
-        VideoCapture videoCapture = this.streamAddress.equals("0") ? new VideoCapture(0) : new VideoCapture(this.streamAddress, Videoio.CAP_FFMPEG);
         int fourcc = VideoWriter.fourcc('M', 'J', 'P', 'G');
+        VideoCapture videoCapture = this.streamAddress.equals("0") ? new VideoCapture(0) : new VideoCapture(this.streamAddress, Videoio.CAP_FFMPEG);
         double fps = videoCapture.get(Videoio.CAP_PROP_FPS);
-        // Size originalSize = new Size(640, 360); // TODO - rozmiar video do zapisu
-        Size originalSize = new Size((int) videoCapture.get(Videoio.CAP_PROP_FRAME_WIDTH), (int) videoCapture.get(Videoio.CAP_PROP_FRAME_HEIGHT));
+        float originalVideoRatio = (float) ((float) videoCapture.get(Videoio.CAP_PROP_FRAME_WIDTH) / videoCapture.get(Videoio.CAP_PROP_FRAME_HEIGHT));
+        Size videoSaveSize = new Size(Math.round(originalVideoRatio * SAVED_VIDEOS_HEIGHT), SAVED_VIDEOS_HEIGHT);
         Mat frame = new Mat();
 
-        // TODO - nazwy plikow + stworzyc nowy folder z data w nazwie: https://stackoverflow.com/questions/28947250/create-a-directory-if-it-does-not-exist-and-then-create-the-files-in-that-direct
-        VideoWriter videoWriter = new VideoWriter(
-                "C:\\Users\\DELL\\Documents\\Mgr\\mobile-platform-repo\\mobile-platform-repo\\saved-videos\\" /*+ dateTimeNow */ + "video-test-" + ((this.streamAddress.length() > 10) ? this.streamAddress.substring(this.streamAddress.length() - 10, this.streamAddress.length() - 4) : "webcam") + ".avi",
-                fourcc, fps, originalSize, true); // TODO - resizing image originalSize here?
+        String videoPath = SAVED_VIDEOS_DIRECTORY + File.separator + "saved-videos" + File.separator + dateTimeNow;
+        File directory = new File(videoPath);
+        if (!directory.exists()){
+            try {
+                if(!directory.mkdirs())
+                    throw new Exception("Error - unable to create a new directory to save videos!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        String videoFileName = videoPath + "\\video-vehicle-" + vehicleNumber + "-stream-" + streamNumber + ".avi";
+        VideoWriter videoWriter = new VideoWriter(videoFileName, fourcc, fps, videoSaveSize, true);
 
         while(videoCapture.read(frame)) {
             if(frame.width() > 0 && frame.height() > 0) {
-                // proba resize
-                //Mat resizedFrameSaving = new Mat();
-                //Imgproc.resize(frame, resizedFrameSaving, originalSize);
-                // /proba resize
-                videoWriter.write(frame);
+                Mat resizedFrame = new Mat();
+                Imgproc.resize(frame, resizedFrame, videoSaveSize);
+                videoWriter.write(resizedFrame);
                 if(isStreamActive) {
                     Mat resizedFrameFrontend = new Mat();
-                    Size sizeFrontend = new Size(400,300); // TODO - set correct size of images before sending to FE? + maintain original video proportions?
+                    Size sizeFrontend = new Size(originalVideoRatio*360,360); // TODO - set correct size of images before sending to FE?
                     Imgproc.resize(frame, resizedFrameFrontend, sizeFrontend);
                     MatOfByte frameOfByte = new MatOfByte();
                     Imgcodecs.imencode(BMP_FILE_EXTENSION, resizedFrameFrontend, frameOfByte);

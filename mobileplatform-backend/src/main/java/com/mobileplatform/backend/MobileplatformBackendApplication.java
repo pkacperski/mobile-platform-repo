@@ -14,8 +14,12 @@ public class MobileplatformBackendApplication {
 	public final static String WEBSOCKET_SERVER_IP_ADDRESS = "localhost";
 	public final static int TELEMETRY_SERVER_PORT_NUMBER = 8081; // by default, port 8080 used for serving backend services, 8081 - for telemetry, 8082 and above for video streams
 	public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams
-	final static String[] STREAMS_ADDRESSES = { // TODO - docelowe adresy streamow:
-			"0",
+	public final static String SAVED_VIDEOS_DIRECTORY = System.getProperty("user.dir"); // folder destination for saving video files
+	public final static int SAVED_VIDEOS_HEIGHT = 360; // determines the quality of the video files which are saved
+	final static String[] STREAMS_ADDRESSES = { // TODO - docelowe adresy streamow (docelowo - zostaic zahardcowane na pojazdach CZY brac je z adresu IP pojazdu z FE?):
+//			"rtmp://10.0.0.1:1935/live/rgb",
+//			"rtmp://10.0.0.2:1935/live/rgb",
+ 			"0",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-star.mp4",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-12angrymen.mp4",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-intouchables.avi",

@@ -187,7 +187,7 @@ public class TelemetryClient extends WebSocketClient {
             LidarReadingDto lidarReadingDto = gson.fromJson(message, LidarReadingDto.class);
             if(lidarReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(lidarReadingDto.getVehicleId());
-                String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading();
+                String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading().substring(0, 15) + " ..."; // TODO - display full lidar reading
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLidarReading().setText(lidarReadingText);

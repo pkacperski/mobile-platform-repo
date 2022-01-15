@@ -2,6 +2,8 @@ package com.mobileplatform.backend.opencv;
 
 import com.mobileplatform.backend.websocket.VideoServer;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static com.mobileplatform.backend.MobileplatformBackendApplication.VIDEO_STREAMS_PORT_NUMBERS;
@@ -25,6 +27,8 @@ public class VideoCaptureHandler {
         videoCaptureHandler = new VideoCaptureHandler();
         vehiclesCount = vehiclesCnt;
         streamsPerVehicleCount = streamsPerVehicleCnt;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd--HH-mm-ss");
+        String dateTimeNow = dateTimeFormatter.format(LocalDateTime.now());
         ArrayList<Thread> videoServerThreads = new ArrayList<>();
         ArrayList<Thread> videoCaptureThreads = new ArrayList<>();
 
@@ -36,7 +40,8 @@ public class VideoCaptureHandler {
 
         for (int i = 0; i < vehiclesCnt * streamsPerVehicleCnt; i++) {
             // whichVehicle variable determines on which FE screen the stream will be available. By default, the first streams for both vehicles are active
-            videoCaptureImpls.add(new VideoCaptureImpl(streamsAddresses[i], videoServers.get(i/streamsPerVehicleCnt), (i % streamsPerVehicleCnt == 0)));
+            videoCaptureImpls.add(new VideoCaptureImpl(streamsAddresses[i], videoServers.get(i/streamsPerVehicleCnt), (i/streamsPerVehicleCnt)+1,
+                    (i%streamsPerVehicleCnt)+1, (i % streamsPerVehicleCnt == 0), dateTimeNow));
             videoCaptureThreads.add(new Thread(videoCaptureImpls.get(i)));
             videoCaptureThreads.get(i).start();
         }
