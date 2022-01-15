@@ -69,7 +69,7 @@ public class TelemetryClient extends WebSocketClient {
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
         // TODO - obsluzyc niepowodzenie w tworzeniu klienta i polaczeniu WS
         try {
-            telemetryClient = new TelemetryClient(new URI("ws://" + WEBSOCKET_SERVER_IP_ADDRESS + ":" + TELEMETRY_SERVER_PORT_NUMBER + "/" + TELEMETRY_SERVER_NAME));
+            telemetryClient = new TelemetryClient(new URI("ws://" + WEBSOCKET_SERVER_IP_ADDRESS_TEST + ":" + TELEMETRY_SERVER_PORT_NUMBER + "/" + TELEMETRY_SERVER_NAME));
             telemetryClient.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();

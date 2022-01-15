@@ -3,7 +3,6 @@ package com.mobileplatform.backend.websocket;
 import com.fatboyindustrial.gsonjavatime.Converters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mobileplatform.backend.MobileplatformBackendApplication;
 import com.mobileplatform.backend.opencv.VideoCaptureHandler;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -11,6 +10,9 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+
+import static com.mobileplatform.backend.MobileplatformBackendApplication.TELEMETRY_SERVER_PORT_NUMBER;
+import static com.mobileplatform.backend.MobileplatformBackendApplication.WEBSOCKET_SERVER_IP_ADDRESS;
 
 /**
  * https://github.com/TooTallNate/Java-WebSocket/wiki#server-example
@@ -66,8 +68,8 @@ public class TelemetryServer extends WebSocketServer {
     }
 
     public static void initialize() {
-        final String host = MobileplatformBackendApplication.WEBSOCKET_SERVER_IP_ADDRESS;
-        final int port = MobileplatformBackendApplication.TELEMETRY_SERVER_PORT_NUMBER;
+        final String host = WEBSOCKET_SERVER_IP_ADDRESS;
+        final int port = TELEMETRY_SERVER_PORT_NUMBER;
 
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
         telemetryServer = new TelemetryServer(new InetSocketAddress(host, port));

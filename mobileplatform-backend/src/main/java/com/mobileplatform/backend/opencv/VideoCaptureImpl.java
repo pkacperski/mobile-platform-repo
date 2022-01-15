@@ -55,7 +55,7 @@ public class VideoCaptureImpl implements Runnable {
         int fourcc = VideoWriter.fourcc('M', 'J', 'P', 'G');
         VideoCapture videoCapture = this.streamAddress.equals("0") ? new VideoCapture(0) : new VideoCapture(this.streamAddress, Videoio.CAP_FFMPEG);
         double fps = videoCapture.get(Videoio.CAP_PROP_FPS);
-        float originalVideoRatio = (float) ((float) videoCapture.get(Videoio.CAP_PROP_FRAME_WIDTH) / videoCapture.get(Videoio.CAP_PROP_FRAME_HEIGHT));
+        float originalVideoRatio = (float) videoCapture.get(Videoio.CAP_PROP_FRAME_WIDTH) / (float) videoCapture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
         Size videoSaveSize = new Size(Math.round(originalVideoRatio * SAVED_VIDEOS_HEIGHT), SAVED_VIDEOS_HEIGHT);
         Mat frame = new Mat();
 
@@ -69,7 +69,7 @@ public class VideoCaptureImpl implements Runnable {
                 e.printStackTrace();
             }
         }
-        String videoFileName = videoPath + "\\video-vehicle-" + vehicleNumber + "-stream-" + streamNumber + ".avi";
+        String videoFileName = videoPath + File.separator + "video-vehicle-" + vehicleNumber + "-stream-" + streamNumber + ".avi";
         VideoWriter videoWriter = new VideoWriter(videoFileName, fourcc, fps, videoSaveSize, true);
 
         while(videoCapture.read(frame)) {

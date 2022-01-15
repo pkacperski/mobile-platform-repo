@@ -16,6 +16,8 @@ import lombok.extern.java.Log;
 import javax.swing.*;
 import java.time.LocalDateTime;
 
+import static com.mobileplatform.frontend.MobileplatformFrontend.*;
+
 @Log
 public class MainFormActions implements Actions {
     private static MainFormActions mainFormActions;
@@ -130,8 +132,8 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr("localhost") // TODO - check: adres IP serwera (BE) do ktorego wysylac dane w sieci lokalnej
-                        .port(8080)
+                        .addr(IS_TEST_ENV ? WEBSOCKET_SERVER_IP_ADDRESS_TEST : WEBSOCKET_SERVER_IP_ADDRESS_PROD)
+                        .port(TELEMETRY_API_PORT_NUMBER)
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
                         .build();
@@ -170,8 +172,8 @@ public class MainFormActions implements Actions {
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
         VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // dopoki endpoint DELETE /connect ma takie samo body jak POST /connect, nie trzeba tworzyc nowego Dto na obsluge requesta ani nowego RestHandlera
-                .addr("localhost") // TODO - adres IP serwera do ktorego wysylac dane w sieci lokalnej - niepotrzebny w tym endpoincie
-                .port(8080) // TODO - port serwera do odbioru danych - zawsze 8080? - niepotrzebny w tym endpoincie
+                .addr(IS_TEST_ENV ? WEBSOCKET_SERVER_IP_ADDRESS_TEST : WEBSOCKET_SERVER_IP_ADDRESS_PROD)
+                .port(TELEMETRY_API_PORT_NUMBER)
                 .vid(storedVehicleId)
                 .mgc(15061)
                 .build();
@@ -179,7 +181,6 @@ public class MainFormActions implements Actions {
         try {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
-            // TODO - rozw. problem z disdconnectem! (mwciskanie przycisku na FE ale pponizszy if nie przechodzi =cos nie tak przy disconnectie)
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 if(whichVehicle == VEHICLE_1) {
                     setAllLabelsAfterDisconnect(VEHICLE_1);

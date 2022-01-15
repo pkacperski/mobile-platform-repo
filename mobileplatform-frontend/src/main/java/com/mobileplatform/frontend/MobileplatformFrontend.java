@@ -12,8 +12,11 @@ import java.util.Objects;
 @Log
 public class MobileplatformFrontend {
 
+    public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' for working with vehicles in real environment
     final static int VEHICLES_COUNT = 2; // same settings as in BE application - TODO - check: moze te same stale z BE i FE trzymac w jednym miejscu i z obu apek je importowac
-    public final static String WEBSOCKET_SERVER_IP_ADDRESS = "localhost";
+    public final static String WEBSOCKET_SERVER_IP_ADDRESS_TEST = "localhost";
+    public final static String WEBSOCKET_SERVER_IP_ADDRESS_PROD = "10.0.0.201";
+    public final static int TELEMETRY_API_PORT_NUMBER = 8080;
     public final static int TELEMETRY_SERVER_PORT_NUMBER = 8081; // by default, port 8080 used for serving backend services, 8081 - for telemetry, 8082 and above for video streams
     public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams
     public final static String TELEMETRY_SERVER_NAME = "telemetry";
