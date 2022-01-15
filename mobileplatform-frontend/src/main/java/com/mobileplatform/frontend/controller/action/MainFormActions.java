@@ -132,7 +132,7 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr(IS_TEST_ENV ? WEBSOCKET_SERVER_IP_ADDRESS_TEST : WEBSOCKET_SERVER_IP_ADDRESS_PROD)
+                        .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD)
                         .port(TELEMETRY_API_PORT_NUMBER)
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
@@ -172,7 +172,7 @@ public class MainFormActions implements Actions {
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
         VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // dopoki endpoint DELETE /connect ma takie samo body jak POST /connect, nie trzeba tworzyc nowego Dto na obsluge requesta ani nowego RestHandlera
-                .addr(IS_TEST_ENV ? WEBSOCKET_SERVER_IP_ADDRESS_TEST : WEBSOCKET_SERVER_IP_ADDRESS_PROD)
+                .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD)
                 .port(TELEMETRY_API_PORT_NUMBER)
                 .vid(storedVehicleId)
                 .mgc(15061)

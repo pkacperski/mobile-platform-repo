@@ -6,7 +6,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import static com.mobileplatform.frontend.MobileplatformFrontend.VIDEO_STREAMS_PORT_NUMBERS;
-import static com.mobileplatform.frontend.MobileplatformFrontend.WEBSOCKET_SERVER_IP_ADDRESS_TEST;
+import static com.mobileplatform.frontend.MobileplatformFrontend.TELEMETRY_API_SERVER_IP_TEST;
 
 public class VideoReceiveHandler {
 
@@ -24,7 +24,7 @@ public class VideoReceiveHandler {
 
         for (int i = 0; i < vehiclesCnt; i++) {
             try {
-                videoClients.add(new VideoClient(WEBSOCKET_SERVER_IP_ADDRESS_TEST, VIDEO_STREAMS_PORT_NUMBERS[i], videoServerNames[i], i+1));
+                videoClients.add(new VideoClient(TELEMETRY_API_SERVER_IP_TEST, VIDEO_STREAMS_PORT_NUMBERS[i], videoServerNames[i], i+1));
                 videoClientThreads.add(new Thread(videoClients.get(i)));
                 videoClientThreads.get(i).start();
 
