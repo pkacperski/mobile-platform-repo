@@ -14,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
+import static com.mobileplatform.frontend.MobileplatformFrontend.IS_TEST_ENV;
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_UNCHANGED;
 
 /**
@@ -42,9 +43,9 @@ public class VideoClient extends WebSocketClient {
         if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
             BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
             ImageIcon icon = new ImageIcon(bufferedImage);
-            if(this.whichVehicle == 1 /*&& !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled()*/) // TODO - uncomment here and below to only receive streams when vehicle is connected. first stream - only show stream if the vehicle is connected
+            if(this.whichVehicle == 1 && (IS_TEST_ENV || !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())) // first stream - only show stream when testing OR when the vehicle is connected
                 MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
-            else if(this.whichVehicle == 2 /*&& !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled()*/) { // second stream
+            else if(this.whichVehicle == 2 && (IS_TEST_ENV || !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())) { // second stream
                 MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
             }
         }

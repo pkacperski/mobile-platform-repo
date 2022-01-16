@@ -58,9 +58,9 @@ public class MainFormActions implements Actions {
     final int STREAM_1 = 1;
     final int STREAM_2 = 2;
     final int STREAM_3 = 3;
-    final int STREAM_4 = 4;
-    final int STREAM_5 = 5;
-    final int STREAM_6 = 6;
+    final int STREAM_4 = STREAMS_PER_VEHICLE_COUNT + 1;
+    final int STREAM_5 = STREAMS_PER_VEHICLE_COUNT + 2;
+    final int STREAM_6 = STREAMS_PER_VEHICLE_COUNT + 3;
 
     private MainFormActions() {}
 
