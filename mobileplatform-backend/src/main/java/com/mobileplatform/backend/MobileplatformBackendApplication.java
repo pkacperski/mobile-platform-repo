@@ -17,8 +17,8 @@ public class MobileplatformBackendApplication {
 	public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams when there are more than 2 vehicles
 	public final static String SAVED_VIDEOS_DIRECTORY = System.getProperty("user.dir"); // folder destination for saving video files
 	public final static int SAVED_VIDEOS_HEIGHT = 360; // determines the quality of the video files which are saved
-	final static String[] REAL_STREAM_ADDRESSES = {
-			"rtmp://10.0.0.101:1935/live/rgb", // TODO - brac adres streama z podanego IP na FE
+	final static String[] REAL_STREAM_ADDRESSES = { // TODO - set the proper addresses of streams; TODO - brac adres streama z podanego IP na FE
+			"rtmp://10.0.0.101:1935/live/rgb",
 			"rtmp://10.0.0.101:1935/live/gs",
 			"rtmp://10.0.0.102:1935/live/rgb",
 			"rtmp://10.0.0.102:1935/live/gs"

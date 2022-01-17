@@ -136,7 +136,11 @@ public class TelemetryClient extends WebSocketClient {
             DiagnosticDataDto diagnosticDataDto = gson.fromJson(message, DiagnosticDataDto.class);
             if(diagnosticDataDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(diagnosticDataDto.getVehicleId());
-                String diagnosticDataText = "Battery status: " + diagnosticDataDto.getBatteryChargeStatus() + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure();
+                String diagnosticDataText = "Battery status: " + (diagnosticDataDto.getBatteryChargeStatus().toString().length() > 5
+                            ? diagnosticDataDto.getBatteryChargeStatus().toString().substring(0,6) : diagnosticDataDto.getBatteryChargeStatus())
+                        + ", wheels turn measure: " + (diagnosticDataDto.getWheelsTurnMeasure().toString().length() > 5
+                            ? diagnosticDataDto.getWheelsTurnMeasure().toString().substring(0,6) : diagnosticDataDto.getWheelsTurnMeasure()
+                );
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled()) // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
                     MainFormActions.getInstance().getMainForm().getLblDiagnosticData().setText(diagnosticDataText);
@@ -153,7 +157,9 @@ public class TelemetryClient extends WebSocketClient {
             EncoderReadingDto encoderReadingDto = gson.fromJson(message, EncoderReadingDto.class);
             if(encoderReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(encoderReadingDto.getVehicleId());
-                String encoderReadingText = "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed() + "...";
+                String encoderReadingText = "Encoder reading: left front wheel: " + (encoderReadingDto.getLeftFrontWheelSpeed().toString().length() > 5
+                        ? encoderReadingDto.getLeftFrontWheelSpeed().toString().substring(0, 6) : encoderReadingDto.getLeftFrontWheelSpeed())
+                        + "...";
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblEncoderReading().setText(encoderReadingText);
@@ -170,7 +176,9 @@ public class TelemetryClient extends WebSocketClient {
             ImuReadingDto imuReadingDto = gson.fromJson(message, ImuReadingDto.class);
             if(imuReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(imuReadingDto.getVehicleId());
-                String imuReadingText = "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ...";
+                String imuReadingText = "IMU reading: acceleration X: " + (imuReadingDto.getAccelerationX().toString().length() > 5
+                        ? imuReadingDto.getAccelerationX().toString().substring(0, 6) : imuReadingDto.getAccelerationX())
+                        + " ...";
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblImuReading().setText(imuReadingText);
@@ -187,7 +195,9 @@ public class TelemetryClient extends WebSocketClient {
             LidarReadingDto lidarReadingDto = gson.fromJson(message, LidarReadingDto.class);
             if(lidarReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(lidarReadingDto.getVehicleId());
-                String lidarReadingText = "Lidar reading: " + lidarReadingDto.getLidarDistancesReading().substring(0, 15) + " ..."; // TODO - display full lidar reading
+                String lidarReadingText = "Lidar reading: " + (lidarReadingDto.getLidarDistancesReading().length() > 10
+                        ? lidarReadingDto.getLidarDistancesReading().substring(0, 10) : "No lidar readings received")
+                        + " ..."; // TODO - display full lidar reading
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLidarReading().setText(lidarReadingText);
@@ -204,7 +214,11 @@ public class TelemetryClient extends WebSocketClient {
             LocationDto locationDto = gson.fromJson(message, LocationDto.class);
             if(locationDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(locationDto.getVehicleId());
-                String locationText = "Location: real X: " + locationDto.getRealXCoordinate() + ", real Y: " + locationDto.getRealYCoordinate();
+                String locationText = "Location: real X: " + (locationDto.getRealXCoordinate().toString().length() > 5
+                        ? locationDto.getRealXCoordinate().toString().substring(0, 6) : locationDto.getRealXCoordinate())
+                            + ", real Y: " + (locationDto.getRealYCoordinate().toString().length() > 5
+                        ? locationDto.getRealYCoordinate().toString().substring(0,6) : locationDto.getRealYCoordinate()
+                );
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblLocation().setText(locationText);
@@ -221,7 +235,9 @@ public class TelemetryClient extends WebSocketClient {
             PointCloudDto pointCloudDto = gson.fromJson(message, PointCloudDto.class);
             if(pointCloudDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(pointCloudDto.getVehicleId());
-                String pointCloudText = "Point cloud reading: " + pointCloudDto.getPointCloudReading();
+                String pointCloudText = "Point cloud reading: " + (pointCloudDto.getPointCloudReading().length() > 5
+                        ? pointCloudDto.getPointCloudReading().substring(0, 6) : pointCloudDto.getPointCloudReading()
+                );
 
                 if(whichTabVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())
                     MainFormActions.getInstance().getMainForm().getLblPointCloudReading().setText(pointCloudText);
