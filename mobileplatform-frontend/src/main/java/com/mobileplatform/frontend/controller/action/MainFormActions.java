@@ -116,6 +116,12 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_4));
         mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_5));
         mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_6));
+
+        mainForm.getProgressBarBatteryStatus().setValue(0);
+        mainForm.getProgressBarWheelsTurnLeft().setValue(0);
+        mainForm.getProgressBarWheelsTurnRight().setValue(0);
+        mainForm.getProgressBarCamerasTurnLeft().setValue(0);
+        mainForm.getProgressBarCamerasTurnRight().setValue(0);
     }
 
     private void sendConnectVehicleSignal(int whichVehicle) {
@@ -138,20 +144,7 @@ public class MainFormActions implements Actions {
                         .mgc(60949)
                         .build();
                 vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
-
-                if (whichVehicle == VEHICLE_1) {
-                    mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleDtoResponse.getId());
-                    mainForm.getLblVehicleIp().setText("Vehicle IP: " + vehicleIp);
-                    mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleDtoResponse.getName());
-                    mainForm.getBtnConnectVehicle().setEnabled(false);
-                    mainForm.getBtnDisconnectVehicle().setEnabled(true);
-                } else if (whichVehicle == VEHICLE_2) {
-                    mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleDtoResponse.getId());
-                    mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
-                    mainForm.getLblVehicleNameVehicle2().setText("Vehicle name: " + vehicleDtoResponse.getName());
-                    mainForm.getBtnConnectVehicle2().setEnabled(false);
-                    mainForm.getBtnDisconnectVehicle2().setEnabled(true);
-                }
+                setLabelsAfterConnect(whichVehicle, vehicleDtoResponse.getId(), vehicleIp, vehicleName);
             }
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -182,22 +175,47 @@ public class MainFormActions implements Actions {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
-                if(whichVehicle == VEHICLE_1) {
-                    setAllLabelsAfterDisconnect(VEHICLE_1);
-                }
-                else if(whichVehicle == VEHICLE_2) {
-                    setAllLabelsAfterDisconnect(VEHICLE_2);
-                }
+                setLabelsAfterDisconnect(whichVehicle);
             }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
     }
 
-    private void setAllLabelsAfterDisconnect(int whichVehicle) {
+    private void setLabelsAfterConnect(int whichVehicle, Long vehicleId, String vehicleIp, String vehicleName) {
+
+        if (whichVehicle == VEHICLE_1) {
+            mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleId);
+            mainForm.getLblVehicleIp().setText("Vehicle IP: " + vehicleIp);
+            mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleName);
+            mainForm.getBtnConnectVehicle().setEnabled(false);
+            mainForm.getBtnDisconnectVehicle().setEnabled(true);
+            mainForm.getBtnAutonomousDrivingMode().setEnabled(true);
+            mainForm.getBtnEmergencyStop().setEnabled(true);
+            mainForm.getBtnEmergencyAbort().setEnabled(true);
+            mainForm.getBtnManualSteeringMode().setEnabled(true);
+        } else if (whichVehicle == VEHICLE_2) {
+            mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
+            mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
+            mainForm.getLblVehicleNameVehicle2().setText("Vehicle name: " + vehicleName);
+            mainForm.getBtnConnectVehicle2().setEnabled(false);
+            mainForm.getBtnDisconnectVehicle2().setEnabled(true);
+            mainForm.getBtnAutonomousDrivingModeVehicle2().setEnabled(true);
+            mainForm.getBtnEmergencyStopVehicle2().setEnabled(true);
+            mainForm.getBtnEmergencyAbortVehicle2().setEnabled(true);
+            mainForm.getBtnManualSteeringModeVehicle2().setEnabled(true);
+        }
+    }
+
+    private void setLabelsAfterDisconnect(int whichVehicle) {
+
         if(whichVehicle == VEHICLE_1) {
             mainForm.getBtnConnectVehicle().setEnabled(true);
             mainForm.getBtnDisconnectVehicle().setEnabled(false);
+            mainForm.getBtnAutonomousDrivingMode().setEnabled(false);
+            mainForm.getBtnEmergencyStop().setEnabled(false);
+            mainForm.getBtnEmergencyAbort().setEnabled(false);
+            mainForm.getBtnManualSteeringMode().setEnabled(false);
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
@@ -206,12 +224,20 @@ public class MainFormActions implements Actions {
             mainForm.getLblLidarReading().setText("No lidar readings received");
             mainForm.getLblImuReading().setText("No IMU readings received");
             mainForm.getLblEncoderReading().setText("No encoder readings received");
-            mainForm.getLblDiagnosticData().setText("No diagnostic data received");
             mainForm.getLblVideoStream().setIcon(new ImageIcon());
+            mainForm.getProgressBarWheelsTurnLeft().setValue(0);
+            mainForm.getProgressBarWheelsTurnRight().setValue(0);
+            mainForm.getProgressBarCamerasTurnLeft().setValue(0);
+            mainForm.getProgressBarCamerasTurnRight().setValue(0);
+            mainForm.getProgressBarBatteryStatus().setValue(0);
         }
         else if(whichVehicle == VEHICLE_2) {
             mainForm.getBtnConnectVehicle2().setEnabled(true);
             mainForm.getBtnDisconnectVehicle2().setEnabled(false);
+            mainForm.getBtnAutonomousDrivingModeVehicle2().setEnabled(false);
+            mainForm.getBtnEmergencyStopVehicle2().setEnabled(false);
+            mainForm.getBtnEmergencyAbortVehicle2().setEnabled(false);
+            mainForm.getBtnManualSteeringModeVehicle2().setEnabled(false);
             mainForm.getLblVehicleIdVehicle2().setText("Vehicle not connected");
             mainForm.getLblVehicleIpVehicle2().setText("Vehicle not connected");
             mainForm.getLblVehicleNameVehicle2().setText("Vehicle not connected");
@@ -222,6 +248,7 @@ public class MainFormActions implements Actions {
             mainForm.getLblEncoderReadingVehicle2().setText("No encoder readings received");
             mainForm.getLblDiagnosticDataVehicle2().setText("No diagnostic data received");
             mainForm.getLblVideoStreamVehicle2().setIcon(new ImageIcon());
+            // TODO - reset battery charge status, wheels' turn, etc.
         }
     }
 
@@ -329,8 +356,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");
             mainForm.getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
             mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
-            mainForm.getLblDiagnosticData().setText(diagnosticDataDto != null ? "Battery status: " + diagnosticDataDto.getBatteryChargeStatus()
-                    + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure() : "No diagnostic data received");
             mainForm.getLblEncoderReading().setText(encoderReadingDto != null ? "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed()
                     + "..." : "No encoder readings received");
             mainForm.getLblImuReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");

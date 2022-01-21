@@ -47,7 +47,6 @@ public class VideoCaptureImpl implements Runnable {
     public static void initialize() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         System.out.println("Loaded OpenCV: " + Core.getVersionString());
-        // TODO - check: no need to load or import openh264-1.8.0-win64.dll file to save videos to .avi files with VideoWriter?
     }
 
     public void run() {
@@ -74,12 +73,14 @@ public class VideoCaptureImpl implements Runnable {
 
         while(videoCapture.read(frame)) {
             if(frame.width() > 0 && frame.height() > 0) {
-                Mat resizedFrame = new Mat();
-                Imgproc.resize(frame, resizedFrame, videoSaveSize);
-                videoWriter.write(resizedFrame);
+                if(!IS_TEST_ENV) { // only save videos on local drive when in real environment
+                    Mat resizedFrame = new Mat();
+                    Imgproc.resize(frame, resizedFrame, videoSaveSize);
+                    videoWriter.write(resizedFrame);
+                }
                 if(isStreamActive) {
                     Mat resizedFrameFrontend = new Mat();
-                    Size sizeFrontend = new Size(originalVideoRatio*360,360); // TODO - set correct size of images before sending to FE?
+                    Size sizeFrontend = new Size(originalVideoRatio*STREAMING_VIDEOS_HEIGHT, STREAMING_VIDEOS_HEIGHT);
                     Imgproc.resize(frame, resizedFrameFrontend, sizeFrontend);
                     MatOfByte frameOfByte = new MatOfByte();
                     Imgcodecs.imencode(BMP_FILE_EXTENSION, resizedFrameFrontend, frameOfByte);

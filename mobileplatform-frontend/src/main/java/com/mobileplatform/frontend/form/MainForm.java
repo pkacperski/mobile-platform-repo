@@ -3,6 +3,7 @@ package com.mobileplatform.frontend.form;
 import lombok.Getter;
 
 import javax.swing.*;
+import java.awt.*;
 
 @Getter
 public class MainForm {
@@ -10,7 +11,6 @@ public class MainForm {
     private JPanel panel;
     private JButton btnFetchData;
     private JLabel lblVehicleName;
-    private JLabel lblDiagnosticData;
     private JLabel lblEncoderReading;
     private JLabel lblImuReading;
     private JLabel lblLidarReading;
@@ -55,12 +55,20 @@ public class MainForm {
     private JButton btnStream1Vehicle2;
     private JButton btnStream2Vehicle2;
     private JButton btnStream3Vehicle2;
+    private JProgressBar progressBarBatteryStatus;
+    private JProgressBar progressBarWheelsTurnLeft;
+    private JProgressBar progressBarWheelsTurnRight;
+    private JProgressBar progressBarCamerasTurnLeft;
+    private JProgressBar progressBarCamerasTurnRight;
 
     public MainForm() {
         frame = new JFrame("MainForm");
+        frame.setTitle("Steering Cockpit");
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        progressBarWheelsTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        progressBarCamerasTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
     }
 
     private void createUIComponents() {
