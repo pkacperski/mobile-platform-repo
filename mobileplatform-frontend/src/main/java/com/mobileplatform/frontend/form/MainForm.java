@@ -11,7 +11,6 @@ public class MainForm {
     private JPanel panel;
     private JButton btnFetchData;
     private JLabel lblVehicleName;
-    private JLabel lblEncoderReading;
     private JLabel lblImuReading;
     private JLabel lblLidarReading;
     private JLabel lblPointCloudReading;
@@ -60,6 +59,10 @@ public class MainForm {
     private JProgressBar progressBarWheelsTurnRight;
     private JProgressBar progressBarCamerasTurnLeft;
     private JProgressBar progressBarCamerasTurnRight;
+    private JProgressBar progressBarLeftFrontWheelSpeed;
+    private JProgressBar progressBarLeftRearWheelSpeed;
+    private JProgressBar progressBarRightFrontWheelSpeed;
+    private JProgressBar progressBarRightRearWheelSpeed;
 
     public MainForm() {
         frame = new JFrame("MainForm");
