@@ -187,7 +187,6 @@ public class TelemetryClient extends WebSocketClient {
             EncoderReadingDto encoderReadingDto = gson.fromJson(message, EncoderReadingDto.class);
             if(encoderReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(encoderReadingDto.getVehicleId());
-                // TODO -
                 setEncoderReadingValuesOnScreen(encoderReadingDto, whichTabVehicle);
             }
         } catch (JsonSyntaxException e) {
@@ -223,18 +222,42 @@ public class TelemetryClient extends WebSocketClient {
             ImuReadingDto imuReadingDto = gson.fromJson(message, ImuReadingDto.class);
             if(imuReadingDto != null) {
                 int whichTabVehicle = findOnWhichTabIsVehicle(imuReadingDto.getVehicleId());
-                String imuReadingText = "IMU reading: acceleration X: " + (imuReadingDto.getAccelerationX().toString().length() > 5
-                        ? imuReadingDto.getAccelerationX().toString().substring(0, 6) : imuReadingDto.getAccelerationX())
-                        + " ...";
-
-                if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
-                    mainForm.getLblImuReading().setText(imuReadingText);
-                else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
-                    mainForm.getLblImuReadingVehicle2().setText(imuReadingText);
+                setImuReadingValuesOnScreen(imuReadingDto, whichTabVehicle);
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
+    }
+
+    private void setImuReadingValuesOnScreen(ImuReadingDto imuReadingDto, int whichTabVehicle) {
+        // TODO - visualise IMU reading data
+        String accelerationReadingText = "<html>Acceleration x: " + (imuReadingDto.getAccelerationX().toString().length() > 5
+                    ? imuReadingDto.getAccelerationX().toString().substring(0, 6) : imuReadingDto.getAccelerationX()) + " m/s^2<br>"
+                + "Acceleration y: " + (imuReadingDto.getAccelerationY().toString().length() > 5
+                    ? imuReadingDto.getAccelerationY().toString().substring(0, 6) : imuReadingDto.getAccelerationY()) + " m/s^2<br>"
+                + "Acceleration z: " + (imuReadingDto.getAccelerationZ().toString().length() > 5
+                    ? imuReadingDto.getAccelerationZ().toString().substring(0, 6) : imuReadingDto.getAccelerationZ()) + " m/s^2<br></html>";
+        String gyroReadingText = "<html>Gyroscope x: " + (imuReadingDto.getAngularVelocityX().toString().length() > 5
+                    ? imuReadingDto.getAngularVelocityX().toString().substring(0, 6) : imuReadingDto.getAngularVelocityX()) + " deg/s<br>"
+                + "Gyroscope y: " + (imuReadingDto.getAngularVelocityY().toString().length() > 5
+                    ? imuReadingDto.getAngularVelocityY().toString().substring(0, 6) : imuReadingDto.getAngularVelocityY()) + " deg/s<br>"
+                + "Gyroscope z: " + (imuReadingDto.getAngularVelocityZ().toString().length() > 5
+                    ? imuReadingDto.getAngularVelocityZ().toString().substring(0, 6) : imuReadingDto.getAngularVelocityZ()) + " deg/s<br></html>";
+        String magnetometerReadingText = "<html>Magnetometer x: " + (imuReadingDto.getMagneticFieldX().toString().length() > 5
+                    ? imuReadingDto.getMagneticFieldX().toString().substring(0, 6) : imuReadingDto.getMagneticFieldX()) + " μT<br>"
+                + "Magnetometer y: " + (imuReadingDto.getMagneticFieldY().toString().length() > 5
+                    ? imuReadingDto.getMagneticFieldY().toString().substring(0, 6) : imuReadingDto.getMagneticFieldY()) + " μT<br>"
+                + "Magnetometer z: " + (imuReadingDto.getMagneticFieldZ().toString().length() > 5
+                    ? imuReadingDto.getMagneticFieldZ().toString().substring(0, 6) : imuReadingDto.getMagneticFieldZ()) + " μT<br></html>";
+
+        if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled())) {
+            mainForm.getLblAccelerometerReading().setText(accelerationReadingText);
+            mainForm.getLblGyroReading().setText(gyroReadingText);
+            mainForm.getLblMagnetometerReading().setText(magnetometerReadingText);
+        }
+        else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
+            // TODO - odbieranie imu data dla drugiego pojazdu
+            mainForm.getLblImuReadingVehicle2().setText(accelerationReadingText);
     }
 
     private void handleMessageWithLidarReading(String message) {

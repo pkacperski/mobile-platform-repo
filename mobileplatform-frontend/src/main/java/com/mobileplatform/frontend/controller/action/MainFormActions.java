@@ -222,7 +222,7 @@ public class MainFormActions implements Actions {
             mainForm.getLblPointCloudReading().setText("No point cloud reading received");
             mainForm.getLblLocation().setText("No location data received");
             mainForm.getLblLidarReading().setText("No lidar readings received");
-            mainForm.getLblImuReading().setText("No IMU readings received");
+            mainForm.getLblAccelerometerReading().setText("No IMU readings received");
             mainForm.getLblVideoStream().setIcon(new ImageIcon());
             mainForm.getProgressBarWheelsTurnLeft().setValue(0);
             mainForm.getProgressBarWheelsTurnRight().setValue(0);
@@ -233,6 +233,9 @@ public class MainFormActions implements Actions {
             mainForm.getProgressBarRightFrontWheelSpeed().setValue(0);
             mainForm.getProgressBarLeftRearWheelSpeed().setValue(0);
             mainForm.getProgressBarRightRearWheelSpeed().setValue(0);
+            mainForm.getLblAccelerometerReading().setText("");
+            mainForm.getLblGyroReading().setText("");
+            mainForm.getLblMagnetometerReading().setText("");
         }
         else if(whichVehicle == VEHICLE_2) {
             mainForm.getBtnConnectVehicle2().setEnabled(true);
@@ -359,7 +362,7 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");
             mainForm.getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
             mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
-            mainForm.getLblImuReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
+            mainForm.getLblAccelerometerReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
             mainForm.getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
             mainForm.getLblLocation().setText(locationDto != null ? "Location: real X: " + locationDto.getRealXCoordinate()
                     + ", real Y: " + locationDto.getRealYCoordinate() : "No location data received");

@@ -11,7 +11,9 @@ public class MainForm {
     private JPanel panel;
     private JButton btnFetchData;
     private JLabel lblVehicleName;
-    private JLabel lblImuReading;
+    private JLabel lblAccelerometerReading;
+    private JLabel lblGyroReading;
+    private JLabel lblMagnetometerReading;
     private JLabel lblLidarReading;
     private JLabel lblPointCloudReading;
     private JLabel lblLocation;
