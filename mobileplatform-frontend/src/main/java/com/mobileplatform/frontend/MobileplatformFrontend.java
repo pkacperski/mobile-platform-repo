@@ -27,7 +27,6 @@ public class MobileplatformFrontend {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             Objects.requireNonNull(ActionsFactory.getActions("MainForm")).control();
-//            MainFormActions.getInstance().getMainForm().getPanelLocationCoordinateSystem().add(new MainForm.GridPane()); // TODO - NPE -> trzeba dodac do JFrame i mozna tylko raz dodac content?
 
             Thread telemetryClientThread = new Thread(TelemetryClient::initialize);
             telemetryClientThread.start();

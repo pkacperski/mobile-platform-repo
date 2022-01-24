@@ -122,13 +122,6 @@ public class MainFormActions implements Actions {
         mainForm.getProgressBarWheelsTurnRight().setValue(0);
         mainForm.getProgressBarCamerasTurnLeft().setValue(0);
         mainForm.getProgressBarCamerasTurnRight().setValue(0);
-
-//        GridPane gridPane = new GridPane();
-//        Image image = gridPane.createImage(300, 300); // null
-//        System.out.println(gridPane);
-//        System.out.println(image); // null
-//        ImageIcon imageIcon = new ImageIcon(image); // TODO - NPE
-//        mainForm.getLblLocationIconTest().setIcon(imageIcon);
     }
 
     private void sendConnectVehicleSignal(int whichVehicle) {
