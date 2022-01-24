@@ -8,7 +8,7 @@ import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
-import com.mobileplatform.frontend.form.GridPane;
+import com.mobileplatform.frontend.form.VehicleLocationPane;
 import com.mobileplatform.frontend.form.MainForm;
 import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
@@ -36,6 +36,7 @@ public class MainFormActions implements Actions {
     private RestHandler<ImuReadingDto> imuReadingDtoRestHandler;
     private RestHandler<LidarReadingDto> lidarReadingDtoRestHandler;
     private RestHandler<LocationDto> locationDtoRestHandler;
+    private RestHandler<LocationDto[]> locationDtoListRestHandler;
     private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
     private RestHandler<VehicleConnectResponse> vehicleConnectResponseRestHandler;
@@ -93,6 +94,7 @@ public class MainFormActions implements Actions {
         imuReadingDtoRestHandler = new RestHandler<>(ImuReadingDto.class);
         lidarReadingDtoRestHandler = new RestHandler<>(LidarReadingDto.class);
         locationDtoRestHandler = new RestHandler<>(LocationDto.class);
+        locationDtoListRestHandler = new RestHandler<>(LocationDto[].class);
         pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
         vehicleConnectResponseRestHandler = new RestHandler<>(VehicleConnectResponse.class);
@@ -107,6 +109,7 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
         mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
         mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
+        mainForm.getBtnViewVehicleLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -118,7 +121,6 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_4));
         mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_5));
         mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_6));
-        mainForm.getBtnViewVehicleLocationHistory().addActionListener(e -> createFrameWithLocationHistory());
 
         mainForm.getProgressBarBatteryStatus().setValue(0);
         mainForm.getProgressBarWheelsTurnLeft().setValue(0);
@@ -311,21 +313,29 @@ public class MainFormActions implements Actions {
         }
     }
 
-    // TODO - po kliknieciu w przycisk pobrac od BE wszystkie dane lokalizacyjne i przekazac je do GridPane
-    private void createFrameWithLocationHistory() {
+    private void createFrameWithLocationHistory(int whichVehicle) {
+        long storedVehicleId = getVehicleId(whichVehicle);
+        if(storedVehicleId < 0)
+            return;
+
         EventQueue.invokeLater(() -> {
-            JFrame frame = new JFrame("Vehicle location");
+            JFrame frame = new JFrame("Vehicle location (red - real, blue - SLAM)");
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            frame.add(new GridPane()); // TODO - przekazac w konstruktorze dane lokalizacyjne
-            frame.pack();
-            frame.setLocationByPlatform(true);
-            frame.setVisible(true);
-            frame.setResizable(false);
+            try {
+                LocationDto[] locationDtos = locationDtoListRestHandler.performGetAbsolutePath("http://localhost:8080/location/" + storedVehicleId);
+                frame.add(new VehicleLocationPane(locationDtos));
+                frame.pack();
+                frame.setLocationByPlatform(true);
+                frame.setVisible(true);
+                frame.setResizable(false);
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
         });
     }
 
