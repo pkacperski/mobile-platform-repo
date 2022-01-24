@@ -8,12 +8,14 @@ import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
+import com.mobileplatform.frontend.form.GridPane;
 import com.mobileplatform.frontend.form.MainForm;
 import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 
 import static com.mobileplatform.frontend.MobileplatformFrontend.*;
@@ -116,6 +118,7 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_4));
         mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_5));
         mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_6));
+        mainForm.getBtnViewVehicleLocationHistory().addActionListener(e -> createFrameWithLocationHistory());
 
         mainForm.getProgressBarBatteryStatus().setValue(0);
         mainForm.getProgressBarWheelsTurnLeft().setValue(0);
@@ -194,6 +197,7 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(true);
             mainForm.getBtnEmergencyAbort().setEnabled(true);
             mainForm.getBtnManualSteeringMode().setEnabled(true);
+            mainForm.getBtnViewVehicleLocationHistory().setEnabled(true);
         } else if (whichVehicle == VEHICLE_2) {
             mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
@@ -216,6 +220,7 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(false);
             mainForm.getBtnEmergencyAbort().setEnabled(false);
             mainForm.getBtnManualSteeringMode().setEnabled(false);
+            mainForm.getBtnViewVehicleLocationHistory().setEnabled(false);
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
@@ -304,6 +309,24 @@ public class MainFormActions implements Actions {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
+    }
+
+    // TODO - po kliknieciu w przycisk pobrac od BE wszystkie dane lokalizacyjne i przekazac je do GridPane
+    private void createFrameWithLocationHistory() {
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Vehicle location");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            frame.add(new GridPane()); // TODO - przekazac w konstruktorze dane lokalizacyjne
+            frame.pack();
+            frame.setLocationByPlatform(true);
+            frame.setVisible(true);
+            frame.setResizable(false);
+        });
     }
 
     private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {

@@ -6,10 +6,10 @@ import java.awt.geom.GeneralPath;
 
 public class GridPane extends JPanel {
 
-//        @Override
-//        public Dimension getPreferredSize() {
-//            return new Dimension(300, 300); // TODO - ?w ustawieniach JPanelu w MainForm.form?
-//        }
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(400, 400);
+    }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -18,7 +18,7 @@ public class GridPane extends JPanel {
         g2d.drawLine(0, getHeight() / 2, getWidth(), getHeight() / 2); // os X
         g2d.dispose();
 
-        // I don't trust you - ???
+        // TODO - pobrac od BE dane lokalizacyjne i zaznaczyc na mapce kropki odp. faktycznemu polozeniu robota
         g2d = (Graphics2D) g.create();
         drawRealLocation(g2d, this);
         drawSlamLocation(g2d, this);
@@ -30,7 +30,6 @@ public class GridPane extends JPanel {
 
         GeneralPath path = new GeneralPath();
         path.moveTo(0, 0);
-        // TODO - narysowac 2 kropki: rzeczywiste i SLAMowe polozenie robota
         path.lineTo((float) parent.getWidth() / 2, (float) parent.getHeight() / 2);
         Polygon polygon = new Polygon();
         polygon.addPoint(parent.getWidth() / 2 - 5, parent.getHeight() / 2 - 5);
@@ -46,14 +45,6 @@ public class GridPane extends JPanel {
         polygon2.addPoint(156 - 5, 19 + 5);
         g2d.fillPolygon(polygon2);
         g2d.draw(path);
-//            path.curveTo(xPos + xDiff, 0, xPos, height, xPos + xDiff, height);
-//            xPos += xDiff;
-//            path.curveTo(xPos + xDiff, height, xPos, 0, xPos + xDiff, 0);
-//            xPos += xDiff;
-//            path.curveTo(xPos + xDiff, 0, xPos, height, xPos + xDiff, height);
-//            xPos += xDiff;
-//            path.curveTo(xPos + xDiff, height, xPos, 0, xPos + xDiff, 0);
-//            g2d.draw(path);
     }
 
     public void drawSlamLocation(Graphics2D g2d, JComponent parent) {

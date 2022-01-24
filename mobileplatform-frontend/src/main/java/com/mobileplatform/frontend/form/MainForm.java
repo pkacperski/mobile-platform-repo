@@ -65,7 +65,7 @@ public class MainForm {
     private JProgressBar progressBarLeftRearWheelSpeed;
     private JProgressBar progressBarRightFrontWheelSpeed;
     private JProgressBar progressBarRightRearWheelSpeed;
-    private JPanel panelLocationCoordinateSystem;
+    private JButton btnViewVehicleLocationHistory;
 
     public MainForm() {
         frame = new JFrame("MainForm");
