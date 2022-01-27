@@ -227,7 +227,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
             mainForm.getLblPointCloudReading().setText("No point cloud reading received");
-            mainForm.getLblLocation().setText("No location data received");
             mainForm.getLblLidarReading().setText("No lidar readings received");
             mainForm.getLblAccelerometerReading().setText("No IMU readings received");
             mainForm.getLblVideoStream().setIcon(new ImageIcon());
@@ -327,6 +326,7 @@ public class MainFormActions implements Actions {
                 e.printStackTrace();
             }
             try {
+                // TODO - odczyt z listy trzymanej lokalnie zamiast strzalu pod API BE
                 LocationDto[] locationDtos = locationDtoListRestHandler.performGetAbsolutePath("http://localhost:8080/location/" + storedVehicleId);
                 frame.add(new VehicleLocationPane(locationDtos));
                 frame.pack();
@@ -397,8 +397,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
             mainForm.getLblAccelerometerReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
             mainForm.getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
-            mainForm.getLblLocation().setText(locationDto != null ? "Location: real X: " + locationDto.getRealXCoordinate()
-                    + ", real Y: " + locationDto.getRealYCoordinate() : "No location data received");
             mainForm.getLblPointCloudReading().setText(pointCloudDto != null ? "Point cloud reading: " + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
         }
         else if(whichVehicle == 2) {
