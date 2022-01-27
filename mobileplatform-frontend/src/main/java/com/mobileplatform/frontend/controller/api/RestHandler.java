@@ -25,6 +25,10 @@ public class RestHandler<T> {
         return gson.fromJson(Unirest.get(apiPath.concat(path)).asJson().getBody().toString(), typeParameterClass);
     }
 
+    public T performGetAbsolutePath(String absolutePath) throws UnirestException {
+        return gson.fromJson(Unirest.get(absolutePath).asJson().getBody().toString(), typeParameterClass);
+    }
+
     public T performGet(String path, String pathParam) throws UnirestException {
         return gson.fromJson(Unirest.get(apiPath.concat(path).concat("/").concat(pathParam)).asJson().getBody().toString(), typeParameterClass);
     }
@@ -36,14 +40,14 @@ public class RestHandler<T> {
     }
 
     public T performPost(String path, String body, String contentType) throws UnirestException {
-        HttpRequestWithBody httpRequestWithBody = Unirest.post(path.contains("http") ? path : apiPath.concat(path));
+        HttpRequestWithBody httpRequestWithBody = Unirest.post(path.contains("http") ? path : apiPath.concat(path)); // TODO - performPostAbsolutePath method
         httpRequestWithBody.header("Content-Type", contentType);
         httpRequestWithBody.body(body);
         return gson.fromJson(httpRequestWithBody.asJson().getBody().toString(), typeParameterClass);
     }
 
     public T performDelete(String path, String body, String contentType) throws UnirestException {
-        HttpRequestWithBody httpRequestWithBody = Unirest.delete(path.contains("http") ? path : apiPath.concat(path));
+        HttpRequestWithBody httpRequestWithBody = Unirest.delete(path.contains("http") ? path : apiPath.concat(path)); // TODO - performDeleteAbsolutePath method
         httpRequestWithBody.header("Content-Type", contentType);
         httpRequestWithBody.body(body);
         return gson.fromJson(httpRequestWithBody.asJson().getBody().toString(), typeParameterClass);

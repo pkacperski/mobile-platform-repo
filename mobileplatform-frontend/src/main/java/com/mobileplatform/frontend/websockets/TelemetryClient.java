@@ -291,7 +291,7 @@ public class TelemetryClient extends WebSocketClient {
                 );
 
                 if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
-                    mainForm.getLblLocation().setText(locationText);
+                    System.out.println(locationText); // TODO - zapisywanie danych w tablicy odczytow, zeby nie bylo koniecznosci strzelania do API BE po dane w MainFormActions
                 else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
                     mainForm.getLblLocationVehicle2().setText(locationText);
             }

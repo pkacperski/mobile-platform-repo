@@ -8,12 +8,14 @@ import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
+import com.mobileplatform.frontend.form.VehicleLocationPane;
 import com.mobileplatform.frontend.form.MainForm;
 import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.LocalDateTime;
 
 import static com.mobileplatform.frontend.MobileplatformFrontend.*;
@@ -34,6 +36,7 @@ public class MainFormActions implements Actions {
     private RestHandler<ImuReadingDto> imuReadingDtoRestHandler;
     private RestHandler<LidarReadingDto> lidarReadingDtoRestHandler;
     private RestHandler<LocationDto> locationDtoRestHandler;
+    private RestHandler<LocationDto[]> locationDtoListRestHandler;
     private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
     private RestHandler<VehicleConnectResponse> vehicleConnectResponseRestHandler;
@@ -91,6 +94,7 @@ public class MainFormActions implements Actions {
         imuReadingDtoRestHandler = new RestHandler<>(ImuReadingDto.class);
         lidarReadingDtoRestHandler = new RestHandler<>(LidarReadingDto.class);
         locationDtoRestHandler = new RestHandler<>(LocationDto.class);
+        locationDtoListRestHandler = new RestHandler<>(LocationDto[].class);
         pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
         vehicleConnectResponseRestHandler = new RestHandler<>(VehicleConnectResponse.class);
@@ -105,6 +109,7 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
         mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
         mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
+        mainForm.getBtnViewVehicleLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -194,6 +199,7 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(true);
             mainForm.getBtnEmergencyAbort().setEnabled(true);
             mainForm.getBtnManualSteeringMode().setEnabled(true);
+            mainForm.getBtnViewVehicleLocationHistory().setEnabled(true);
         } else if (whichVehicle == VEHICLE_2) {
             mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
@@ -216,11 +222,11 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(false);
             mainForm.getBtnEmergencyAbort().setEnabled(false);
             mainForm.getBtnManualSteeringMode().setEnabled(false);
+            mainForm.getBtnViewVehicleLocationHistory().setEnabled(false);
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
             mainForm.getLblPointCloudReading().setText("No point cloud reading received");
-            mainForm.getLblLocation().setText("No location data received");
             mainForm.getLblLidarReading().setText("No lidar readings received");
             mainForm.getLblAccelerometerReading().setText("No IMU readings received");
             mainForm.getLblVideoStream().setIcon(new ImageIcon());
@@ -306,6 +312,33 @@ public class MainFormActions implements Actions {
         }
     }
 
+    private void createFrameWithLocationHistory(int whichVehicle) {
+        long storedVehicleId = getVehicleId(whichVehicle);
+        if(storedVehicleId < 0)
+            return;
+
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Vehicle location (red - real, blue - SLAM)");
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                // TODO - odczyt z listy trzymanej lokalnie zamiast strzalu pod API BE
+                LocationDto[] locationDtos = locationDtoListRestHandler.performGetAbsolutePath("http://localhost:8080/location/" + storedVehicleId);
+                frame.add(new VehicleLocationPane(locationDtos));
+                frame.pack();
+                frame.setLocationByPlatform(true);
+                frame.setVisible(true);
+                frame.setResizable(false);
+            } catch (UnirestException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
         TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
     }
@@ -364,8 +397,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
             mainForm.getLblAccelerometerReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
             mainForm.getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
-            mainForm.getLblLocation().setText(locationDto != null ? "Location: real X: " + locationDto.getRealXCoordinate()
-                    + ", real Y: " + locationDto.getRealYCoordinate() : "No location data received");
             mainForm.getLblPointCloudReading().setText(pointCloudDto != null ? "Point cloud reading: " + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
         }
         else if(whichVehicle == 2) {
