@@ -26,7 +26,7 @@ public class MobileplatformBackendApplication {
 			"rtmp://10.0.0.102:1935/live/gs"
 	};
 	final static String[] TEST_STREAMS_ADDRESSES = {
-			"0",
+			// "0",
 			"rtmp://localhost/live/rgb",
 			"rtmp://localhost/live/gs",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-theory.mp4",

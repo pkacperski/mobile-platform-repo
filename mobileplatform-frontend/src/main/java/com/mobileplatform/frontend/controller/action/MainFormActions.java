@@ -229,8 +229,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
-            mainForm.getLblPointCloudReading().setText("No point cloud reading received");
-            mainForm.getLblLidarReading().setText("No lidar readings received");
             mainForm.getLblAccelerometerReading().setText("No IMU readings received");
             mainForm.getLblVideoStream().setIcon(new ImageIcon());
             mainForm.getProgressBarWheelsTurnLeft().setValue(0);
@@ -437,8 +435,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
             mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
             mainForm.getLblAccelerometerReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
-            mainForm.getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
-            mainForm.getLblPointCloudReading().setText(pointCloudDto != null ? "Point cloud reading: " + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
         }
         else if(whichVehicle == 2) {
             mainForm.getLblVehicleNameVehicle2().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");

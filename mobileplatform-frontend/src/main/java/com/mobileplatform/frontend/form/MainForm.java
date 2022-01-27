@@ -14,8 +14,6 @@ public class MainForm {
     private JLabel lblAccelerometerReading;
     private JLabel lblGyroReading;
     private JLabel lblMagnetometerReading;
-    private JLabel lblLidarReading;
-    private JLabel lblPointCloudReading;
     private JLabel lblVideoStream;
     private JTabbedPane tabbedPane;
     private JPanel panelVehicle1;

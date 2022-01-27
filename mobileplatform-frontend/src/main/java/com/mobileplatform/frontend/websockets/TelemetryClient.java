@@ -270,7 +270,7 @@ public class TelemetryClient extends WebSocketClient {
                         + " ..."; // TODO - display full lidar reading
 
                 if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
-                    mainForm.getLblLidarReading().setText(lidarReadingText);
+                    System.out.println(lidarReadingText); // TODO - remove handling this message here if not necessary
                 else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
                     mainForm.getLblLidarReadingVehicle2().setText(lidarReadingText);
             }
@@ -310,7 +310,7 @@ public class TelemetryClient extends WebSocketClient {
                 );
 
                 if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
-                    mainForm.getLblPointCloudReading().setText(pointCloudText);
+                    System.out.println(pointCloudText); // TODO - target handling message with point cloud reading
                 else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
                     mainForm.getLblPointCloudReadingVehicle2().setText(pointCloudText);
             }
