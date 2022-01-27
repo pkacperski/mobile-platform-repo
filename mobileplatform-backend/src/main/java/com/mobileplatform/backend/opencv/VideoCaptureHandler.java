@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-import static com.mobileplatform.backend.MobileplatformBackendApplication.VIDEO_STREAMS_PORT_NUMBERS;
-import static com.mobileplatform.backend.MobileplatformBackendApplication.WEBSOCKET_SERVER_IP_ADDRESS;
+import static com.mobileplatform.backend.MobileplatformBackendApplication.*;
 
 public class VideoCaptureHandler {
 
@@ -44,6 +43,24 @@ public class VideoCaptureHandler {
                     (i%streamsPerVehicleCnt)+1, (i % streamsPerVehicleCnt == 0), dateTimeNow));
             videoCaptureThreads.add(new Thread(videoCaptureImpls.get(i)));
             videoCaptureThreads.get(i).start();
+        }
+
+        if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING) {
+            videoServers.add(new VideoServer(WEBSOCKET_SERVER_IP_ADDRESS, 8084));
+            videoServerThreads.add(new Thread(videoServers.get(videoServers.size()-1)));
+            videoServerThreads.get(videoServerThreads.size()-1).start();
+            videoCaptureImpls.add(new VideoCaptureImpl("rtmp://localhost/live/lidar", videoServers.get(videoServers.size()-1), 1,
+                    0, true, dateTimeNow));
+            videoCaptureThreads.add(new Thread(videoCaptureImpls.get(videoCaptureImpls.size()-1)));
+            videoCaptureThreads.get(videoCaptureThreads.size()-1).start();
+
+            videoServers.add(new VideoServer(WEBSOCKET_SERVER_IP_ADDRESS, 8085));
+            videoServerThreads.add(new Thread(videoServers.get(videoServers.size()-1)));
+            videoServerThreads.get(videoServerThreads.size()-1).start();
+            videoCaptureImpls.add(new VideoCaptureImpl("rtmp://localhost/live/pc", videoServers.get(videoServers.size()-1), 1,
+                    0, true, dateTimeNow));
+            videoCaptureThreads.add(new Thread(videoCaptureImpls.get(videoCaptureImpls.size()-1)));
+            videoCaptureThreads.get(videoCaptureThreads.size()-1).start();
         }
     }
 

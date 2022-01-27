@@ -64,7 +64,9 @@ public class MainForm {
     private JProgressBar progressBarLeftRearWheelSpeed;
     private JProgressBar progressBarRightFrontWheelSpeed;
     private JProgressBar progressBarRightRearWheelSpeed;
-    private JButton btnViewVehicleLocationHistory;
+    private JButton btnShowLocationHistory;
+    private JButton btnShowPointCloud;
+    private JButton btnShowLidarOccupancyMap;
 
     public MainForm() {
         frame = new JFrame("MainForm");

@@ -12,7 +12,8 @@ import java.util.Objects;
 @Log
 public class MobileplatformFrontend {
 
-    public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' for working with vehicles in real environment
+    public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' when working with vehicles in real environment
+    public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = true; // TODO - only 'true' for testing purposes
     public final static int VEHICLES_COUNT = 1; // same settings as in BE application - TODO - check: moze te same stale z BE i FE trzymac w jednym miejscu i z obu apek je importowac
     public final static int STREAMS_PER_VEHICLE_COUNT = 1; // TODO - set the appropriate streams per vehicle count
     public final static String TELEMETRY_API_SERVER_IP_TEST = "localhost";

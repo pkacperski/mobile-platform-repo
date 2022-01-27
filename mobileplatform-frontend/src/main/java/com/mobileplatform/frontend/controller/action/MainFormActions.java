@@ -10,6 +10,7 @@ import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
 import com.mobileplatform.frontend.form.VehicleLocationPane;
 import com.mobileplatform.frontend.form.MainForm;
+import com.mobileplatform.frontend.opencv.VideoReceiveHandler;
 import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -109,7 +110,9 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
         mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
         mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
-        mainForm.getBtnViewVehicleLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
+        mainForm.getBtnShowLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
+        mainForm.getBtnShowLidarOccupancyMap().addActionListener(e -> createFrameWithLidarOccupancyMap());
+        mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -199,7 +202,7 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(true);
             mainForm.getBtnEmergencyAbort().setEnabled(true);
             mainForm.getBtnManualSteeringMode().setEnabled(true);
-            mainForm.getBtnViewVehicleLocationHistory().setEnabled(true);
+            mainForm.getBtnShowLocationHistory().setEnabled(true);
         } else if (whichVehicle == VEHICLE_2) {
             mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
@@ -222,7 +225,7 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(false);
             mainForm.getBtnEmergencyAbort().setEnabled(false);
             mainForm.getBtnManualSteeringMode().setEnabled(false);
-            mainForm.getBtnViewVehicleLocationHistory().setEnabled(false);
+            mainForm.getBtnShowLocationHistory().setEnabled(false);
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
@@ -312,6 +315,10 @@ public class MainFormActions implements Actions {
         }
     }
 
+    private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
+        TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
+    }
+
     private void createFrameWithLocationHistory(int whichVehicle) {
         long storedVehicleId = getVehicleId(whichVehicle);
         if(storedVehicleId < 0)
@@ -339,8 +346,42 @@ public class MainFormActions implements Actions {
         });
     }
 
-    private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
-        TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
+    private void createFrameWithLidarOccupancyMap() {
+        // only for testing & demonstration purposes
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Occupancy map from lidar");
+            frame.setSize(360, 360);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ImageIcon imageIcon = VideoReceiveHandler.getLidarImageIcon();
+            JLabel label = new JLabel();
+            label.setIcon(imageIcon);
+            frame.add(label);
+            frame.setVisible(true);
+        });
+    }
+
+    private void createFrameWithPointCloud() {
+        // only for testing & demonstration purposes
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Point cloud visualisation");
+            frame.setSize(800, 450);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ImageIcon imageIcon = VideoReceiveHandler.getPcImageIcon();
+            JLabel label = new JLabel();
+            label.setIcon(imageIcon);
+            frame.add(label);
+            frame.setVisible(true);
+        });
     }
 
     private long getVehicleId(int whichVehicle) {

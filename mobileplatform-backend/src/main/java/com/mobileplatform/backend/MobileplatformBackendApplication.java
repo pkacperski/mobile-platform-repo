@@ -9,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MobileplatformBackendApplication {
 
-	public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' when testing with real vehicles
+	public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' when working with real vehicles
+	public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = true; // TODO - only 'true' for testing purposes
 	final static int VEHICLES_COUNT = 1; // TODO - set the appropriate vehicles count
 	final static int STREAMS_PER_VEHICLE_COUNT = 1; // TODO - set the appropriate streams per vehicle count
 	public final static String WEBSOCKET_SERVER_IP_ADDRESS = "localhost";
@@ -26,13 +27,14 @@ public class MobileplatformBackendApplication {
 	};
 	final static String[] TEST_STREAMS_ADDRESSES = {
 			"0",
+			"rtmp://localhost/live/rgb",
+			"rtmp://localhost/live/gs",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-theory.mp4",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-star.mp4",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-12angrymen.mp4",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-intouchables.avi",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-beauty.mp4",
 			"C:/Users/DELL/Documents/Mgr/rozne/video-harry.mkv"
-			// "rtmp://localhost/live/rgb", // ew. TODO - sprobowac zainstalowac nginx i sprobowac transmisji ze skryptu main.py PZ
 	};
 
 	public static void main(String[] args) {
