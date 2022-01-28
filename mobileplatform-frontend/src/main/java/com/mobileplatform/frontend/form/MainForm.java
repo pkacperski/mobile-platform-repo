@@ -27,7 +27,7 @@ public class MainForm {
     private JLabel lblVehicleIp;
     private JLabel lblVehicleId;
     private JButton btnDisconnectVehicle;
-    private JPanel panelVehicle2;
+    private JPanel panelVehicle2Deprecated;
     private JLabel lblEncoderReadingVehicle2;
     private JButton btnFetchDataVehicle2;
     private JLabel lblVideoStreamVehicle2;
@@ -65,6 +65,8 @@ public class MainForm {
     private JButton btnShowLocationHistory;
     private JButton btnShowPointCloud;
     private JButton btnShowLidarOccupancyMap;
+    private JButton btnSwitchToVehicle2View;
+    private JPanel panelVehicle2;
 
     public MainForm() {
         frame = new JFrame("MainForm");

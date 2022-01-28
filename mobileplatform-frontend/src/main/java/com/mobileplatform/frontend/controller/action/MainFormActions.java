@@ -113,6 +113,7 @@ public class MainFormActions implements Actions {
         mainForm.getBtnShowLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
         mainForm.getBtnShowLidarOccupancyMap().addActionListener(e -> createFrameWithLidarOccupancyMap());
         mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
+        mainForm.getBtnSwitchToVehicle2View().addActionListener(e -> createFrameForVehicle2());
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -382,6 +383,22 @@ public class MainFormActions implements Actions {
             JLabel label = new JLabel();
             label.setIcon(imageIcon);
             frame.add(label);
+            frame.setVisible(true);
+        });
+    }
+
+    private void createFrameForVehicle2() {
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Steering Cockpit - Vehicle 2");
+            frame.setSize(1440, 810);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            frame.setContentPane(mainForm.getPanelVehicle2()); // TODO add functional components to panelVehicle2 - now only for testing & demonstration purposes
+            frame.pack();
             frame.setVisible(true);
         });
     }
