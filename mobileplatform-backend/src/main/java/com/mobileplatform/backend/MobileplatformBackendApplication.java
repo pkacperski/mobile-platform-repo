@@ -12,7 +12,7 @@ public class MobileplatformBackendApplication {
 	public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' when working with real vehicles
 	public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = true; // TODO - only 'true' for testing purposes
 	final static int VEHICLES_COUNT = 1; // TODO - set the appropriate vehicles count
-	final static int STREAMS_PER_VEHICLE_COUNT = 1; // TODO - set the appropriate streams per vehicle count
+	final static int STREAMS_PER_VEHICLE_COUNT = 2; // TODO - set the appropriate streams per vehicle count
 	public final static String WEBSOCKET_SERVER_IP_ADDRESS = "localhost";
 	public final static int TELEMETRY_SERVER_PORT_NUMBER = 8081; // by default, port 8080 used for serving backend services, 8081 - for telemetry, 8082 and above for video streams
 	public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams when there are more than 2 vehicles

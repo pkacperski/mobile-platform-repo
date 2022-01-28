@@ -203,6 +203,8 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyAbort().setEnabled(true);
             mainForm.getBtnManualSteeringMode().setEnabled(true);
             mainForm.getBtnShowLocationHistory().setEnabled(true);
+            mainForm.getBtnShowLidarOccupancyMap().setEnabled(true);
+            mainForm.getBtnShowPointCloud().setEnabled(true);
         } else if (whichVehicle == VEHICLE_2) {
             mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
@@ -226,6 +228,8 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyAbort().setEnabled(false);
             mainForm.getBtnManualSteeringMode().setEnabled(false);
             mainForm.getBtnShowLocationHistory().setEnabled(false);
+            mainForm.getBtnShowLidarOccupancyMap().setEnabled(false);
+            mainForm.getBtnShowPointCloud().setEnabled(false);
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
