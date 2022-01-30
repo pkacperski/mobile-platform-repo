@@ -65,7 +65,7 @@ public class MainForm {
     private JButton btnShowLocationHistory;
     private JButton btnShowPointCloud;
     private JButton btnShowLidarOccupancyMap;
-    private JButton btnSwitchToVehicle2View;
+    private JButton btnOpenVehicle2View;
     private JPanel panelVehicle2;
 
     public MainForm() {

@@ -8,8 +8,8 @@ import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
-import com.mobileplatform.frontend.form.VehicleLocationPane;
 import com.mobileplatform.frontend.form.MainForm;
+import com.mobileplatform.frontend.form.VehicleLocationPane;
 import com.mobileplatform.frontend.opencv.VideoReceiveHandler;
 import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
@@ -20,6 +20,8 @@ import java.awt.*;
 import java.time.LocalDateTime;
 
 import static com.mobileplatform.frontend.MobileplatformFrontend.*;
+import static com.mobileplatform.frontend.opencv.VideoReceiveHandler.createMockLidarAndPointCloudStreamClients;
+import static com.mobileplatform.frontend.opencv.VideoReceiveHandler.disableMockLidarAndPointCloudStreamClients;
 
 @Log
 public class MainFormActions implements Actions {
@@ -113,7 +115,7 @@ public class MainFormActions implements Actions {
         mainForm.getBtnShowLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
         mainForm.getBtnShowLidarOccupancyMap().addActionListener(e -> createFrameWithLidarOccupancyMap());
         mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
-        mainForm.getBtnSwitchToVehicle2View().addActionListener(e -> createFrameForVehicle2());
+        mainForm.getBtnOpenVehicle2View().addActionListener(e -> createFrameForVehicle2());
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -139,7 +141,7 @@ public class MainFormActions implements Actions {
         String vehicleName = (whichVehicle == 1) ? mainForm.getTxtVehicleName().getText() : mainForm.getTxtVehicleNameVehicle2().getText();
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(vehicleIp)
-                .name(vehicleName)
+                .name(vehicleName + "$" + whichVehicle)
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.CONNECTED)
                 .build();
@@ -153,6 +155,8 @@ public class MainFormActions implements Actions {
                         .mgc(60949)
                         .build();
                 vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+                if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
+                    createMockLidarAndPointCloudStreamClients();
                 setLabelsAfterConnect(whichVehicle, vehicleDtoResponse.getId(), vehicleIp, vehicleName);
             }
         } catch (UnirestException e) {
@@ -169,7 +173,7 @@ public class MainFormActions implements Actions {
             return;
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(storedVehicleIp)
-                .name(storedVehicleName)
+                .name(storedVehicleName + "$" + whichVehicle)
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
@@ -183,6 +187,8 @@ public class MainFormActions implements Actions {
         try {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+            if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
+                disableMockLidarAndPointCloudStreamClients();
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 setLabelsAfterDisconnect(whichVehicle);
             }

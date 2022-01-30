@@ -12,6 +12,8 @@ import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static com.mobileplatform.backend.MobileplatformBackendApplication.*;
 
@@ -30,23 +32,35 @@ public class VideoCaptureImpl implements Runnable {
 
     private final String streamAddress;
     private final VideoServer videoServer;
-    private final int vehicleNumber;
+    private final int whichVehicle;
     private final int streamNumber;
     private boolean isStreamActive;
-    private final String dateTimeNow;
+    private String videoPath;
 
-    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, int vehicleNumber, int streamNumber, boolean isStreamActive, String dateTimeNow) {
+    public VideoCaptureImpl(String streamAddress, VideoServer videoServer, int whichVehicle, int streamNumber, boolean isStreamActive) {
         this.streamAddress = streamAddress;
         this.videoServer = videoServer;
-        this.vehicleNumber = vehicleNumber;
+        this.whichVehicle = whichVehicle;
         this.streamNumber = streamNumber;
         this.isStreamActive = isStreamActive;
-        this.dateTimeNow = dateTimeNow;
     }
 
     public static void initialize() {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         System.out.println("Loaded OpenCV: " + Core.getVersionString());
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd--HH-mm-ss");
+        String dateTimeNow = dateTimeFormatter.format(LocalDateTime.now());
+        String videoPath = SAVED_VIDEOS_DIRECTORY + File.separator + "saved-videos" + File.separator + dateTimeNow;
+        File directory = new File(videoPath);
+        if(!directory.exists()){
+            try {
+                if(!directory.mkdirs())
+                    throw new Exception("Error - unable to create a new directory to save videos!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void run() {
@@ -58,20 +72,10 @@ public class VideoCaptureImpl implements Runnable {
         Size videoSaveSize = new Size(Math.round(originalVideoRatio * SAVED_VIDEOS_HEIGHT), SAVED_VIDEOS_HEIGHT);
         Mat frame = new Mat();
 
-        String videoPath = SAVED_VIDEOS_DIRECTORY + File.separator + "saved-videos" + File.separator + dateTimeNow;
-        File directory = new File(videoPath);
-        if (!directory.exists()){
-            try {
-                if(!directory.mkdirs())
-                    throw new Exception("Error - unable to create a new directory to save videos!");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        String videoFileName = videoPath + File.separator + "video-vehicle-" + vehicleNumber + "-stream-" + streamNumber + ".avi";
+        String videoFileName = videoPath + File.separator + "video-vehicle-" + whichVehicle + "-stream-" + streamNumber + ".avi";
         VideoWriter videoWriter = new VideoWriter(videoFileName, fourcc, fps, videoSaveSize, true);
 
-        while(videoCapture.read(frame)) {
+        while(!Thread.interrupted() && videoCapture.read(frame)) {
             if(frame.width() > 0 && frame.height() > 0) {
                 if(!IS_TEST_ENV) { // only save videos on local drive when in real environment
                     Mat resizedFrame = new Mat();
