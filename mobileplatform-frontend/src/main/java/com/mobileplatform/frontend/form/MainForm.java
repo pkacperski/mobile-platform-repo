@@ -14,8 +14,6 @@ public class MainForm {
     private JLabel lblAccelerometerReading;
     private JLabel lblGyroReading;
     private JLabel lblMagnetometerReading;
-    private JLabel lblLidarReading;
-    private JLabel lblPointCloudReading;
     private JLabel lblVideoStream;
     private JTabbedPane tabbedPane;
     private JPanel panelVehicle1;
@@ -29,7 +27,7 @@ public class MainForm {
     private JLabel lblVehicleIp;
     private JLabel lblVehicleId;
     private JButton btnDisconnectVehicle;
-    private JPanel panelVehicle2;
+    private JPanel panelVehicle2Deprecated;
     private JLabel lblEncoderReadingVehicle2;
     private JButton btnFetchDataVehicle2;
     private JLabel lblVideoStreamVehicle2;
@@ -64,7 +62,11 @@ public class MainForm {
     private JProgressBar progressBarLeftRearWheelSpeed;
     private JProgressBar progressBarRightFrontWheelSpeed;
     private JProgressBar progressBarRightRearWheelSpeed;
-    private JButton btnViewVehicleLocationHistory;
+    private JButton btnShowLocationHistory;
+    private JButton btnShowPointCloud;
+    private JButton btnShowLidarOccupancyMap;
+    private JButton btnOpenVehicle2View;
+    private JPanel panelVehicle2;
 
     public MainForm() {
         frame = new JFrame("MainForm");

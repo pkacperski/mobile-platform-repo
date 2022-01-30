@@ -8,8 +8,9 @@ import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
 import com.mobileplatform.frontend.dto.*;
 import com.mobileplatform.frontend.dto.steering.*;
-import com.mobileplatform.frontend.form.VehicleLocationPane;
 import com.mobileplatform.frontend.form.MainForm;
+import com.mobileplatform.frontend.form.VehicleLocationPane;
+import com.mobileplatform.frontend.opencv.VideoReceiveHandler;
 import com.mobileplatform.frontend.websockets.TelemetryClient;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -19,6 +20,8 @@ import java.awt.*;
 import java.time.LocalDateTime;
 
 import static com.mobileplatform.frontend.MobileplatformFrontend.*;
+import static com.mobileplatform.frontend.opencv.VideoReceiveHandler.createMockLidarAndPointCloudStreamClients;
+import static com.mobileplatform.frontend.opencv.VideoReceiveHandler.disableMockLidarAndPointCloudStreamClients;
 
 @Log
 public class MainFormActions implements Actions {
@@ -109,7 +112,10 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
         mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
         mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
-        mainForm.getBtnViewVehicleLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
+        mainForm.getBtnShowLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
+        mainForm.getBtnShowLidarOccupancyMap().addActionListener(e -> createFrameWithLidarOccupancyMap());
+        mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
+        mainForm.getBtnOpenVehicle2View().addActionListener(e -> createFrameForVehicle2());
 
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
@@ -135,7 +141,7 @@ public class MainFormActions implements Actions {
         String vehicleName = (whichVehicle == 1) ? mainForm.getTxtVehicleName().getText() : mainForm.getTxtVehicleNameVehicle2().getText();
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(vehicleIp)
-                .name(vehicleName)
+                .name(vehicleName + "$" + whichVehicle)
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.CONNECTED)
                 .build();
@@ -149,6 +155,8 @@ public class MainFormActions implements Actions {
                         .mgc(60949)
                         .build();
                 vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+                if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
+                    createMockLidarAndPointCloudStreamClients();
                 setLabelsAfterConnect(whichVehicle, vehicleDtoResponse.getId(), vehicleIp, vehicleName);
             }
         } catch (UnirestException e) {
@@ -165,7 +173,7 @@ public class MainFormActions implements Actions {
             return;
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(storedVehicleIp)
-                .name(storedVehicleName)
+                .name(storedVehicleName + "$" + whichVehicle)
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
@@ -179,6 +187,8 @@ public class MainFormActions implements Actions {
         try {
             vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
+            if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
+                disableMockLidarAndPointCloudStreamClients();
             if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 setLabelsAfterDisconnect(whichVehicle);
             }
@@ -199,7 +209,9 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(true);
             mainForm.getBtnEmergencyAbort().setEnabled(true);
             mainForm.getBtnManualSteeringMode().setEnabled(true);
-            mainForm.getBtnViewVehicleLocationHistory().setEnabled(true);
+            mainForm.getBtnShowLocationHistory().setEnabled(true);
+            mainForm.getBtnShowLidarOccupancyMap().setEnabled(true);
+            mainForm.getBtnShowPointCloud().setEnabled(true);
         } else if (whichVehicle == VEHICLE_2) {
             mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
@@ -222,12 +234,12 @@ public class MainFormActions implements Actions {
             mainForm.getBtnEmergencyStop().setEnabled(false);
             mainForm.getBtnEmergencyAbort().setEnabled(false);
             mainForm.getBtnManualSteeringMode().setEnabled(false);
-            mainForm.getBtnViewVehicleLocationHistory().setEnabled(false);
+            mainForm.getBtnShowLocationHistory().setEnabled(false);
+            mainForm.getBtnShowLidarOccupancyMap().setEnabled(false);
+            mainForm.getBtnShowPointCloud().setEnabled(false);
             mainForm.getLblVehicleId().setText("Vehicle not connected");
             mainForm.getLblVehicleIp().setText("Vehicle not connected");
             mainForm.getLblVehicleName().setText("Vehicle not connected");
-            mainForm.getLblPointCloudReading().setText("No point cloud reading received");
-            mainForm.getLblLidarReading().setText("No lidar readings received");
             mainForm.getLblAccelerometerReading().setText("No IMU readings received");
             mainForm.getLblVideoStream().setIcon(new ImageIcon());
             mainForm.getProgressBarWheelsTurnLeft().setValue(0);
@@ -312,6 +324,10 @@ public class MainFormActions implements Actions {
         }
     }
 
+    private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
+        TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
+    }
+
     private void createFrameWithLocationHistory(int whichVehicle) {
         long storedVehicleId = getVehicleId(whichVehicle);
         if(storedVehicleId < 0)
@@ -339,8 +355,58 @@ public class MainFormActions implements Actions {
         });
     }
 
-    private void sendChangeActiveStreamSignal(int whichVehicle, int whichStream) {
-        TelemetryClient.getInstance().sendMessage("Change stream for vehicle: " + whichVehicle + " to stream " + whichStream + ".");
+    private void createFrameWithLidarOccupancyMap() {
+        // only for testing & demonstration purposes
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Occupancy map from lidar");
+            frame.setSize(360, 360);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ImageIcon imageIcon = VideoReceiveHandler.getLidarImageIcon();
+            JLabel label = new JLabel();
+            label.setIcon(imageIcon);
+            frame.add(label);
+            frame.setVisible(true);
+        });
+    }
+
+    private void createFrameWithPointCloud() {
+        // only for testing & demonstration purposes
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Point cloud visualisation");
+            frame.setSize(520, 520); // ??? 600x600
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            ImageIcon imageIcon = VideoReceiveHandler.getPcImageIcon();
+            JLabel label = new JLabel();
+            label.setIcon(imageIcon);
+            frame.add(label);
+            frame.setVisible(true);
+        });
+    }
+
+    private void createFrameForVehicle2() {
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("Steering Cockpit - Vehicle 2");
+            frame.setSize(1440, 810);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            frame.setContentPane(mainForm.getPanelVehicle2()); // TODO add functional components to panelVehicle2 - now only for testing & demonstration purposes
+            frame.pack();
+            frame.setVisible(true);
+        });
     }
 
     private long getVehicleId(int whichVehicle) {
@@ -396,8 +462,6 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
             mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
             mainForm.getLblAccelerometerReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
-            mainForm.getLblLidarReading().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
-            mainForm.getLblPointCloudReading().setText(pointCloudDto != null ? "Point cloud reading: " + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
         }
         else if(whichVehicle == 2) {
             mainForm.getLblVehicleNameVehicle2().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");

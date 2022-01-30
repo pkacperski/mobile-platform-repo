@@ -1,6 +1,7 @@
 package com.mobileplatform.frontend.websockets;
 
 import com.mobileplatform.frontend.controller.action.MainFormActions;
+import com.mobileplatform.frontend.opencv.VideoReceiveHandler;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.opencv.core.Mat;
@@ -14,7 +15,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
-import static com.mobileplatform.frontend.MobileplatformFrontend.IS_TEST_ENV;
 import static org.opencv.imgcodecs.Imgcodecs.IMREAD_UNCHANGED;
 
 /**
@@ -23,10 +23,12 @@ import static org.opencv.imgcodecs.Imgcodecs.IMREAD_UNCHANGED;
 public class VideoClient extends WebSocketClient {
 
     private final int whichVehicle; // for video from which vehicle (tab) is this VideoClient responsible
+    private final VideoStreamType streamType;
 
-    public VideoClient(String ipAddress, int port, String serverName, int whichVehicle) throws URISyntaxException {
+    public VideoClient(String ipAddress, int port, String serverName, int whichVehicle, VideoStreamType streamType) throws URISyntaxException {
         super(new URI("ws://" + ipAddress + ":" + port + "/" + serverName));
         this.whichVehicle = whichVehicle;
+        this.streamType = streamType;
     }
 
     @Override
@@ -43,9 +45,15 @@ public class VideoClient extends WebSocketClient {
         if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
             BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
             ImageIcon icon = new ImageIcon(bufferedImage);
-            if(this.whichVehicle == 1 && (IS_TEST_ENV || !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled())) // first stream - only show stream when testing OR when the vehicle is connected
-                MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
-            else if(this.whichVehicle == 2 && (IS_TEST_ENV || !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled())) { // second stream
+            if(this.whichVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled()) { // first stream - only show stream when testing OR when the vehicle is connected
+                if(this.streamType == VideoStreamType.CAMERA_STREAM)
+                    MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
+                else if(this.streamType == VideoStreamType.LIDAR_STREAM)
+                    VideoReceiveHandler.setLidarImageIcon(icon);
+                else if(this.streamType == VideoStreamType.POINT_CLOUD_STREAM)
+                    VideoReceiveHandler.setPcImageIcon(icon);
+            }
+            else if(this.whichVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled()) { // second stream
                 MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
             }
         }
