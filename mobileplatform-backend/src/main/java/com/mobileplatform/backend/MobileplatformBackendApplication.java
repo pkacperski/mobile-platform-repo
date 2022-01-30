@@ -16,6 +16,8 @@ public class MobileplatformBackendApplication {
 	public final static String WEBSOCKET_SERVER_IP_ADDRESS = "localhost"; // WebSocket server address for exchanging data between backend and frontend applications
 	public final static int TELEMETRY_SERVER_PORT_NUMBER = 8081; // by default, port 8080 used for serving backend services, 8081 - for telemetry, 8082 and above for video streams
 	public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams (e.g., from more vehicles, simultaneously)
+	public final static String LIDAR_MOCK_STREAM_ADDRESS = "rtmp://localhost/live/lidar";
+	public final static String POINT_CLOUD_MOCK_STREAM_ADDRESS = "rtmp://localhost/live/pc";
 	public final static int LIDAR_STREAM_PORT_NUMBER = 8086;
 	public final static int POINT_CLOUD_STREAM_PORT_NUMBER = 8087;
 	public final static String SAVED_VIDEOS_DIRECTORY = System.getProperty("user.dir"); // folder destination for saving video files

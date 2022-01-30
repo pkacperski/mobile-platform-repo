@@ -378,7 +378,7 @@ public class MainFormActions implements Actions {
         // only for testing & demonstration purposes
         EventQueue.invokeLater(() -> {
             JFrame frame = new JFrame("Point cloud visualisation");
-            frame.setSize(800, 450);
+            frame.setSize(520, 520); // ??? 600x600
             frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
