@@ -295,6 +295,8 @@ public class MainFormActions implements Actions {
         try {
             emergencyModeDataDtoRestHandler.performPost(EMERGENCY_MODE_DATA_PATH, gson.toJson(emergencyModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             emergencyModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
+            mainForm.getLblCurrentEmergencyMode().setText("Current mode: " + (emergencyMode.equals(EmergencyMode.STOP) ? "STOP" : "abort mission"));
+            mainForm.getLblCurrentEmergencyMode().setVisible(true);
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -319,6 +321,8 @@ public class MainFormActions implements Actions {
         try {
             drivingModeDataDtoRestHandler.performPost(DRIVING_MODE_DATA_PATH, gson.toJson(drivingModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             drivingModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
+            mainForm.getLblCurrentDrivingMode().setText("Current mode: " + (drivingMode.equals(DrivingMode.AUTONOMOUS) ? "autonomous" : "manual"));
+            mainForm.getLblCurrentDrivingMode().setVisible(true);
         } catch (UnirestException e) {
             e.printStackTrace();
         }

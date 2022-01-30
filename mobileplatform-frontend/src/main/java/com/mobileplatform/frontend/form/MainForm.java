@@ -68,6 +68,8 @@ public class MainForm {
     private JButton btnStream1Vehicle2;
     private JButton btnStream2Vehicle2;
     private JButton btnStream3Vehicle2;
+    private JLabel lblCurrentEmergencyMode;
+    private JLabel lblCurrentDrivingMode;
 
     public MainForm() {
         frame = new JFrame("MainForm");
@@ -77,6 +79,8 @@ public class MainForm {
         frame.pack();
         progressBarWheelsTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         progressBarCamerasTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        lblCurrentDrivingMode.setVisible(false);
+        lblCurrentEmergencyMode.setVisible(false);
         setButtonsBorders();
     }
 
