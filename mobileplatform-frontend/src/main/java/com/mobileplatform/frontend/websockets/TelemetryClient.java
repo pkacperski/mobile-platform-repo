@@ -149,19 +149,24 @@ public class TelemetryClient extends WebSocketClient {
     private void setDiagnosticDataValuesOnScreen(DiagnosticDataDto diagnosticDataDto, int whichTabVehicle) {
 
         if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled())) { // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
-            mainForm.getProgressBarBatteryStatus().setValue((diagnosticDataDto.getBatteryChargeStatus() < 1.0)
-                    ? (int)(diagnosticDataDto.getBatteryChargeStatus() * 100) : ((diagnosticDataDto.getBatteryChargeStatus() <= 100))
-                    ? diagnosticDataDto.getBatteryChargeStatus().intValue() : 0);
+
+            int batteryPercentage = (diagnosticDataDto.getBatteryChargeStatus() < 1.0)
+                    ? (int)(diagnosticDataDto.getBatteryChargeStatus() * 100) : (diagnosticDataDto.getBatteryChargeStatus() <= 100)
+                    ? diagnosticDataDto.getBatteryChargeStatus().intValue() : 0;
+            mainForm.getProgressBarBatteryStatus().setValue(batteryPercentage);
+            mainForm.getLblBatteryStatusAllData().setText(String.valueOf(batteryPercentage) + "%");
 
             mainForm.getProgressBarWheelsTurnLeft().setValue(0); // clear wheels' left turn indicator
             mainForm.getProgressBarWheelsTurnRight().setValue(0); // clear wheels' right turn indicator
             if(diagnosticDataDto.getWheelsTurnMeasure() > 0 && diagnosticDataDto.getWheelsTurnMeasure() < Math.PI/2) { // left turn
                 int turnLeftValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180 / Math.PI); // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarWheelsTurnLeft().setValue(turnLeftValue);
+                mainForm.getLblWheelsTurnAngleAllData().setText("Left turn by " + turnLeftValue + " deg");
             }
             else if(diagnosticDataDto.getWheelsTurnMeasure() < 0 && diagnosticDataDto.getWheelsTurnMeasure() > -Math.PI/2) { // right turn
                 int turnRightValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180 / Math.PI * -1); // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarWheelsTurnRight().setValue(turnRightValue);
+                mainForm.getLblWheelsTurnAngleAllData().setText("Right turn by " + turnRightValue + " deg");
             }
 
             mainForm.getProgressBarCamerasTurnLeft().setValue(0); // clear camera's left turn indicator
@@ -169,10 +174,12 @@ public class TelemetryClient extends WebSocketClient {
             if(diagnosticDataDto.getCameraTurnAngle() > 0 && diagnosticDataDto.getCameraTurnAngle() < Math.PI/2) { // left turn
                 int turnLeftValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI); // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarCamerasTurnLeft().setValue(turnLeftValue);
+                mainForm.getLblCamerasTurnAngleAllData().setText("Left turn by " + turnLeftValue + " deg");
             }
             else if(diagnosticDataDto.getCameraTurnAngle() < 0 && diagnosticDataDto.getCameraTurnAngle() > -Math.PI/2) { // right turn
                 int turnRightValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI * -1); // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarCamerasTurnRight().setValue(turnRightValue);
+                mainForm.getLblCamerasTurnAngleAllData().setText("Right turn by " + turnRightValue + " deg");
             }
             // TODO - action when received battery status is out of ranges (0: 1) and (0; 100) and wheels' and camera's turn out of range (-PI/2; PI/2)
         }
@@ -210,6 +217,12 @@ public class TelemetryClient extends WebSocketClient {
                     && encoderReadingDto.getRightRearWheelSpeed() <= mainForm.getProgressBarRightRearWheelSpeed().getMaximum())
                 mainForm.getProgressBarRightRearWheelSpeed().setValue(encoderReadingDto.getRightRearWheelSpeed().intValue());
             // TODO - action when wheels' speed out of range (0, 100)
+            mainForm.getLblWheelsVelocityAllData().setText(
+                    "<html>Left front: " + encoderReadingDto.getLeftFrontWheelSpeed().intValue() + " rpm<br>"
+                    + "Right front: " + encoderReadingDto.getRightFrontWheelSpeed().intValue() + " rpm<br>"
+                    + "Left rear: " + encoderReadingDto.getLeftRearWheelSpeed().intValue() + " rpm<br>"
+                    + "Right rear: " + encoderReadingDto.getRightRearWheelSpeed().intValue() + " rpm<br></html>"
+            );
         }
         else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled())) {
             // TODO - odbieranie diagnostic data dla drugiego pojazdu
@@ -254,6 +267,9 @@ public class TelemetryClient extends WebSocketClient {
             mainForm.getLblAccelerometerReading().setText(accelerationReadingText);
             mainForm.getLblGyroReading().setText(gyroReadingText);
             mainForm.getLblMagnetometerReading().setText(magnetometerReadingText);
+            mainForm.getLblAcceleometerAllData().setText(accelerationReadingText); // TODO - jednostki, formatowanie
+            mainForm.getLblGyroscopeAllData().setText(gyroReadingText); // TODO - jednostki, formatowanie
+            mainForm.getLblMagnetometerAllData().setText(magnetometerReadingText); // TODO - jednostki, formatowanie
         }
         else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
             // TODO - odbieranie imu data dla drugiego pojazdu
@@ -290,8 +306,19 @@ public class TelemetryClient extends WebSocketClient {
                         ? locationDto.getRealYCoordinate().toString().substring(0,6) : locationDto.getRealYCoordinate()
                 );
 
-                if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
+                if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled())) {
                     System.out.println(locationText); // TODO - zapisywanie danych w tablicy odczytow, zeby nie bylo koniecznosci strzelania do API BE po dane w MainFormActions
+                    mainForm.getLblRealXCoordAllData().setText(locationDto.getRealXCoordinate().toString().length() > 5
+                            ? locationDto.getRealXCoordinate().toString().substring(0, 6) : String.valueOf(locationDto.getRealXCoordinate()));
+                    mainForm.getLblRealYCoordAllData().setText(locationDto.getRealYCoordinate().toString().length() > 5
+                            ? locationDto.getRealYCoordinate().toString().substring(0,6) : String.valueOf(locationDto.getRealYCoordinate()));
+                    mainForm.getLblSlamXCoordAllData().setText(locationDto.getSlamXCoordinate().toString().length() > 5
+                            ? locationDto.getSlamXCoordinate().toString().substring(0,6) : String.valueOf(locationDto.getSlamXCoordinate()));
+                    mainForm.getLblSlamYCoordAllData().setText(locationDto.getSlamYCoordinate().toString().length() > 5
+                            ? locationDto.getSlamYCoordinate().toString().substring(0,6) : String.valueOf(locationDto.getSlamYCoordinate()));
+                    mainForm.getLblSlamRotationAllData().setText(locationDto.getSlamRotation().toString().length() > 5
+                            ? locationDto.getSlamRotation().toString().substring(0,6) : String.valueOf(locationDto.getSlamRotation()));
+                }
                 else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
                     mainForm.getLblLocationVehicle2().setText(locationText);
             }

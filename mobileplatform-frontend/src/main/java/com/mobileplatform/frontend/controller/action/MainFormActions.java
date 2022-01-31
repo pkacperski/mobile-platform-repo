@@ -116,7 +116,9 @@ public class MainFormActions implements Actions {
         mainForm.getBtnShowLidarOccupancyMap().addActionListener(e -> createFrameWithLidarOccupancyMap());
         mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
         mainForm.getBtnOpenVehicle2View().addActionListener(e -> createFrameForVehicle2());
+        mainForm.getBtnOpenAllDataView().addActionListener(e -> createFrameWithAllDataView());
 
+        // TODO - dodac docelowe akcje dla pojazdu 2
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
         mainForm.getBtnEmergencyStopVehicle2().addActionListener(e -> sendEmergencySignal(EmergencyMode.STOP, VEHICLE_2));
@@ -203,6 +205,10 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIp().setText("Vehicle IP: " + vehicleIp);
             mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleName);
+            mainForm.getLblVehicleNameAllData().setText(vehicleName);
+            mainForm.getLblVehicleIpAllData().setText(vehicleIp);
+            mainForm.getLblEmergencyModeAllData().setText("Not set");
+            mainForm.getLblDrivingModeAllData().setText("Not set");
             mainForm.getBtnConnectVehicle().setEnabled(false);
             mainForm.getBtnDisconnectVehicle().setEnabled(true);
             mainForm.getBtnAutonomousDrivingMode().setEnabled(true);
@@ -297,6 +303,7 @@ public class MainFormActions implements Actions {
             emergencyModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
             mainForm.getLblCurrentEmergencyMode().setText("Current mode: " + (emergencyMode.equals(EmergencyMode.STOP) ? "STOP" : "abort mission"));
             mainForm.getLblCurrentEmergencyMode().setVisible(true);
+            mainForm.getLblEmergencyModeAllData().setText(emergencyMode.equals(EmergencyMode.STOP) ? "STOP" : "abort mission");
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -323,6 +330,7 @@ public class MainFormActions implements Actions {
             drivingModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
             mainForm.getLblCurrentDrivingMode().setText("Current mode: " + (drivingMode.equals(DrivingMode.AUTONOMOUS) ? "autonomous" : "manual"));
             mainForm.getLblCurrentDrivingMode().setVisible(true);
+            mainForm.getLblDrivingModeAllData().setText(drivingMode.equals(DrivingMode.AUTONOMOUS) ? "autonomous" : "manual");
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -408,6 +416,22 @@ public class MainFormActions implements Actions {
                 e.printStackTrace();
             }
             frame.setContentPane(mainForm.getPanelVehicle2()); // TODO add functional components to panelVehicle2 - now only for testing & demonstration purposes
+            frame.pack();
+            frame.setVisible(true);
+        });
+    }
+
+    private void createFrameWithAllDataView() { // TODO add functional components to panelVehicle2 - now only for testing & demonstration purposes
+        EventQueue.invokeLater(() -> {
+            JFrame frame = new JFrame("All data view - Vehicle 1");
+            frame.setSize(1440, 980);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            frame.setContentPane(mainForm.getPanelAllDataVehicle1());
             frame.pack();
             frame.setVisible(true);
         });

@@ -5,6 +5,7 @@ import lombok.Getter;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.Arrays;
 
 @Getter
 public class MainForm {
@@ -70,6 +71,46 @@ public class MainForm {
     private JButton btnStream3Vehicle2;
     private JLabel lblCurrentEmergencyMode;
     private JLabel lblCurrentDrivingMode;
+    private JPanel panelAllDataVehicle1;
+    private JPanel panelAllDataVehicle2;
+    private JButton btnOpenAllDataView;
+    private JLabel lblBatteryStatusAllData;
+    private JTextField textFieldBatteryMinimalValue;
+    private JLabel lblVehicleNameAllData;
+    private JLabel lblVehicleIpAllData;
+    private JLabel lblEmergencyModeAllData;
+    private JLabel lblDrivingModeAllData;
+    private JLabel lblWheelsTurnAngleAllData;
+    private JLabel lblCamerasTurnAngleAllData;
+    private JLabel lblWheelsVelocityAllData;
+    private JLabel lblAcceleometerAllData;
+    private JLabel lblGyroscopeAllData;
+    private JLabel lblMagnetometerAllData;
+    private JTextField textFieldWheelsTurnAngleMinimalValue;
+    private JTextField textFieldCamerasTurnAngleMinimalValue;
+    private JTextField textFieldWheelsVelocityMinimalValue;
+    private JTextField textFieldAccelerometerMinimalValue;
+    private JTextField textFieldGyroscopeMinimalValue;
+    private JTextField textFieldMagnetometerMinimalValue;
+    private JTextField textFieldBatteryMaximalValue;
+    private JTextField textFieldWheelsTurnAngleMaximalValue;
+    private JTextField textFieldCamerasTurnAngleMaximalValue;
+    private JTextField textFieldWheelsVelocityMaximalValue;
+    private JTextField textFieldAccelerometerMaximalValue;
+    private JTextField textFieldGyroscopeMaximalValue;
+    private JTextField textFieldMagnetometerMaximalValue;
+    private JButton btnSetRangeBatteryAllData;
+    private JButton btnSetRangeWheelsTurnAllData;
+    private JButton btnSetRangeCamerasTurnAllData;
+    private JButton btnSetRangeWheelsVelocityAllData;
+    private JButton btnSetRangeAccelerometerAllData;
+    private JButton btnSetRangeGyroscopeAllData;
+    private JButton btnSetRangeMagnetometerAllData;
+    private JLabel lblRealXCoordAllData;
+    private JLabel lblRealYCoordAllData;
+    private JLabel lblSlamXCoordAllData;
+    private JLabel lblSlamYCoordAllData;
+    private JLabel lblSlamRotationAllData;
 
     public MainForm() {
         frame = new JFrame("MainForm");
@@ -79,32 +120,19 @@ public class MainForm {
         frame.pack();
         progressBarWheelsTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         progressBarCamerasTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-        lblCurrentDrivingMode.setVisible(false);
-        lblCurrentEmergencyMode.setVisible(false);
         setButtonsBorders();
     }
 
     private void setButtonsBorders() {
         final Color buttonBorderColor = new Color(128, 128, 128);
-        final int thicknessFive = 4;
+        final int thicknessFour = 4;
         final boolean roundedCornersFalse = false;
-        final LineBorder buttonBorder = new LineBorder(buttonBorderColor, thicknessFive, roundedCornersFalse);
+        final LineBorder buttonBorder = new LineBorder(buttonBorderColor, thicknessFour, roundedCornersFalse);
 
-        btnFetchData.setBorder(buttonBorder);
-        btnEmergencyStop.setBorder(buttonBorder);
-        btnEmergencyAbort.setBorder(buttonBorder);
-        btnAutonomousDrivingMode.setBorder(buttonBorder);
-        btnManualSteeringMode.setBorder(buttonBorder);
-        btnConnectVehicle.setBorder(buttonBorder);
-        btnDisconnectVehicle.setBorder(buttonBorder);
-        btnConnectVehicle.setBorder(buttonBorder);
-        btnStream1.setBorder(buttonBorder);
-        btnStream2.setBorder(buttonBorder);
-        btnStream3.setBorder(buttonBorder);
-        btnShowLocationHistory.setBorder(buttonBorder);
-        btnShowPointCloud.setBorder(buttonBorder);
-        btnShowLidarOccupancyMap.setBorder(buttonBorder);
-        btnOpenVehicle2View.setBorder(buttonBorder);
+        for (JButton button : Arrays.asList(btnFetchData, btnEmergencyStop, btnEmergencyAbort, btnAutonomousDrivingMode, btnManualSteeringMode, btnConnectVehicle, btnDisconnectVehicle,
+                btnConnectVehicle, btnStream1, btnStream2, btnStream3, btnShowLocationHistory, btnShowPointCloud, btnShowLidarOccupancyMap, btnOpenVehicle2View, btnOpenAllDataView)) {
+            button.setBorder(buttonBorder);
+        }
     }
 
     private void createUIComponents() {

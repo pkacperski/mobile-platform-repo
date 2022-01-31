@@ -55,7 +55,9 @@
                 <children>
                   <component id="e9201" class="javax.swing.JButton" binding="btnStream1">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <enabled value="false"/>
@@ -66,7 +68,9 @@
                   </component>
                   <component id="3d6a0" class="javax.swing.JButton" binding="btnStream2">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <enabled value="false"/>
@@ -77,7 +81,9 @@
                   </component>
                   <component id="7a29e" class="javax.swing.JButton" binding="btnStream3">
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <enabled value="false"/>
@@ -132,10 +138,10 @@
                   </component>
                 </children>
               </grid>
-              <grid id="eb444" layout-manager="GridLayoutManager" row-count="8" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="eb444" layout-manager="GridLayoutManager" row-count="9" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="3" row-span="2" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <background color="-12828863"/>
@@ -228,7 +234,7 @@
                     <properties>
                       <font name="Segoe UI" size="14" style="0"/>
                       <foreground color="-4473925"/>
-                      <text value="Current mode: "/>
+                      <text value="Current mode: not set"/>
                     </properties>
                   </component>
                   <component id="6a3d0" class="javax.swing.JLabel" binding="lblCurrentDrivingMode">
@@ -238,7 +244,25 @@
                     <properties>
                       <font name="Segoe UI" size="14" style="0"/>
                       <foreground color="-4473925"/>
-                      <text value="Current mode: "/>
+                      <text value="Current mode: not set"/>
+                    </properties>
+                  </component>
+                  <component id="f59c4" class="javax.swing.JButton" binding="btnOpenAllDataView">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="-1"/>
+                        <maximum-size width="180" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Open All data view"/>
                     </properties>
                   </component>
                 </children>
@@ -429,7 +453,10 @@
                   </grid>
                   <component id="718dc" class="javax.swing.JButton" binding="btnShowLocationHistory">
                     <constraints>
-                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="220" height="-1"/>
+                        <maximum-size width="220" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <enabled value="false"/>
@@ -437,10 +464,16 @@
                       <foreground color="-12828863"/>
                       <text value="Show vehicle location and path"/>
                     </properties>
+                    <clientProperties>
+                      <hideActionText class="java.lang.Boolean" value="false"/>
+                    </clientProperties>
                   </component>
                   <component id="5b05b" class="javax.swing.JButton" binding="btnShowLidarOccupancyMap">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="220" height="-1"/>
+                        <maximum-size width="220" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <enabled value="false"/>
@@ -451,7 +484,10 @@
                   </component>
                   <component id="d7927" class="javax.swing.JButton" binding="btnShowPointCloud">
                     <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="220" height="-1"/>
+                        <maximum-size width="220" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <enabled value="false"/>
@@ -465,7 +501,7 @@
               <component id="380cb" class="javax.swing.JButton" binding="btnFetchData">
                 <constraints>
                   <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
+                    <preferred-size width="120" height="-1"/>
                   </grid>
                 </constraints>
                 <properties>
@@ -530,7 +566,10 @@
                   </component>
                   <component id="800fe" class="javax.swing.JButton" binding="btnOpenVehicle2View">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="180" height="-1"/>
+                        <maximum-size width="180" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties>
                       <alignmentX value="0.0"/>
@@ -542,6 +581,9 @@
                       <foreground color="-12828863"/>
                       <text value="Open Vehicle 2 view"/>
                     </properties>
+                    <clientProperties>
+                      <hideActionText class="java.lang.Boolean" value="false"/>
+                    </clientProperties>
                   </component>
                   <vspacer id="7baf7">
                     <constraints>
@@ -616,88 +658,6 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <grid id="30889" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                            <preferred-size width="100" height="-1"/>
-                            <maximum-size width="100" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties>
-                          <background color="-12828863"/>
-                        </properties>
-                        <border type="none"/>
-                        <children>
-                          <component id="6fad7" class="javax.swing.JProgressBar" binding="progressBarLeftFrontWheelSpeed">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                                <preferred-size width="-1" height="50"/>
-                                <maximum-size width="-1" height="50"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <foreground color="-16749008"/>
-                              <maximum value="50"/>
-                              <orientation value="1"/>
-                            </properties>
-                          </component>
-                          <component id="cd343" class="javax.swing.JProgressBar" binding="progressBarRightFrontWheelSpeed">
-                            <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                                <preferred-size width="-1" height="50"/>
-                                <maximum-size width="-1" height="50"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <foreground color="-16749008"/>
-                              <maximum value="50"/>
-                              <orientation value="1"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </grid>
-                      <grid id="7293e" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                            <preferred-size width="100" height="-1"/>
-                            <maximum-size width="100" height="-1"/>
-                          </grid>
-                        </constraints>
-                        <properties>
-                          <background color="-12828863"/>
-                        </properties>
-                        <border type="none"/>
-                        <children>
-                          <component id="3467b" class="javax.swing.JProgressBar" binding="progressBarLeftRearWheelSpeed">
-                            <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                                <preferred-size width="-1" height="50"/>
-                                <maximum-size width="-1" height="50"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <foreground color="-16749008"/>
-                              <maximum value="50"/>
-                              <orientation value="1"/>
-                            </properties>
-                          </component>
-                          <component id="95ffb" class="javax.swing.JProgressBar" binding="progressBarRightRearWheelSpeed">
-                            <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                                <preferred-size width="-1" height="50"/>
-                                <maximum-size width="-1" height="50"/>
-                              </grid>
-                            </constraints>
-                            <properties>
-                              <foreground color="-16749008"/>
-                              <maximum value="50"/>
-                              <orientation value="1"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </grid>
                       <component id="9eb2f" class="javax.swing.JLabel">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
@@ -725,6 +685,193 @@
                           </grid>
                         </constraints>
                       </vspacer>
+                      <grid id="4b9ca" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <autoscrolls value="false"/>
+                          <background color="-12828863"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <grid id="30889" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="100" height="-1"/>
+                                <maximum-size width="200" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-12828863"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <component id="6fad7" class="javax.swing.JProgressBar" binding="progressBarLeftFrontWheelSpeed">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                                    <preferred-size width="-1" height="50"/>
+                                    <maximum-size width="-1" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <foreground color="-16749008"/>
+                                  <maximum value="50"/>
+                                  <orientation value="1"/>
+                                </properties>
+                              </component>
+                              <component id="cd343" class="javax.swing.JProgressBar" binding="progressBarRightFrontWheelSpeed">
+                                <constraints>
+                                  <grid row="0" column="2" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                                    <preferred-size width="-1" height="50"/>
+                                    <maximum-size width="-1" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <foreground color="-16749008"/>
+                                  <maximum value="50"/>
+                                  <orientation value="1"/>
+                                </properties>
+                              </component>
+                              <component id="a182b" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="0 rpm"/>
+                                </properties>
+                              </component>
+                              <component id="46208" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="50 rpm"/>
+                                </properties>
+                              </component>
+                              <component id="33704" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="50 rpm"/>
+                                </properties>
+                              </component>
+                              <component id="d5b42" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="0 rpm"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
+                      <grid id="ac3d" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <background color="-12828863"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <grid id="7293e" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                            <margin top="0" left="0" bottom="0" right="0"/>
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="100" height="-1"/>
+                                <maximum-size width="200" height="-1"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-12828863"/>
+                            </properties>
+                            <border type="none"/>
+                            <children>
+                              <component id="3467b" class="javax.swing.JProgressBar" binding="progressBarLeftRearWheelSpeed">
+                                <constraints>
+                                  <grid row="0" column="1" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                                    <preferred-size width="-1" height="50"/>
+                                    <maximum-size width="-1" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <foreground color="-16749008"/>
+                                  <maximum value="50"/>
+                                  <orientation value="1"/>
+                                </properties>
+                              </component>
+                              <component id="95ffb" class="javax.swing.JProgressBar" binding="progressBarRightRearWheelSpeed">
+                                <constraints>
+                                  <grid row="0" column="2" row-span="2" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                                    <preferred-size width="-1" height="50"/>
+                                    <maximum-size width="-1" height="50"/>
+                                  </grid>
+                                </constraints>
+                                <properties>
+                                  <foreground color="-16749008"/>
+                                  <maximum value="50"/>
+                                  <orientation value="1"/>
+                                </properties>
+                              </component>
+                              <component id="2a6ee" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="0 rpm"/>
+                                </properties>
+                              </component>
+                              <component id="4d699" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="50 rpm"/>
+                                </properties>
+                              </component>
+                              <component id="db625" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="50 rpm"/>
+                                </properties>
+                              </component>
+                              <component id="ab771" class="javax.swing.JLabel">
+                                <constraints>
+                                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                                </constraints>
+                                <properties>
+                                  <font name="Segoe UI" size="12" style="0"/>
+                                  <foreground color="-4473925"/>
+                                  <text value="0 rpm"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </grid>
+                        </children>
+                      </grid>
                     </children>
                   </grid>
                   <grid id="606d2" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -864,7 +1011,7 @@
           <grid id="ca245" binding="panelVehicle2" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="20" bottom="0" right="20"/>
             <constraints>
-              <tabbedpane title=" "/>
+              <tabbedpane title=""/>
             </constraints>
             <properties>
               <background color="-12828863"/>
@@ -1662,7 +1809,7 @@
           <grid id="882c3" binding="panelVehicle2Deprecated" layout-manager="GridLayoutManager" row-count="9" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="20" bottom="0" right="20"/>
             <constraints>
-              <tabbedpane title=" "/>
+              <tabbedpane title=""/>
             </constraints>
             <properties>
               <background color="-12828863"/>
@@ -1934,6 +2081,1101 @@
                 </properties>
               </component>
             </children>
+          </grid>
+          <grid id="57016" binding="panelAllDataVehicle1" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title=""/>
+            </constraints>
+            <properties>
+              <background color="-12828863"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <grid id="706f2" layout-manager="GridLayoutManager" row-count="18" column-count="15" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-12828863"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <component id="6f55" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Vehicle name"/>
+                    </properties>
+                  </component>
+                  <component id="8803a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Vehicle IP"/>
+                    </properties>
+                  </component>
+                  <component id="541d4" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="1"/>
+                      <foreground color="-11892537"/>
+                      <text value="CONNECTION DETAILS"/>
+                    </properties>
+                  </component>
+                  <component id="36040" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Battery"/>
+                    </properties>
+                  </component>
+                  <component id="af5fc" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Wheels' turn angle"/>
+                    </properties>
+                  </component>
+                  <component id="2cf29" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Camera's turn angle"/>
+                    </properties>
+                  </component>
+                  <component id="9146c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Accelerometer"/>
+                    </properties>
+                  </component>
+                  <component id="aae42" class="javax.swing.JLabel" binding="lblBatteryStatusAllData">
+                    <constraints>
+                      <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="b5771" class="javax.swing.JLabel" binding="lblWheelsTurnAngleAllData">
+                    <constraints>
+                      <grid row="11" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="11667" class="javax.swing.JButton" binding="btnSetRangeBatteryAllData">
+                    <constraints>
+                      <grid row="10" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="b7a5d" class="javax.swing.JTextField" binding="textFieldBatteryMinimalValue">
+                    <constraints>
+                      <grid row="10" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="2d4dc" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="10" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="b0db" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="10" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="5062c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="15" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="7d139" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="15" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="b53b2" class="javax.swing.JTextField" binding="textFieldWheelsTurnAngleMinimalValue">
+                    <constraints>
+                      <grid row="11" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="a3ea2" class="javax.swing.JTextField" binding="textFieldCamerasTurnAngleMinimalValue">
+                    <constraints>
+                      <grid row="12" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="57486" class="javax.swing.JTextField" binding="textFieldAccelerometerMinimalValue">
+                    <constraints>
+                      <grid row="15" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="64f3c" class="javax.swing.JTextField" binding="textFieldBatteryMaximalValue">
+                    <constraints>
+                      <grid row="10" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="56c4" class="javax.swing.JTextField" binding="textFieldWheelsTurnAngleMaximalValue">
+                    <constraints>
+                      <grid row="11" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="f75d4" class="javax.swing.JTextField" binding="textFieldCamerasTurnAngleMaximalValue">
+                    <constraints>
+                      <grid row="12" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="3a7fa" class="javax.swing.JTextField" binding="textFieldAccelerometerMaximalValue">
+                    <constraints>
+                      <grid row="15" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="9e433" class="javax.swing.JLabel" binding="lblVehicleNameAllData">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="3074f" class="javax.swing.JLabel" binding="lblVehicleIpAllData">
+                    <constraints>
+                      <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="a7fad" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="16" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="390cb" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="17" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="209e0" class="javax.swing.JTextField" binding="textFieldGyroscopeMinimalValue">
+                    <constraints>
+                      <grid row="16" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="795f7" class="javax.swing.JTextField" binding="textFieldMagnetometerMinimalValue">
+                    <constraints>
+                      <grid row="17" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="1b4a7" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="16" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="77cad" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="17" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="bf2cb" class="javax.swing.JTextField" binding="textFieldGyroscopeMaximalValue">
+                    <constraints>
+                      <grid row="16" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="22ce" class="javax.swing.JTextField" binding="textFieldMagnetometerMaximalValue">
+                    <constraints>
+                      <grid row="17" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="bad23" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Emergency mode"/>
+                    </properties>
+                  </component>
+                  <component id="71076" class="javax.swing.JLabel" binding="lblEmergencyModeAllData">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="c9443" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Driving mode"/>
+                    </properties>
+                  </component>
+                  <component id="a1e82" class="javax.swing.JLabel" binding="lblDrivingModeAllData">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="768a3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="1"/>
+                      <foreground color="-11892537"/>
+                      <text value="TELEMETRY DATA"/>
+                    </properties>
+                  </component>
+                  <component id="ec088" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="1"/>
+                      <foreground color="-11892537"/>
+                      <text value="OPERATION MODES"/>
+                    </properties>
+                  </component>
+                  <vspacer id="203e0">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="30"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="d14ac">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="30"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="73b06" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Wheels' velocity"/>
+                    </properties>
+                  </component>
+                  <component id="2a43d" class="javax.swing.JTextField" binding="textFieldWheelsVelocityMinimalValue">
+                    <constraints>
+                      <grid row="13" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="c8a2c" class="javax.swing.JTextField" binding="textFieldWheelsVelocityMaximalValue">
+                    <constraints>
+                      <grid row="13" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="100" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-10394522"/>
+                      <caretColor color="-4473925"/>
+                      <disabledTextColor color="-6579301"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="9df25" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="11" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="98b69" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="12" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="a5643" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="13" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Minimal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="8cfdd" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="11" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="1a9ce" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="12" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="d67e6" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="13" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Maximal expected value"/>
+                    </properties>
+                  </component>
+                  <component id="a1b6c" class="javax.swing.JLabel" binding="lblCamerasTurnAngleAllData">
+                    <constraints>
+                      <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="7c9f4" class="javax.swing.JLabel" binding="lblWheelsVelocityAllData">
+                    <constraints>
+                      <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="d95d4" class="javax.swing.JLabel" binding="lblAcceleometerAllData">
+                    <constraints>
+                      <grid row="15" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="6b808" class="javax.swing.JLabel" binding="lblGyroscopeAllData">
+                    <constraints>
+                      <grid row="16" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="5f6b7" class="javax.swing.JLabel" binding="lblMagnetometerAllData">
+                    <constraints>
+                      <grid row="17" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <hspacer id="7dcde">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="20" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="97d42">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="40" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="f4fe0">
+                    <constraints>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="20" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="e6d5f">
+                    <constraints>
+                      <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="20" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="c5c6c">
+                    <constraints>
+                      <grid row="0" column="10" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="20" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <hspacer id="b6712">
+                    <constraints>
+                      <grid row="0" column="13" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="20" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                  <component id="1a525" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="17" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="μT"/>
+                    </properties>
+                  </component>
+                  <component id="3b8ec" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="17" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="μT"/>
+                    </properties>
+                  </component>
+                  <component id="48fa6" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="16" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="deg/s"/>
+                    </properties>
+                  </component>
+                  <component id="5c7cd" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="16" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="deg/s"/>
+                    </properties>
+                  </component>
+                  <component id="7b5e8" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="15" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="m/2^2"/>
+                    </properties>
+                  </component>
+                  <component id="b907f" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="15" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="m/2^2"/>
+                    </properties>
+                  </component>
+                  <component id="ef4fb" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="13" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="rpm"/>
+                    </properties>
+                  </component>
+                  <component id="5c01" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="13" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="rpm"/>
+                    </properties>
+                  </component>
+                  <component id="349f3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="12" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="deg"/>
+                    </properties>
+                  </component>
+                  <component id="e2d04" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="12" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="deg"/>
+                    </properties>
+                  </component>
+                  <component id="8b778" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="11" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="deg"/>
+                    </properties>
+                  </component>
+                  <component id="81770" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="11" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="deg"/>
+                    </properties>
+                  </component>
+                  <component id="96b0a" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="10" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="%"/>
+                    </properties>
+                  </component>
+                  <component id="ec555" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="10" column="12" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="%"/>
+                    </properties>
+                  </component>
+                  <component id="ae2be" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="1"/>
+                      <foreground color="-4473925"/>
+                      <text value="IMU READINGS"/>
+                    </properties>
+                  </component>
+                  <component id="71491" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="16" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Gyroscope"/>
+                    </properties>
+                  </component>
+                  <component id="4027" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="17" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Magnetometer"/>
+                    </properties>
+                  </component>
+                  <component id="4a1b3" class="javax.swing.JButton" binding="btnSetRangeWheelsTurnAllData">
+                    <constraints>
+                      <grid row="11" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="d2f52" class="javax.swing.JButton" binding="btnSetRangeCamerasTurnAllData">
+                    <constraints>
+                      <grid row="12" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="b1b90" class="javax.swing.JButton" binding="btnSetRangeWheelsVelocityAllData">
+                    <constraints>
+                      <grid row="13" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="955f6" class="javax.swing.JButton" binding="btnSetRangeAccelerometerAllData">
+                    <constraints>
+                      <grid row="15" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="d899b" class="javax.swing.JButton" binding="btnSetRangeGyroscopeAllData">
+                    <constraints>
+                      <grid row="16" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="323f1" class="javax.swing.JButton" binding="btnSetRangeMagnetometerAllData">
+                    <constraints>
+                      <grid row="17" column="14" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <alignmentX value="0.0"/>
+                      <borderPainted value="true"/>
+                      <contentAreaFilled value="true"/>
+                      <enabled value="true"/>
+                      <focusPainted value="true"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-12828863"/>
+                      <text value="Set range for observation"/>
+                    </properties>
+                  </component>
+                  <component id="e252" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Real X coordinate"/>
+                    </properties>
+                  </component>
+                  <component id="fb283" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="1"/>
+                      <foreground color="-11892537"/>
+                      <text value="VEHICLE LOCATION"/>
+                    </properties>
+                  </component>
+                  <component id="48ed3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="Real Y coordinate"/>
+                    </properties>
+                  </component>
+                  <component id="2e892" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="5" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="SLAM X coordinate"/>
+                    </properties>
+                  </component>
+                  <component id="5ff3" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="6" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="SLAM Y coordinate"/>
+                    </properties>
+                  </component>
+                  <component id="86f9c" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="7" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1315861"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value="SLAM rotation"/>
+                    </properties>
+                  </component>
+                  <component id="ce64d" class="javax.swing.JLabel" binding="lblRealXCoordAllData">
+                    <constraints>
+                      <grid row="5" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="7b2db" class="javax.swing.JLabel" binding="lblRealYCoordAllData">
+                    <constraints>
+                      <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="8d62" class="javax.swing.JLabel" binding="lblSlamXCoordAllData">
+                    <constraints>
+                      <grid row="5" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="d31e2" class="javax.swing.JLabel" binding="lblSlamYCoordAllData">
+                    <constraints>
+                      <grid row="6" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="4a195" class="javax.swing.JLabel" binding="lblSlamRotationAllData">
+                    <constraints>
+                      <grid row="7" column="11" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-4473925"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <hspacer id="455b3">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="40" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <hspacer id="aa961">
+                <constraints>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="40" height="-1"/>
+                  </grid>
+                </constraints>
+              </hspacer>
+              <vspacer id="874e3">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="40"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+              <vspacer id="43008">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="-1" height="30"/>
+                  </grid>
+                </constraints>
+              </vspacer>
+            </children>
+          </grid>
+          <grid id="a1c6d" binding="panelAllDataVehicle2" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title=""/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
           </grid>
         </children>
       </tabbedpane>
