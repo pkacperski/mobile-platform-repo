@@ -33,7 +33,6 @@ public class MainForm {
     private JButton btnStream3;
     private JProgressBar progressBarBatteryStatus;
     private JProgressBar progressBarWheelsTurnLeft;
-    private JProgressBar progressBarWheelsTurnRight;
     private JProgressBar progressBarCamerasTurnLeft;
     private JProgressBar progressBarCamerasTurnRight;
     private JProgressBar progressBarLeftFrontWheelSpeed;
@@ -68,8 +67,7 @@ public class MainForm {
     private JButton btnStream1Vehicle2;
     private JButton btnStream2Vehicle2;
     private JButton btnStream3Vehicle2;
-    private JLabel lblCurrentEmergencyMode;
-    private JLabel lblCurrentDrivingMode;
+    private JLabel lblCurrentMode;
     private JPanel panelAllDataVehicle1;
     private JPanel panelAllDataVehicle2;
     private JButton btnOpenAllDataView;
@@ -77,8 +75,7 @@ public class MainForm {
     private JTextField textFieldBatteryMinValue;
     private JLabel lblVehicleNameAllData;
     private JLabel lblVehicleIpAllData;
-    private JLabel lblEmergencyModeAllData;
-    private JLabel lblDrivingModeAllData;
+    private JLabel lblCurrentModeAllData;
     private JLabel lblWheelsTurnAngleAllData;
     private JLabel lblCamerasTurnAngleAllData;
     private JLabel lblWheelsVelocityAllData;
@@ -110,6 +107,7 @@ public class MainForm {
     private JLabel lblSlamXCoordAllData;
     private JLabel lblSlamYCoordAllData;
     private JLabel lblSlamRotationAllData;
+    private JProgressBar progressBarWheelsTurnRight;
 
     public MainForm() {
         frame = new JFrame("MainForm");
@@ -118,6 +116,7 @@ public class MainForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         progressBarWheelsTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        progressBarWheelsTurnLeft.setMaximum(90);
         progressBarCamerasTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         setButtonsBorders();
     }

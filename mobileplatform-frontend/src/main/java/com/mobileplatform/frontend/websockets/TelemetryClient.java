@@ -172,7 +172,7 @@ public class TelemetryClient extends WebSocketClient {
             mainForm.getProgressBarWheelsTurnLeft().setValue(0); // clear wheels' left turn indicator
             mainForm.getProgressBarWheelsTurnRight().setValue(0); // clear wheels' right turn indicator
             if(diagnosticDataDto.getWheelsTurnMeasure() > 0 && diagnosticDataDto.getWheelsTurnMeasure() < Math.PI/2) { // left turn
-                int turnLeftValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180 / Math.PI); // convert radians to degrees and scale them to a (0; 90) range
+                int turnLeftValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180.0 / Math.PI) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarWheelsTurnLeft().setValue(turnLeftValue);
                 if(turnLeftValue < mainFormActions.getWheelsTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblWheelsTurnAngleAllData().setText("Left turn by " + turnLeftValue + " deg ˅");
@@ -186,7 +186,7 @@ public class TelemetryClient extends WebSocketClient {
                 }
             }
             else if(diagnosticDataDto.getWheelsTurnMeasure() < 0 && diagnosticDataDto.getWheelsTurnMeasure() > -Math.PI/2) { // right turn
-                int turnRightValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180 / Math.PI * -1); // convert radians to degrees and scale them to a (0; 90) range
+                int turnRightValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180.0 / Math.PI * -1) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarWheelsTurnRight().setValue(turnRightValue);
                 if(turnRightValue < mainFormActions.getWheelsTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblWheelsTurnAngleAllData().setText("Right turn by " + turnRightValue + " deg ˅");
@@ -203,7 +203,7 @@ public class TelemetryClient extends WebSocketClient {
             mainForm.getProgressBarCamerasTurnLeft().setValue(0); // clear camera's left turn indicator
             mainForm.getProgressBarCamerasTurnRight().setValue(0); // clear camera's right turn indicator
             if(diagnosticDataDto.getCameraTurnAngle() > 0 && diagnosticDataDto.getCameraTurnAngle() < Math.PI/2) { // left turn
-                int turnLeftValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI); // convert radians to degrees and scale them to a (0; 90) range
+                int turnLeftValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarCamerasTurnLeft().setValue(turnLeftValue);
                 if(turnLeftValue < mainFormActions.getCamerasTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblCamerasTurnAngleAllData().setText("Left turn by " + turnLeftValue + " deg ˅");
@@ -217,7 +217,7 @@ public class TelemetryClient extends WebSocketClient {
                 }
             }
             else if(diagnosticDataDto.getCameraTurnAngle() < 0 && diagnosticDataDto.getCameraTurnAngle() > -Math.PI/2) { // right turn
-                int turnRightValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI * -1); // convert radians to degrees and scale them to a (0; 90) range
+                int turnRightValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI * -1) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
                 mainForm.getProgressBarCamerasTurnRight().setValue(turnRightValue);
                 if(turnRightValue < mainFormActions.getCamerasTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblCamerasTurnAngleAllData().setText("Right turn by " + turnRightValue + " deg ˅");

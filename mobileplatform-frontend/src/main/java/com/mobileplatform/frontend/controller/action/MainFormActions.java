@@ -6,7 +6,9 @@ import com.google.gson.GsonBuilder;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mobileplatform.frontend.controller.action.creation.Actions;
 import com.mobileplatform.frontend.controller.api.RestHandler;
-import com.mobileplatform.frontend.dto.*;
+import com.mobileplatform.frontend.dto.LocationDto;
+import com.mobileplatform.frontend.dto.VehicleConnectionStatus;
+import com.mobileplatform.frontend.dto.VehicleDto;
 import com.mobileplatform.frontend.dto.steering.*;
 import com.mobileplatform.frontend.form.MainForm;
 import com.mobileplatform.frontend.form.VehicleLocationPane;
@@ -62,6 +64,10 @@ public class MainFormActions implements Actions {
     @Getter final int[] accelerometerLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
     @Getter final int[] gyroscopeLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
     @Getter final int[] magnetometerLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    final Color COLOR_RED = new Color(220, 0, 0);
+    final Color COLOR_YELLOW = new Color(255, 210, 0);
+    final Color COLOR_BLUE = new Color(74, 136, 199);
+    final Color COLOR_GREEN = new Color(131, 179, 92);
 
     private MainFormActions() {}
 
@@ -236,8 +242,7 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleName);
             mainForm.getLblVehicleNameAllData().setText(vehicleName);
             mainForm.getLblVehicleIpAllData().setText(vehicleIp);
-            mainForm.getLblEmergencyModeAllData().setText("Not set");
-            mainForm.getLblDrivingModeAllData().setText("Not set");
+            mainForm.getLblCurrentModeAllData().setText("Not set");
             mainForm.getBtnConnectVehicle().setEnabled(false);
             mainForm.getBtnDisconnectVehicle().setEnabled(true);
             mainForm.getBtnAutonomousDrivingMode().setEnabled(true);
@@ -330,9 +335,18 @@ public class MainFormActions implements Actions {
         try {
             emergencyModeDataDtoRestHandler.performPost(EMERGENCY_MODE_DATA_PATH, gson.toJson(emergencyModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             emergencyModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
-            mainForm.getLblCurrentEmergencyMode().setText("Current mode: " + (emergencyMode.equals(EmergencyMode.STOP) ? "STOP" : "abort mission"));
-            mainForm.getLblCurrentEmergencyMode().setVisible(true);
-            mainForm.getLblEmergencyModeAllData().setText(emergencyMode.equals(EmergencyMode.STOP) ? "STOP" : "abort mission");
+            if(emergencyMode.equals(EmergencyMode.STOP)) {
+                mainForm.getLblCurrentMode().setText("Current: STOP");
+                mainForm.getLblCurrentMode().setForeground(COLOR_RED);
+                mainForm.getLblCurrentModeAllData().setText("STOP");
+                mainForm.getLblCurrentModeAllData().setForeground(COLOR_RED);
+            }
+            else {
+                mainForm.getLblCurrentMode().setText("Current: abort mission");
+                mainForm.getLblCurrentMode().setForeground(COLOR_YELLOW);
+                mainForm.getLblCurrentModeAllData().setText("abort mission");
+                mainForm.getLblCurrentModeAllData().setForeground(COLOR_YELLOW);
+            }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -357,9 +371,18 @@ public class MainFormActions implements Actions {
         try {
             drivingModeDataDtoRestHandler.performPost(DRIVING_MODE_DATA_PATH, gson.toJson(drivingModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             drivingModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
-            mainForm.getLblCurrentDrivingMode().setText("Current mode: " + (drivingMode.equals(DrivingMode.AUTONOMOUS) ? "autonomous" : "manual"));
-            mainForm.getLblCurrentDrivingMode().setVisible(true);
-            mainForm.getLblDrivingModeAllData().setText(drivingMode.equals(DrivingMode.AUTONOMOUS) ? "autonomous" : "manual");
+            if(drivingMode.equals(DrivingMode.AUTONOMOUS)) {
+                mainForm.getLblCurrentMode().setText("Current: autonomous");
+                mainForm.getLblCurrentMode().setForeground(COLOR_GREEN);
+                mainForm.getLblCurrentModeAllData().setText("autonomous");
+                mainForm.getLblCurrentModeAllData().setForeground(COLOR_GREEN);
+            }
+            else {
+                mainForm.getLblCurrentMode().setText("Current: manual");
+                mainForm.getLblCurrentMode().setForeground(COLOR_BLUE);
+                mainForm.getLblCurrentModeAllData().setText("manual");
+                mainForm.getLblCurrentModeAllData().setForeground(COLOR_BLUE);
+            }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
