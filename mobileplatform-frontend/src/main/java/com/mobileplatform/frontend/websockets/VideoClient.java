@@ -53,8 +53,8 @@ public class VideoClient extends WebSocketClient {
                 else if(this.streamType == VideoStreamType.POINT_CLOUD_STREAM)
                     VideoReceiveHandler.setPcImageIcon(icon);
             }
-            else if(this.whichVehicle == 2 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled()) { // second stream
-                MainFormActions.getInstance().getMainForm().getLblVideoStreamVehicle2().setIcon(icon);
+            else if(this.whichVehicle == 2 /* && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled()*/) { // second stream
+                System.out.println("TODO - vehicle 2"); // TODO - vehicle 2
             }
         }
     }

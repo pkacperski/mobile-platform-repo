@@ -133,8 +133,9 @@ public class TelemetryClient extends WebSocketClient {
     private int findOnWhichTabIsVehicle(Long receivedVehicleId) {
         String firstTabVehicleIdText = mainForm.getLblVehicleId().getText();
         Long firstTabVehicleId = (!firstTabVehicleIdText.contains("not connected") && !firstTabVehicleIdText.equals("")) ? Long.parseLong(firstTabVehicleIdText.substring(firstTabVehicleIdText.indexOf(':') + 2)) : -1;
-        String secondTabVehicleIdText = mainForm.getLblVehicleIdVehicle2().getText();
-        Long secondTabVehicleId = (!secondTabVehicleIdText.contains("not connected") && !secondTabVehicleIdText.equals("")) ? Long.parseLong(secondTabVehicleIdText.substring(secondTabVehicleIdText.indexOf(':') + 2)) : -1;
+//        String secondTabVehicleIdText = mainForm.getLblVehicleIdVehicle2().getText();
+//        Long secondTabVehicleId = (!secondTabVehicleIdText.contains("not connected") && !secondTabVehicleIdText.equals("")) ? Long.parseLong(secondTabVehicleIdText.substring(secondTabVehicleIdText.indexOf(':') + 2)) : -1;
+        Long secondTabVehicleId = 2L; // TODO - vehicle 2
         return (Objects.equals(receivedVehicleId, firstTabVehicleId) ? 1 : (Objects.equals(receivedVehicleId, secondTabVehicleId) ? 2 : -1));
     }
 
@@ -172,8 +173,9 @@ public class TelemetryClient extends WebSocketClient {
             mainForm.getProgressBarWheelsTurnLeft().setValue(0); // clear wheels' left turn indicator
             mainForm.getProgressBarWheelsTurnRight().setValue(0); // clear wheels' right turn indicator
             if(diagnosticDataDto.getWheelsTurnMeasure() > 0 && diagnosticDataDto.getWheelsTurnMeasure() < Math.PI/2) { // left turn
-                int turnLeftValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180.0 / Math.PI) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
-                mainForm.getProgressBarWheelsTurnLeft().setValue(turnLeftValue);
+                int turnLeftValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180.0 / Math.PI); // convert radians to degrees and scale them to a (0; 90) range
+                int turnLeftValueScaled = turnLeftValue * 100 / 90; // scaled to a (0; 100) range to set progress bar correctly
+                mainForm.getProgressBarWheelsTurnLeft().setValue(turnLeftValueScaled);
                 if(turnLeftValue < mainFormActions.getWheelsTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblWheelsTurnAngleAllData().setText("Left turn by " + turnLeftValue + " deg ˅");
                     mainForm.getLblWheelsTurnAngleAllData().setForeground(COLOR_RED);
@@ -186,8 +188,9 @@ public class TelemetryClient extends WebSocketClient {
                 }
             }
             else if(diagnosticDataDto.getWheelsTurnMeasure() < 0 && diagnosticDataDto.getWheelsTurnMeasure() > -Math.PI/2) { // right turn
-                int turnRightValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180.0 / Math.PI * -1) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
-                mainForm.getProgressBarWheelsTurnRight().setValue(turnRightValue);
+                int turnRightValue = (int) (diagnosticDataDto.getWheelsTurnMeasure() * 180.0 / Math.PI * -1); // convert radians to degrees and scale them to a (0; 90) range
+                int turnRightValueScaled = turnRightValue  * 100 / 90; // scaled to a (0; 100) range to set progress bar correctly
+                mainForm.getProgressBarWheelsTurnRight().setValue(turnRightValueScaled);
                 if(turnRightValue < mainFormActions.getWheelsTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblWheelsTurnAngleAllData().setText("Right turn by " + turnRightValue + " deg ˅");
                     mainForm.getLblWheelsTurnAngleAllData().setForeground(COLOR_RED);
@@ -203,8 +206,9 @@ public class TelemetryClient extends WebSocketClient {
             mainForm.getProgressBarCamerasTurnLeft().setValue(0); // clear camera's left turn indicator
             mainForm.getProgressBarCamerasTurnRight().setValue(0); // clear camera's right turn indicator
             if(diagnosticDataDto.getCameraTurnAngle() > 0 && diagnosticDataDto.getCameraTurnAngle() < Math.PI/2) { // left turn
-                int turnLeftValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
-                mainForm.getProgressBarCamerasTurnLeft().setValue(turnLeftValue);
+                int turnLeftValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI); // convert radians to degrees and scale them to a (0; 90) range
+                int turnLeftValueScaled = turnLeftValue * 100 / 90;
+                mainForm.getProgressBarCamerasTurnLeft().setValue(turnLeftValueScaled);
                 if(turnLeftValue < mainFormActions.getCamerasTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblCamerasTurnAngleAllData().setText("Left turn by " + turnLeftValue + " deg ˅");
                     mainForm.getLblCamerasTurnAngleAllData().setForeground(COLOR_RED);
@@ -218,7 +222,8 @@ public class TelemetryClient extends WebSocketClient {
             }
             else if(diagnosticDataDto.getCameraTurnAngle() < 0 && diagnosticDataDto.getCameraTurnAngle() > -Math.PI/2) { // right turn
                 int turnRightValue = (int) (diagnosticDataDto.getCameraTurnAngle() * 180 / Math.PI * -1) * 100 / 90; // convert radians to degrees and scale them to a (0; 90) range
-                mainForm.getProgressBarCamerasTurnRight().setValue(turnRightValue);
+                int turnRightValueScaled = turnRightValue  * 100 / 90;
+                mainForm.getProgressBarCamerasTurnRight().setValue(turnRightValueScaled);
                 if(turnRightValue < mainFormActions.getCamerasTurnAngleLimitsAllData()[0]) {
                     mainForm.getLblCamerasTurnAngleAllData().setText("Right turn by " + turnRightValue + " deg ˅");
                     mainForm.getLblCamerasTurnAngleAllData().setForeground(COLOR_RED);
@@ -232,8 +237,8 @@ public class TelemetryClient extends WebSocketClient {
             }
             // TODO - action when received battery status is out of ranges (0: 1) and (0; 100) and wheels' and camera's turn out of range (-PI/2; PI/2)
         }
-        else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled())) {
-            // TODO - odbieranie diagnostic data dla drugiego pojazdu
+        else if(whichTabVehicle == 2 && (IS_TEST_ENV)/* || !mainForm.getBtnConnectVehicle2().isEnabled())*/ ) {
+            // TODO - vehicle 2: odbieranie diagnostic data dla drugiego pojazdu
             System.out.println("Vehicle 2 diagnostic data: " + diagnosticDataDto);
         }
     }
@@ -291,8 +296,8 @@ public class TelemetryClient extends WebSocketClient {
                 mainForm.getLblWheelsVelocityAllData().setForeground(COLOR_GRAY);
             }
         }
-        else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled())) {
-            // TODO - odbieranie diagnostic data dla drugiego pojazdu
+        else if(whichTabVehicle == 2 && (IS_TEST_ENV)/* || !mainForm.getBtnConnectVehicle2().isEnabled())*/) {
+            // TODO - vehicle 2: odbieranie diagnostic data dla drugiego pojazdu
             System.out.println("Vehicle 2 encoder data: " + encoderReadingDto);
         }
     }
@@ -383,9 +388,9 @@ public class TelemetryClient extends WebSocketClient {
                 mainForm.getLblMagnetometerAllData().setForeground(COLOR_GRAY);
             }
         }
-        else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
-            // TODO - odbieranie imu data dla drugiego pojazdu
-            mainForm.getLblImuReadingVehicle2().setText(accelerationReadingText);
+        else if(whichTabVehicle == 2 && (IS_TEST_ENV)/* || !mainForm.getBtnConnectVehicle2().isEnabled())*/)
+            // TODO - vehicle 2: odbieranie imu data dla drugiego pojazdu
+            System.out.println("TODO - vehicle 2");
     }
 
     private void handleMessageWithLidarReading(String message) {
@@ -399,8 +404,8 @@ public class TelemetryClient extends WebSocketClient {
 
                 if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
                     System.out.println(lidarReadingText); // TODO - remove handling this message here if not necessary
-                else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
-                    mainForm.getLblLidarReadingVehicle2().setText(lidarReadingText);
+                else if(whichTabVehicle == 2 && (IS_TEST_ENV)/* || !mainForm.getBtnConnectVehicle2().isEnabled())*/)
+                    System.out.println(lidarReadingText); // TODO - vehicle 2 + remove if not necessary
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
@@ -431,8 +436,8 @@ public class TelemetryClient extends WebSocketClient {
                     mainForm.getLblSlamRotationAllData().setText(locationDto.getSlamRotation().toString().length() > 5
                             ? locationDto.getSlamRotation().toString().substring(0,6) : String.valueOf(locationDto.getSlamRotation()));
                 }
-                else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
-                    mainForm.getLblLocationVehicle2().setText(locationText);
+                else if(whichTabVehicle == 2 && (IS_TEST_ENV)/* || !mainForm.getBtnConnectVehicle2().isEnabled())*/)
+                    System.out.println(locationText); // TODO - vehicle 2
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
@@ -450,8 +455,8 @@ public class TelemetryClient extends WebSocketClient {
 
                 if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()))
                     System.out.println(pointCloudText); // TODO - target handling message with point cloud reading
-                else if(whichTabVehicle == 2 && (IS_TEST_ENV || !mainForm.getBtnConnectVehicle2().isEnabled()))
-                    mainForm.getLblPointCloudReadingVehicle2().setText(pointCloudText);
+                else if(whichTabVehicle == 2 && (IS_TEST_ENV)/* || !mainForm.getBtnConnectVehicle2().isEnabled())*/)
+                    System.out.println("TODO - vehicle 2"); // TODO - vehicle 2
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
