@@ -30,30 +30,17 @@ public class MainFormActions implements Actions {
     private @Getter MainForm mainForm;
     private Gson gson;
 
-    private RestHandler<DiagnosticDataDto> diagnosticDataDtoRestHandler;
     private RestHandler<DrivingModeDataDto> drivingModeDataDtoRestHandler;
     private RestHandler<DrivingModeSteeringResponse> drivingModeSteeringResponseRestHandler;
     private RestHandler<EmergencyModeDataDto> emergencyModeDataDtoRestHandler;
     private RestHandler<EmergencyModeSteeringResponse> emergencyModeSteeringResponseRestHandler;
-    private RestHandler<EncoderReadingDto> encoderReadingDtoRestHandler;
-    private RestHandler<ImuReadingDto> imuReadingDtoRestHandler;
-    private RestHandler<LidarReadingDto> lidarReadingDtoRestHandler;
-    private RestHandler<LocationDto> locationDtoRestHandler;
     private RestHandler<LocationDto[]> locationDtoListRestHandler;
-    private RestHandler<PointCloudDto> pointCloudDtoRestHandler;
     private RestHandler<VehicleDto> vehicleDtoRestHandler;
     private RestHandler<VehicleConnectResponse> vehicleConnectResponseRestHandler;
 
     final String VEHICLE_PATH = "/vehicle";
-    final String DIAGNOSTIC_DATA_NEWEST_PATH = "/diagnostic-data/newest";
     final String DRIVING_MODE_DATA_PATH = "/driving-mode-data";
     final String EMERGENCY_MODE_DATA_PATH = "/emergency-mode-data";
-    final String ENCODER_READING_NEWEST_PATH = "/encoder-reading/newest";
-    final String IMU_READING_NEWEST_PATH = "/imu-reading/newest";
-    final String LIDAR_READING_NEWEST_PATH = "/lidar-reading/newest";
-    final String LOCATION_NEWEST_PATH = "/location/newest";
-    final String POINT_CLOUD_NEWEST_PATH = "/point-cloud/newest";
-    final String NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE = "JSONArray text must start with '['";
     final String APPLICATION_JSON_CONTENT_TYPE = "application/json";
     final int DRIVING_MODE_AUTONOMOUS_API_CONST = 1;
     final int DRIVING_MODE_MANUAL_API_CONST = 2;
@@ -75,8 +62,6 @@ public class MainFormActions implements Actions {
     @Getter final int[] accelerometerLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
     @Getter final int[] gyroscopeLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
     @Getter final int[] magnetometerLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
-    private final Color COLOR_RED = new Color(200, 0, 0);
-    private final Color COLOR_GRAY = new Color(187, 187, 187);
 
     private MainFormActions() {}
 
@@ -98,17 +83,11 @@ public class MainFormActions implements Actions {
         mainForm.getFrame().setVisible(true);
         gson = Converters.registerLocalDateTime(new GsonBuilder()).create();
 
-        diagnosticDataDtoRestHandler = new RestHandler<>(DiagnosticDataDto.class);
         drivingModeDataDtoRestHandler = new RestHandler<>(DrivingModeDataDto.class);
         drivingModeSteeringResponseRestHandler = new RestHandler<>(DrivingModeSteeringResponse.class);
         emergencyModeDataDtoRestHandler = new RestHandler<>(EmergencyModeDataDto.class);
         emergencyModeSteeringResponseRestHandler = new RestHandler<>(EmergencyModeSteeringResponse.class);
-        encoderReadingDtoRestHandler = new RestHandler<>(EncoderReadingDto.class);
-        imuReadingDtoRestHandler = new RestHandler<>(ImuReadingDto.class);
-        lidarReadingDtoRestHandler = new RestHandler<>(LidarReadingDto.class);
-        locationDtoRestHandler = new RestHandler<>(LocationDto.class);
         locationDtoListRestHandler = new RestHandler<>(LocationDto[].class);
-        pointCloudDtoRestHandler = new RestHandler<>(PointCloudDto.class);
         vehicleDtoRestHandler = new RestHandler<>(VehicleDto.class);
         vehicleConnectResponseRestHandler = new RestHandler<>(VehicleConnectResponse.class);
 
@@ -118,7 +97,6 @@ public class MainFormActions implements Actions {
         mainForm.getBtnEmergencyAbort().addActionListener(e -> sendEmergencySignal(EmergencyMode.ABORT_MISSION_AND_RETURN, VEHICLE_1));
         mainForm.getBtnAutonomousDrivingMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_1));
         mainForm.getBtnManualSteeringMode().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_1));
-        mainForm.getBtnFetchData().addActionListener(e -> refreshDataInMainPanel(VEHICLE_1));
         mainForm.getBtnStream1().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_1));
         mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
         mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
@@ -142,7 +120,6 @@ public class MainFormActions implements Actions {
         mainForm.getBtnEmergencyAbortVehicle2().addActionListener(e -> sendEmergencySignal(EmergencyMode.ABORT_MISSION_AND_RETURN, VEHICLE_2));
         mainForm.getBtnAutonomousDrivingModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_2));
         mainForm.getBtnManualSteeringModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_2));
-        mainForm.getBtnFetchDataVehicle2().addActionListener(e -> refreshDataInMainPanel(VEHICLE_2));
         mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_4));
         mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_5));
         mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_6));
@@ -506,57 +483,4 @@ public class MainFormActions implements Actions {
                 ? mainForm.getLblVehicleName().getText().substring(mainForm.getLblVehicleName().getText().indexOf(':') + 2)
                 : mainForm.getLblVehicleNameVehicle2().getText().substring(mainForm.getLblVehicleNameVehicle2().getText().indexOf(':') + 2);
     }
-
-    // TODO - reformat (duplikacja kodu!) + docelowo przycisk "Refresh data" niepotrzebny
-    public void refreshDataInMainPanel(int whichVehicle) {
-
-        VehicleDto vehicleDto = null;
-        DiagnosticDataDto diagnosticDataDto = null;
-        EncoderReadingDto encoderReadingDto = null;
-        ImuReadingDto imuReadingDto = null;
-        LidarReadingDto lidarReadingDto = null;
-        LocationDto locationDto = null;
-        PointCloudDto pointCloudDto = null;
-
-        String storedVehicleId = ((whichVehicle == 1)
-                ? mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)
-                : mainForm.getLblVehicleIdVehicle2().getText().substring(mainForm.getLblVehicleIdVehicle2().getText().indexOf(':') + 2));
-
-        try {
-            vehicleDto = vehicleDtoRestHandler.performGet(VEHICLE_PATH, storedVehicleId);
-            diagnosticDataDto = diagnosticDataDtoRestHandler.performGet(DIAGNOSTIC_DATA_NEWEST_PATH, storedVehicleId);
-            encoderReadingDto = encoderReadingDtoRestHandler.performGet(ENCODER_READING_NEWEST_PATH, storedVehicleId);
-            imuReadingDto = imuReadingDtoRestHandler.performGet(IMU_READING_NEWEST_PATH, storedVehicleId);
-            lidarReadingDto = lidarReadingDtoRestHandler.performGet(LIDAR_READING_NEWEST_PATH, storedVehicleId);
-            locationDto = locationDtoRestHandler.performGet(LOCATION_NEWEST_PATH, storedVehicleId);
-            pointCloudDto = pointCloudDtoRestHandler.performGet(POINT_CLOUD_NEWEST_PATH, storedVehicleId);
-        } catch (UnirestException exception) {
-            // When no object is found under specified URL, Unirest cannot parse the response as JSON and throws a UnirestException which is handled - hence only log other exceptions
-            if(!exception.getMessage().contains(NO_DATA_AT_SPECIFIED_LOCATION_ERROR_MESSAGE)) {
-                log.severe(exception.getMessage());
-            }
-        }
-
-        if(whichVehicle == 1) {
-            mainForm.getLblVehicleName().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");
-            mainForm.getLblVehicleIp().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
-            mainForm.getLblVehicleId().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
-            mainForm.getLblAccelerometerReading().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
-        }
-        else if(whichVehicle == 2) {
-            mainForm.getLblVehicleNameVehicle2().setText(vehicleDto != null ? "Vehicle name: " + vehicleDto.getName() : "Vehicle not connected");
-            mainForm.getLblVehicleIpVehicle2().setText(vehicleDto != null ? "Vehicle IP address: " + vehicleDto.getIpAddress() : "Vehicle not connected");
-            mainForm.getLblVehicleIdVehicle2().setText(vehicleDto != null ? "Vehicle ID: " + vehicleDto.getId() : "Vehicle not connected");
-            mainForm.getLblDiagnosticDataVehicle2().setText(diagnosticDataDto != null ? "Battery status: " + diagnosticDataDto.getBatteryChargeStatus()
-                    + ", wheels turn measure: " + diagnosticDataDto.getWheelsTurnMeasure() : "No diagnostic data received");
-            mainForm.getLblEncoderReadingVehicle2().setText(encoderReadingDto != null ? "Encoder reading: left front wheel: " + encoderReadingDto.getLeftFrontWheelSpeed()
-                    + "..." : "No encoder readings received");
-            mainForm.getLblImuReadingVehicle2().setText(imuReadingDto != null ? "IMU reading: acceleration X: " + imuReadingDto.getAccelerationX() + " ..." : "No IMU readings received");
-            mainForm.getLblLidarReadingVehicle2().setText(lidarReadingDto != null ? "Lidar reading: " + lidarReadingDto.getLidarDistancesReading() : "No lidar readings received");
-            mainForm.getLblLocationVehicle2().setText(locationDto != null ? "Location: real X: " + locationDto.getRealXCoordinate()
-                    + ", real Y: " + locationDto.getRealYCoordinate() : "No location data received");
-            mainForm.getLblPointCloudReadingVehicle2().setText(pointCloudDto != null ? "Point cloud reading: " + pointCloudDto.getPointCloudReading() : "No point cloud reading received");
-        }
-    }
-
 }

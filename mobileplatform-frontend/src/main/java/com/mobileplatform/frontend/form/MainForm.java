@@ -12,7 +12,6 @@ public class MainForm {
     private JFrame frame;
     private JPanel panel;
     private JPanel panelVehicle1;
-    private JButton btnFetchData;
     private JLabel lblVehicleName;
     private JLabel lblAccelerometerReading;
     private JLabel lblGyroReading;
@@ -83,7 +82,7 @@ public class MainForm {
     private JLabel lblWheelsTurnAngleAllData;
     private JLabel lblCamerasTurnAngleAllData;
     private JLabel lblWheelsVelocityAllData;
-    private JLabel lblAcceleometerAllData;
+    private JLabel lblAccelerometerAllData;
     private JLabel lblGyroscopeAllData;
     private JLabel lblMagnetometerAllData;
     private JTextField textFieldWheelsTurnAngleMinValue;
@@ -129,7 +128,7 @@ public class MainForm {
         final boolean roundedCornersFalse = false;
         final LineBorder buttonBorder = new LineBorder(buttonBorderColor, thicknessFour, roundedCornersFalse);
 
-        for (JButton button : Arrays.asList(btnFetchData, btnEmergencyStop, btnEmergencyAbort, btnAutonomousDrivingMode, btnManualSteeringMode, btnConnectVehicle, btnDisconnectVehicle,
+        for (JButton button : Arrays.asList(btnEmergencyStop, btnEmergencyAbort, btnAutonomousDrivingMode, btnManualSteeringMode, btnConnectVehicle, btnDisconnectVehicle,
                 btnConnectVehicle, btnStream1, btnStream2, btnStream3, btnShowLocationHistory, btnShowPointCloud, btnShowLidarOccupancyMap, btnOpenVehicle2View, btnOpenAllDataView, btnSetLimitsBatteryAllData,
                 btnSetLimitsWheelsTurnAllData, btnSetLimitsCamerasTurnAllData, btnSetLimitsWheelsVelocityAllData, btnSetLimitsAccelerometerAllData, btnSetLimitsGyroscopeAllData, btnSetLimitsMagnetometerAllData)) {
             button.setBorder(buttonBorder);

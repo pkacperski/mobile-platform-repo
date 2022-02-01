@@ -24,7 +24,7 @@ public class TelemetryClient extends WebSocketClient {
 
     private final MainForm mainForm = MainFormActions.getInstance().getMainForm();
     private final MainFormActions mainFormActions = MainFormActions.getInstance();
-    private final Color COLOR_RED = new Color(200, 0, 0);
+    private final Color COLOR_RED = new Color(220, 0, 0);
     private final Color COLOR_GRAY = new Color(187, 187, 187);
 
     private static TelemetryClient telemetryClient;
@@ -154,7 +154,6 @@ public class TelemetryClient extends WebSocketClient {
 
         if(IS_TEST_ENV || (whichTabVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled())) { // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
 
-            // TODO refactor - rozbic ponizsze na funkcje
             int batteryPercentage = (diagnosticDataDto.getBatteryChargeStatus() < 1.0)
                     ? (int)(diagnosticDataDto.getBatteryChargeStatus() * 100) : (diagnosticDataDto.getBatteryChargeStatus() <= 100)
                     ? diagnosticDataDto.getBatteryChargeStatus().intValue() : 0;
@@ -340,16 +339,16 @@ public class TelemetryClient extends WebSocketClient {
                     || imuReadingDto.getAccelerationY() < mainFormActions.getAccelerometerLimitsAllData()[0]
                     || imuReadingDto.getAccelerationZ() < mainFormActions.getAccelerometerLimitsAllData()[0]
             ) {
-                mainForm.getLblAcceleometerAllData().setText(accelerationReadingText + " ˅<br></html>");
-                mainForm.getLblAcceleometerAllData().setForeground(COLOR_RED);
+                mainForm.getLblAccelerometerAllData().setText(accelerationReadingText + " ˅<br></html>");
+                mainForm.getLblAccelerometerAllData().setForeground(COLOR_RED);
             } else if(imuReadingDto.getAccelerationX() > mainFormActions.getAccelerometerLimitsAllData()[1]
                     || imuReadingDto.getAccelerationY() > mainFormActions.getAccelerometerLimitsAllData()[1]
                     || imuReadingDto.getAccelerationZ() > mainFormActions.getAccelerometerLimitsAllData()[1]) {
-                mainForm.getLblAcceleometerAllData().setText(accelerationReadingText + " ˄<br></html>");
-                mainForm.getLblAcceleometerAllData().setForeground(COLOR_RED);
+                mainForm.getLblAccelerometerAllData().setText(accelerationReadingText + " ˄<br></html>");
+                mainForm.getLblAccelerometerAllData().setForeground(COLOR_RED);
             } else {
-                mainForm.getLblAcceleometerAllData().setText(accelerationReadingText + "<br></html>");
-                mainForm.getLblAcceleometerAllData().setForeground(COLOR_GRAY);
+                mainForm.getLblAccelerometerAllData().setText(accelerationReadingText + "<br></html>");
+                mainForm.getLblAccelerometerAllData().setForeground(COLOR_GRAY);
             }
 
             if(imuReadingDto.getAngularVelocityX() < mainFormActions.getGyroscopeLimitsAllData()[0]
