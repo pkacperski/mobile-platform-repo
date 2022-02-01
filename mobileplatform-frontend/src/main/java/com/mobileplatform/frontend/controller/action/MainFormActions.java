@@ -67,6 +67,16 @@ public class MainFormActions implements Actions {
     final int STREAM_4 = STREAMS_PER_VEHICLE_COUNT + 1;
     final int STREAM_5 = STREAMS_PER_VEHICLE_COUNT + 2;
     final int STREAM_6 = STREAMS_PER_VEHICLE_COUNT + 3;
+    final int MAX_INIT_LIMIT = 99999;
+    @Getter final int[] batteryLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    @Getter final int[] wheelsTurnAngleLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    @Getter final int[] camerasTurnAngleLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    @Getter final int[] wheelsVelocityLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    @Getter final int[] accelerometerLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    @Getter final int[] gyroscopeLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    @Getter final int[] magnetometerLimitsAllData = {-MAX_INIT_LIMIT, MAX_INIT_LIMIT};
+    private final Color COLOR_RED = new Color(200, 0, 0);
+    private final Color COLOR_GRAY = new Color(187, 187, 187);
 
     private MainFormActions() {}
 
@@ -117,6 +127,13 @@ public class MainFormActions implements Actions {
         mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
         mainForm.getBtnOpenVehicle2View().addActionListener(e -> createFrameForVehicle2());
         mainForm.getBtnOpenAllDataView().addActionListener(e -> createFrameWithAllDataView());
+        mainForm.getBtnSetLimitsBatteryAllData().addActionListener(e -> setLimitsBatteryAllData());
+        mainForm.getBtnSetLimitsWheelsTurnAllData().addActionListener(e -> setLimitsWheelsTurnAllData());
+        mainForm.getBtnSetLimitsCamerasTurnAllData().addActionListener(e -> setLimitsCamerasTurnAllData());
+        mainForm.getBtnSetLimitsWheelsVelocityAllData().addActionListener(e -> setLimitsWheelsVelocityAllData());
+        mainForm.getBtnSetLimitsAccelerometerAllData().addActionListener(e -> setLimitsAccelerometerAllData());
+        mainForm.getBtnSetLimitsGyroscopeAllData().addActionListener(e -> setLimitsGyroscopeAllData());
+        mainForm.getBtnSetLimitsMagnetometerAllData().addActionListener(e -> setLimitsMagnetometerAllData());
 
         // TODO - dodac docelowe akcje dla pojazdu 2
         mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
@@ -135,6 +152,41 @@ public class MainFormActions implements Actions {
         mainForm.getProgressBarWheelsTurnRight().setValue(0);
         mainForm.getProgressBarCamerasTurnLeft().setValue(0);
         mainForm.getProgressBarCamerasTurnRight().setValue(0);
+    }
+
+    private void setLimitsBatteryAllData() {
+        batteryLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldBatteryMinValue().getText());
+        batteryLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldBatteryMaxValue().getText());
+    }
+
+    private void setLimitsWheelsTurnAllData() {
+        wheelsTurnAngleLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldWheelsTurnAngleMinValue().getText());
+        wheelsTurnAngleLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldWheelsTurnAngleMaxValue().getText());
+    }
+
+    private void setLimitsCamerasTurnAllData() {
+        camerasTurnAngleLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldCamerasTurnAngleMinValue().getText());
+        camerasTurnAngleLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldCamerasTurnAngleMaxValue().getText());
+    }
+
+    private void setLimitsWheelsVelocityAllData() {
+        wheelsVelocityLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldWheelsVelocityMinValue().getText());
+        wheelsVelocityLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldWheelsVelocityMaxValue().getText());
+    }
+
+    private void setLimitsAccelerometerAllData() {
+        accelerometerLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldAccelerometerMinValue().getText());
+        accelerometerLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldAccelerometerMaxValue().getText());
+    }
+
+    private void setLimitsGyroscopeAllData() {
+        gyroscopeLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldGyroscopeMinValue().getText());
+        gyroscopeLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldGyroscopeMaxValue().getText());
+    }
+
+    private void setLimitsMagnetometerAllData() {
+        magnetometerLimitsAllData[0] = Integer.parseInt(mainForm.getTextFieldMagnetometerMinValue().getText());
+        magnetometerLimitsAllData[1] = Integer.parseInt(mainForm.getTextFieldMagnetometerMaxValue().getText());
     }
 
     private void sendConnectVehicleSignal(int whichVehicle) {

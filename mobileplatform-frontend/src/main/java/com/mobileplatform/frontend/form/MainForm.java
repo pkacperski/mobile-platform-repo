@@ -75,7 +75,7 @@ public class MainForm {
     private JPanel panelAllDataVehicle2;
     private JButton btnOpenAllDataView;
     private JLabel lblBatteryStatusAllData;
-    private JTextField textFieldBatteryMinimalValue;
+    private JTextField textFieldBatteryMinValue;
     private JLabel lblVehicleNameAllData;
     private JLabel lblVehicleIpAllData;
     private JLabel lblEmergencyModeAllData;
@@ -86,26 +86,26 @@ public class MainForm {
     private JLabel lblAcceleometerAllData;
     private JLabel lblGyroscopeAllData;
     private JLabel lblMagnetometerAllData;
-    private JTextField textFieldWheelsTurnAngleMinimalValue;
-    private JTextField textFieldCamerasTurnAngleMinimalValue;
-    private JTextField textFieldWheelsVelocityMinimalValue;
-    private JTextField textFieldAccelerometerMinimalValue;
-    private JTextField textFieldGyroscopeMinimalValue;
-    private JTextField textFieldMagnetometerMinimalValue;
-    private JTextField textFieldBatteryMaximalValue;
-    private JTextField textFieldWheelsTurnAngleMaximalValue;
-    private JTextField textFieldCamerasTurnAngleMaximalValue;
-    private JTextField textFieldWheelsVelocityMaximalValue;
-    private JTextField textFieldAccelerometerMaximalValue;
-    private JTextField textFieldGyroscopeMaximalValue;
-    private JTextField textFieldMagnetometerMaximalValue;
-    private JButton btnSetRangeBatteryAllData;
-    private JButton btnSetRangeWheelsTurnAllData;
-    private JButton btnSetRangeCamerasTurnAllData;
-    private JButton btnSetRangeWheelsVelocityAllData;
-    private JButton btnSetRangeAccelerometerAllData;
-    private JButton btnSetRangeGyroscopeAllData;
-    private JButton btnSetRangeMagnetometerAllData;
+    private JTextField textFieldWheelsTurnAngleMinValue;
+    private JTextField textFieldCamerasTurnAngleMinValue;
+    private JTextField textFieldWheelsVelocityMinValue;
+    private JTextField textFieldAccelerometerMinValue;
+    private JTextField textFieldGyroscopeMinValue;
+    private JTextField textFieldMagnetometerMinValue;
+    private JTextField textFieldBatteryMaxValue;
+    private JTextField textFieldWheelsTurnAngleMaxValue;
+    private JTextField textFieldCamerasTurnAngleMaxValue;
+    private JTextField textFieldWheelsVelocityMaxValue;
+    private JTextField textFieldAccelerometerMaxValue;
+    private JTextField textFieldGyroscopeMaxValue;
+    private JTextField textFieldMagnetometerMaxValue;
+    private JButton btnSetLimitsBatteryAllData;
+    private JButton btnSetLimitsWheelsTurnAllData;
+    private JButton btnSetLimitsCamerasTurnAllData;
+    private JButton btnSetLimitsWheelsVelocityAllData;
+    private JButton btnSetLimitsAccelerometerAllData;
+    private JButton btnSetLimitsGyroscopeAllData;
+    private JButton btnSetLimitsMagnetometerAllData;
     private JLabel lblRealXCoordAllData;
     private JLabel lblRealYCoordAllData;
     private JLabel lblSlamXCoordAllData;
@@ -130,7 +130,8 @@ public class MainForm {
         final LineBorder buttonBorder = new LineBorder(buttonBorderColor, thicknessFour, roundedCornersFalse);
 
         for (JButton button : Arrays.asList(btnFetchData, btnEmergencyStop, btnEmergencyAbort, btnAutonomousDrivingMode, btnManualSteeringMode, btnConnectVehicle, btnDisconnectVehicle,
-                btnConnectVehicle, btnStream1, btnStream2, btnStream3, btnShowLocationHistory, btnShowPointCloud, btnShowLidarOccupancyMap, btnOpenVehicle2View, btnOpenAllDataView)) {
+                btnConnectVehicle, btnStream1, btnStream2, btnStream3, btnShowLocationHistory, btnShowPointCloud, btnShowLidarOccupancyMap, btnOpenVehicle2View, btnOpenAllDataView, btnSetLimitsBatteryAllData,
+                btnSetLimitsWheelsTurnAllData, btnSetLimitsCamerasTurnAllData, btnSetLimitsWheelsVelocityAllData, btnSetLimitsAccelerometerAllData, btnSetLimitsGyroscopeAllData, btnSetLimitsMagnetometerAllData)) {
             button.setBorder(buttonBorder);
         }
     }
