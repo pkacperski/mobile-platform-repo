@@ -1,6 +1,7 @@
 package com.mobileplatform.frontend.websockets;
 
 import com.mobileplatform.frontend.controller.action.MainFormActions;
+import com.mobileplatform.frontend.form.MainForm;
 import com.mobileplatform.frontend.opencv.VideoReceiveHandler;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -24,6 +25,7 @@ public class VideoClient extends WebSocketClient {
 
     private final int whichVehicle; // for video from which vehicle (tab) is this VideoClient responsible
     private final VideoStreamType streamType;
+    private final MainForm mainForm = MainFormActions.getInstance().getMainForm();
 
     public VideoClient(String ipAddress, int port, String serverName, int whichVehicle, VideoStreamType streamType) throws URISyntaxException {
         super(new URI("ws://" + ipAddress + ":" + port + "/" + serverName));
@@ -45,16 +47,21 @@ public class VideoClient extends WebSocketClient {
         if(receivedFrame.width() > 0 && receivedFrame.height() > 0) {
             BufferedImage bufferedImage = mat2BufferedImage(receivedFrame);
             ImageIcon icon = new ImageIcon(bufferedImage);
-            if(this.whichVehicle == 1 && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle().isEnabled()) { // first stream - only show stream when testing OR when the vehicle is connected
+            if(this.whichVehicle == 1 && !mainForm.getBtnConnectVehicle().isEnabled()) { // first stream - only show stream when the vehicle is connected OR when testing
                 if(this.streamType == VideoStreamType.CAMERA_STREAM)
-                    MainFormActions.getInstance().getMainForm().getLblVideoStream().setIcon(icon);
+                    mainForm.getLblVideoStream().setIcon(icon);
                 else if(this.streamType == VideoStreamType.LIDAR_STREAM)
                     VideoReceiveHandler.setLidarImageIcon(icon);
                 else if(this.streamType == VideoStreamType.POINT_CLOUD_STREAM)
                     VideoReceiveHandler.setPcImageIcon(icon);
             }
-            else if(this.whichVehicle == 2 /* && !MainFormActions.getInstance().getMainForm().getBtnConnectVehicle2().isEnabled()*/) { // second stream
-                System.out.println("TODO - vehicle 2"); // TODO - vehicle 2
+            else if(this.whichVehicle == 2 && !mainForm.getBtnConnectVehicle2().isEnabled()) { // second stream - only show stream when the vehicle is connected OR when testing
+                if(this.streamType == VideoStreamType.CAMERA_STREAM)
+                    mainForm.getLblVideoStreamVehicle2().setIcon(icon);
+                else if(this.streamType == VideoStreamType.LIDAR_STREAM)
+                    VideoReceiveHandler.setLidarImageIcon(icon);
+                else if(this.streamType == VideoStreamType.POINT_CLOUD_STREAM)
+                    VideoReceiveHandler.setPcImageIcon(icon);
             }
         }
     }

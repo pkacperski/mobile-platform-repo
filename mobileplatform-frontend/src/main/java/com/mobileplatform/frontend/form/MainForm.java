@@ -109,7 +109,7 @@ public class MainForm {
     private JButton btnEmergencyStopVehicle2;
     private JButton btnEmergencyAbortVehicle2;
     private JButton btnAutonomousDrivingModeVehicle2;
-    private JButton btnManualSteeringVehicle2;
+    private JButton btnManualSteeringModeVehicle2;
     private JLabel lblCurrentModeVehicle2;
     private JButton btnOpenAllDataViewVehicle2;
     private JLabel lblVideoStreamVehicle2;
@@ -152,7 +152,7 @@ public class MainForm {
     private JLabel lblRealYCoordAllDataVehicle2;
     private JLabel lblSlamXCoordAllDataVehicle2;
     private JLabel lblSlamYCoordAllDataVehicle2;
-    private JLabel lblSlamZCoordAllDataVehicle2;
+    private JLabel lblSlamRotationAllDataVehicle2;
 
     public MainForm() {
         frame = new JFrame("MainForm");
@@ -161,8 +161,9 @@ public class MainForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         progressBarWheelsTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-        progressBarWheelsTurnLeft.setMaximum(90);
         progressBarCamerasTurnLeft.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        progressBarWheelsTurnLeftVehicle2.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+        progressBarCamerasTurnLeftVehicle2.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
         setButtonsBorders();
     }
 
@@ -173,13 +174,14 @@ public class MainForm {
         final LineBorder buttonBorder = new LineBorder(buttonBorderColor, thicknessFour, roundedCornersFalse);
 
         for (JButton button : Arrays.asList(btnEmergencyStop, btnEmergencyAbort, btnAutonomousDrivingMode, btnManualSteeringMode, btnConnectVehicle, btnDisconnectVehicle,
-                btnConnectVehicle, btnStream1, btnStream2, btnStream3, btnShowLocationHistory, btnShowPointCloud, btnShowLidarOccupancyMap, btnOpenVehicle2View, btnOpenAllDataView, btnSetLimitsBatteryAllData,
-                btnSetLimitsWheelsTurnAllData, btnSetLimitsCamerasTurnAllData, btnSetLimitsWheelsVelocityAllData, btnSetLimitsAccelerometerAllData, btnSetLimitsGyroscopeAllData, btnSetLimitsMagnetometerAllData)) {
+                btnConnectVehicle, btnStream1, btnStream2, btnStream3, btnShowLocationHistory, btnShowPointCloud, btnShowLidarOccupancyMap, btnOpenVehicle2View, btnOpenAllDataView,
+                btnSetLimitsBatteryAllData, btnSetLimitsWheelsTurnAllData, btnSetLimitsCamerasTurnAllData, btnSetLimitsWheelsVelocityAllData, btnSetLimitsAccelerometerAllData,
+                btnSetLimitsGyroscopeAllData, btnSetLimitsMagnetometerAllData, btnEmergencyStopVehicle2, btnEmergencyAbortVehicle2, btnAutonomousDrivingModeVehicle2, btnManualSteeringModeVehicle2,
+                btnDisconnectVehicle2, btnConnectVehicle2, btnStream1Vehicle2, btnStream2Vehicle2, btnStream3Vehicle2, btnShowLocationHistoryVehicle2, btnShowPointCloudVehicle2,
+                btnShowLidarOccupancyMapVehicle2, btnOpenAllDataViewVehicle2, btnSetLimitsBatteryAllDataVehicle2, btnSetLimitsWheelsTurnAllDataVehicle2, btnSetLimitsCamerasTurnAllDataVehicle2,
+                btnSetLimitsWheelsVelocityAllDataVehicle2, btnSetLimitsAccelerometerAllDataVehicle2, btnSetLimitsGyroscopeAllDataVehicle2, btnSetLimitsMagnetometerAllDataVehicle2
+        )) {
             button.setBorder(buttonBorder);
         }
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }

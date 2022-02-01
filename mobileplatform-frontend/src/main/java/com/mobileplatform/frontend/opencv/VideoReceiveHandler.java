@@ -1,6 +1,7 @@
 package com.mobileplatform.frontend.opencv;
 
 import com.mobileplatform.frontend.controller.action.MainFormActions;
+import com.mobileplatform.frontend.form.MainForm;
 import com.mobileplatform.frontend.websockets.VideoClient;
 import com.mobileplatform.frontend.websockets.VideoStreamType;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class VideoReceiveHandler {
 
     private static VideoReceiveHandler videoReceiveHandler;
     private static ArrayList<VideoClient> videoClients;
+    private static final MainForm mainForm = MainFormActions.getInstance().getMainForm();
 
     private VideoReceiveHandler(){
         videoClients = new ArrayList<>();
@@ -44,11 +46,11 @@ public class VideoReceiveHandler {
     private static Thread lidarMockVideoReceiveThread;
     private static Thread pointCloudMockVideoReceiveThread;
 
-    public static void createMockLidarAndPointCloudStreamClients() {
-        // create mocked lidar and point cloud stream clients for vehicle 1 - for testing and demonstration purposes only
+    public static void createMockLidarAndPointCloudStreamClients(int whichVehicle) {
+        // create mocked lidar and point cloud stream clients - for testing and demonstration purposes only
         try {
-            lidarMockVideoClient = new VideoClient(TELEMETRY_API_SERVER_IP_TEST, LIDAR_STREAM_PORT_NUMBER, "lidar", 1, VideoStreamType.LIDAR_STREAM);
-            pointCloudMockVideoClient = new VideoClient(TELEMETRY_API_SERVER_IP_TEST, POINT_CLOUD_STREAM_PORT_NUMBER, "pc", 1, VideoStreamType.POINT_CLOUD_STREAM);
+            lidarMockVideoClient = new VideoClient(TELEMETRY_API_SERVER_IP_TEST, LIDAR_STREAM_PORT_NUMBER, "lidar", whichVehicle, VideoStreamType.LIDAR_STREAM);
+            pointCloudMockVideoClient = new VideoClient(TELEMETRY_API_SERVER_IP_TEST, POINT_CLOUD_STREAM_PORT_NUMBER, "pc", whichVehicle, VideoStreamType.POINT_CLOUD_STREAM);
             lidarMockVideoReceiveThread = new Thread(lidarMockVideoClient);
             pointCloudMockVideoReceiveThread = new Thread(pointCloudMockVideoClient);
             lidarMockVideoReceiveThread.start();
@@ -73,19 +75,18 @@ public class VideoReceiveHandler {
 
     private static void setStreamButtonsActive(int whichVehicle) {
         if(whichVehicle == 1) {
-            MainFormActions.getInstance().getMainForm().getBtnStream1().setEnabled(true);
+            mainForm.getBtnStream1().setEnabled(true);
             if(STREAMS_PER_VEHICLE_COUNT > 1)
-                MainFormActions.getInstance().getMainForm().getBtnStream2().setEnabled(true);
+                mainForm.getBtnStream2().setEnabled(true);
             if(STREAMS_PER_VEHICLE_COUNT > 2)
-                MainFormActions.getInstance().getMainForm().getBtnStream3().setEnabled(true);
+                mainForm.getBtnStream3().setEnabled(true);
         }
         else if(whichVehicle == 2) {
-            System.out.println("TODO - vehicle 2"); // TODO - vehicle 2
-//            MainFormActions.getInstance().getMainForm().getBtnStream1Vehicle2().setEnabled(true);
-//            if(STREAMS_PER_VEHICLE_COUNT > 1)
-//                MainFormActions.getInstance().getMainForm().getBtnStream2Vehicle2().setEnabled(true);
-//            if(STREAMS_PER_VEHICLE_COUNT > 2)
-//                MainFormActions.getInstance().getMainForm().getBtnStream3Vehicle2().setEnabled(true);
+            mainForm.getBtnStream1Vehicle2().setEnabled(true);
+            if(STREAMS_PER_VEHICLE_COUNT > 1)
+                mainForm.getBtnStream2Vehicle2().setEnabled(true);
+            if(STREAMS_PER_VEHICLE_COUNT > 2)
+                mainForm.getBtnStream3Vehicle2().setEnabled(true);
         }
     }
 

@@ -107,10 +107,10 @@ public class MainFormActions implements Actions {
         mainForm.getBtnStream2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_2));
         mainForm.getBtnStream3().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_1, STREAM_3));
         mainForm.getBtnShowLocationHistory().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_1));
+        mainForm.getBtnOpenAllDataView().addActionListener(e -> createFrameWithAllDataView(VEHICLE_1));
         mainForm.getBtnShowLidarOccupancyMap().addActionListener(e -> createFrameWithLidarOccupancyMap());
         mainForm.getBtnShowPointCloud().addActionListener(e -> createFrameWithPointCloud());
         mainForm.getBtnOpenVehicle2View().addActionListener(e -> createFrameForVehicle2());
-        mainForm.getBtnOpenAllDataView().addActionListener(e -> createFrameWithAllDataView(VEHICLE_1));
         mainForm.getBtnSetLimitsBatteryAllData().addActionListener(e -> setLimitsBatteryAllData());
         mainForm.getBtnSetLimitsWheelsTurnAllData().addActionListener(e -> setLimitsWheelsTurnAllData());
         mainForm.getBtnSetLimitsCamerasTurnAllData().addActionListener(e -> setLimitsCamerasTurnAllData());
@@ -119,19 +119,43 @@ public class MainFormActions implements Actions {
         mainForm.getBtnSetLimitsGyroscopeAllData().addActionListener(e -> setLimitsGyroscopeAllData());
         mainForm.getBtnSetLimitsMagnetometerAllData().addActionListener(e -> setLimitsMagnetometerAllData());
 
-        // TODO - dodac docelowe akcje dla pojazdu 2
+        mainForm.getBtnConnectVehicle2().addActionListener(e -> sendConnectVehicleSignal(VEHICLE_2));
+        mainForm.getBtnDisconnectVehicle2().addActionListener(e -> sendDisconnectVehicleSignal(VEHICLE_2));
+        mainForm.getBtnEmergencyStopVehicle2().addActionListener(e -> sendEmergencySignal(EmergencyMode.STOP, VEHICLE_2));
+        mainForm.getBtnEmergencyAbortVehicle2().addActionListener(e -> sendEmergencySignal(EmergencyMode.ABORT_MISSION_AND_RETURN, VEHICLE_2));
+        mainForm.getBtnAutonomousDrivingModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.AUTONOMOUS, VEHICLE_2));
+        mainForm.getBtnManualSteeringModeVehicle2().addActionListener(e -> sendDrivingModeSignal(DrivingMode.MANUAL_STEERING, VEHICLE_2));
+        mainForm.getBtnStream1Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_1));
+        mainForm.getBtnStream2Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_2));
+        mainForm.getBtnStream3Vehicle2().addActionListener(e -> sendChangeActiveStreamSignal(VEHICLE_2, STREAM_3));
+        mainForm.getBtnShowLocationHistoryVehicle2().addActionListener(e -> createFrameWithLocationHistory(VEHICLE_2));
+        mainForm.getBtnOpenAllDataViewVehicle2().addActionListener(e -> createFrameWithAllDataView(VEHICLE_2));
+        mainForm.getBtnShowLidarOccupancyMapVehicle2().addActionListener(e -> createFrameWithLidarOccupancyMap());
+        mainForm.getBtnShowPointCloudVehicle2().addActionListener(e -> createFrameWithPointCloud());
+        mainForm.getBtnSetLimitsBatteryAllDataVehicle2().addActionListener(e -> setLimitsBatteryAllData());
+        mainForm.getBtnSetLimitsWheelsTurnAllDataVehicle2().addActionListener(e -> setLimitsWheelsTurnAllData());
+        mainForm.getBtnSetLimitsCamerasTurnAllDataVehicle2().addActionListener(e -> setLimitsCamerasTurnAllData());
+        mainForm.getBtnSetLimitsWheelsVelocityAllDataVehicle2().addActionListener(e -> setLimitsWheelsVelocityAllData());
+        mainForm.getBtnSetLimitsAccelerometerAllDataVehicle2().addActionListener(e -> setLimitsAccelerometerAllData());
+        mainForm.getBtnSetLimitsGyroscopeAllDataVehicle2().addActionListener(e -> setLimitsGyroscopeAllData());
+        mainForm.getBtnSetLimitsMagnetometerAllDataVehicle2().addActionListener(e -> setLimitsMagnetometerAllData());
 
         mainForm.getProgressBarBatteryStatus().setValue(0);
         mainForm.getProgressBarWheelsTurnLeft().setValue(0);
         mainForm.getProgressBarWheelsTurnRight().setValue(0);
         mainForm.getProgressBarCamerasTurnLeft().setValue(0);
         mainForm.getProgressBarCamerasTurnRight().setValue(0);
+        mainForm.getProgressBarBatteryStatusVehicle2().setValue(0);
+        mainForm.getProgressBarWheelsTurnLeftVehicle2().setValue(0);
+        mainForm.getProgressBarWheelsTurnRightVehicle2().setValue(0);
+        mainForm.getProgressBarCamerasTurnLeftVehicle2().setValue(0);
+        mainForm.getProgressBarCamerasTurnRightVehicle2().setValue(0);
     }
 
     private void sendConnectVehicleSignal(int whichVehicle) {
 
-        String vehicleIp = mainForm.getTxtVehicleIp().getText(); // TODO - vehicle 2: String vehicleIp = (whichVehicle == 1) ? mainForm.getTxtVehicleIp().getText() : mainForm.getTxtVehicleIpVehicle2().getText();
-        String vehicleName = mainForm.getTxtVehicleName().getText(); // TODO - vehicle 2: String vehicleName = (whichVehicle == 1) ? mainForm.getTxtVehicleName().getText() : mainForm.getTxtVehicleNameVehicle2().getText();
+        String vehicleIp = (whichVehicle == 1) ? mainForm.getTxtVehicleIp().getText() : mainForm.getTxtVehicleIpVehicle2().getText();
+        String vehicleName = (whichVehicle == 1) ? mainForm.getTxtVehicleName().getText() : mainForm.getTxtVehicleNameVehicle2().getText();
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(vehicleIp)
                 .name(vehicleName + "$" + whichVehicle)
@@ -149,7 +173,7 @@ public class MainFormActions implements Actions {
                         .build();
                 vehicleConnectResponseRestHandler.performPost(vehicleIp + "/connect", gson.toJson(vehicleConnectRequest), APPLICATION_JSON_CONTENT_TYPE);
                 if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
-                    createMockLidarAndPointCloudStreamClients();
+                    createMockLidarAndPointCloudStreamClients(whichVehicle);
                 setLabelsAfterConnect(whichVehicle, vehicleDtoResponse.getId(), vehicleIp, vehicleName);
             }
         } catch (UnirestException e) {
@@ -170,7 +194,7 @@ public class MainFormActions implements Actions {
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
-        VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // dopoki endpoint DELETE /connect ma takie samo body jak POST /connect, nie trzeba tworzyc nowego Dto na obsluge requesta ani nowego RestHandlera
+        VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // endpoint DELETE /connect has the same body as POST /connect - no need to create a new Dto or a new RestHandler
                 .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD)
                 .port(TELEMETRY_API_PORT_NUMBER)
                 .vid(storedVehicleId)
@@ -182,9 +206,8 @@ public class MainFormActions implements Actions {
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
                 disableMockLidarAndPointCloudStreamClients();
-            if(vehicleConnectResponse.getVid() == storedVehicleId) { // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
+            if(vehicleConnectResponse.getVid() == storedVehicleId) // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
                 setLabelsAfterDisconnect(whichVehicle);
-            }
         } catch (UnirestException e) {
             e.printStackTrace();
         }
@@ -196,9 +219,9 @@ public class MainFormActions implements Actions {
             mainForm.getLblVehicleId().setText("Vehicle ID: " + vehicleId);
             mainForm.getLblVehicleIp().setText("Vehicle IP: " + vehicleIp);
             mainForm.getLblVehicleName().setText("Vehicle name: " + vehicleName);
+            mainForm.getLblCurrentModeAllData().setText("Not set");
             mainForm.getLblVehicleNameAllData().setText(vehicleName);
             mainForm.getLblVehicleIpAllData().setText(vehicleIp);
-            mainForm.getLblCurrentModeAllData().setText("Not set");
             mainForm.getBtnConnectVehicle().setEnabled(false);
             mainForm.getBtnDisconnectVehicle().setEnabled(true);
             mainForm.getBtnAutonomousDrivingMode().setEnabled(true);
@@ -208,8 +231,23 @@ public class MainFormActions implements Actions {
             mainForm.getBtnShowLocationHistory().setEnabled(true);
             mainForm.getBtnShowLidarOccupancyMap().setEnabled(true);
             mainForm.getBtnShowPointCloud().setEnabled(true);
-        } else if (whichVehicle == VEHICLE_2) {
-            System.out.println("TODO - Vehicle 2"); // TODO - vehicle 2
+        }
+        else if (whichVehicle == VEHICLE_2) {
+            mainForm.getLblVehicleIdVehicle2().setText("Vehicle ID: " + vehicleId);
+            mainForm.getLblVehicleIpVehicle2().setText("Vehicle IP: " + vehicleIp);
+            mainForm.getLblVehicleNameVehicle2().setText("Vehicle name: " + vehicleName);
+            mainForm.getLblCurrentModeAllDataVehicle2().setText("Not set");
+            mainForm.getLblVehicleNameAllDataVehicle2().setText(vehicleName);
+            mainForm.getLblVehicleIpAllDataVehicle2().setText(vehicleIp);
+            mainForm.getBtnConnectVehicle2().setEnabled(false);
+            mainForm.getBtnDisconnectVehicle2().setEnabled(true);
+            mainForm.getBtnAutonomousDrivingModeVehicle2().setEnabled(true);
+            mainForm.getBtnEmergencyStopVehicle2().setEnabled(true);
+            mainForm.getBtnEmergencyAbortVehicle2().setEnabled(true);
+            mainForm.getBtnManualSteeringModeVehicle2().setEnabled(true);
+            mainForm.getBtnShowLocationHistoryVehicle2().setEnabled(true);
+            mainForm.getBtnShowLidarOccupancyMapVehicle2().setEnabled(true);
+            mainForm.getBtnShowPointCloudVehicle2().setEnabled(true);
         }
     }
 
@@ -244,7 +282,32 @@ public class MainFormActions implements Actions {
             mainForm.getLblMagnetometerReading().setText("");
         }
         else if(whichVehicle == VEHICLE_2) {
-            System.out.println("TODO - vehicle 2"); // TODO - vehicle 2
+            mainForm.getBtnConnectVehicle2().setEnabled(true);
+            mainForm.getBtnDisconnectVehicle2().setEnabled(false);
+            mainForm.getBtnAutonomousDrivingModeVehicle2().setEnabled(false);
+            mainForm.getBtnEmergencyStopVehicle2().setEnabled(false);
+            mainForm.getBtnEmergencyAbortVehicle2().setEnabled(false);
+            mainForm.getBtnManualSteeringModeVehicle2().setEnabled(false);
+            mainForm.getBtnShowLocationHistoryVehicle2().setEnabled(false);
+            mainForm.getBtnShowLidarOccupancyMapVehicle2().setEnabled(false);
+            mainForm.getBtnShowPointCloudVehicle2().setEnabled(false);
+            mainForm.getLblVehicleIdVehicle2().setText("Vehicle not connected");
+            mainForm.getLblVehicleIpVehicle2().setText("Vehicle not connected");
+            mainForm.getLblVehicleNameVehicle2().setText("Vehicle not connected");
+            mainForm.getLblAccelerometerReadingVehicle2().setText("No IMU readings received");
+            mainForm.getLblVideoStreamVehicle2().setIcon(new ImageIcon());
+            mainForm.getProgressBarWheelsTurnLeftVehicle2().setValue(0);
+            mainForm.getProgressBarWheelsTurnRightVehicle2().setValue(0);
+            mainForm.getProgressBarCamerasTurnLeftVehicle2().setValue(0);
+            mainForm.getProgressBarCamerasTurnRightVehicle2().setValue(0);
+            mainForm.getProgressBarBatteryStatusVehicle2().setValue(0);
+            mainForm.getProgressBarLeftFrontWheelSpeedVehicle2().setValue(0);
+            mainForm.getProgressBarRightFrontWheelSpeedVehicle2().setValue(0);
+            mainForm.getProgressBarLeftRearWheelSpeedVehicle2().setValue(0);
+            mainForm.getProgressBarRightRearWheelSpeedVehicle2().setValue(0);
+            mainForm.getLblAccelerometerReadingVehicle2().setText("");
+            mainForm.getLblGyroReadingVehicle2().setText("");
+            mainForm.getLblMagnetometerReadingVehicle2().setText("");
         }
     }
 
@@ -268,16 +331,32 @@ public class MainFormActions implements Actions {
             emergencyModeDataDtoRestHandler.performPost(EMERGENCY_MODE_DATA_PATH, gson.toJson(emergencyModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             emergencyModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/emergency", gson.toJson(emergencyModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(emergencyMode.equals(EmergencyMode.STOP)) {
-                mainForm.getLblCurrentMode().setText("Current: STOP");
-                mainForm.getLblCurrentMode().setForeground(COLOR_RED);
-                mainForm.getLblCurrentModeAllData().setText("STOP");
-                mainForm.getLblCurrentModeAllData().setForeground(COLOR_RED);
+                if(whichVehicle == 1) {
+                    mainForm.getLblCurrentMode().setText("Current: STOP");
+                    mainForm.getLblCurrentMode().setForeground(COLOR_RED);
+                    mainForm.getLblCurrentModeAllData().setText("STOP");
+                    mainForm.getLblCurrentModeAllData().setForeground(COLOR_RED);
+                }
+                else if(whichVehicle == 2) {
+                    mainForm.getLblCurrentModeVehicle2().setText("Current: STOP");
+                    mainForm.getLblCurrentModeVehicle2().setForeground(COLOR_RED);
+                    mainForm.getLblCurrentModeAllDataVehicle2().setText("STOP");
+                    mainForm.getLblCurrentModeAllDataVehicle2().setForeground(COLOR_RED);
+                }
             }
             else {
-                mainForm.getLblCurrentMode().setText("Current: abort mission");
-                mainForm.getLblCurrentMode().setForeground(COLOR_YELLOW);
-                mainForm.getLblCurrentModeAllData().setText("abort mission");
-                mainForm.getLblCurrentModeAllData().setForeground(COLOR_YELLOW);
+                if(whichVehicle == 1) {
+                    mainForm.getLblCurrentMode().setText("Current: abort mission");
+                    mainForm.getLblCurrentMode().setForeground(COLOR_YELLOW);
+                    mainForm.getLblCurrentModeAllData().setText("abort mission");
+                    mainForm.getLblCurrentModeAllData().setForeground(COLOR_YELLOW);
+                }
+                else if(whichVehicle == 2) {
+                    mainForm.getLblCurrentModeVehicle2().setText("Current: abort mission");
+                    mainForm.getLblCurrentModeVehicle2().setForeground(COLOR_YELLOW);
+                    mainForm.getLblCurrentModeAllDataVehicle2().setText("abort mission");
+                    mainForm.getLblCurrentModeAllDataVehicle2().setForeground(COLOR_YELLOW);
+                }
             }
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -304,16 +383,32 @@ public class MainFormActions implements Actions {
             drivingModeDataDtoRestHandler.performPost(DRIVING_MODE_DATA_PATH, gson.toJson(drivingModeDataDto), APPLICATION_JSON_CONTENT_TYPE);
             drivingModeSteeringResponseRestHandler.performPost(storedVehicleIp + "/mode", gson.toJson(drivingModeSteeringRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(drivingMode.equals(DrivingMode.AUTONOMOUS)) {
-                mainForm.getLblCurrentMode().setText("Current: autonomous");
-                mainForm.getLblCurrentMode().setForeground(COLOR_GREEN);
-                mainForm.getLblCurrentModeAllData().setText("autonomous");
-                mainForm.getLblCurrentModeAllData().setForeground(COLOR_GREEN);
+                if(whichVehicle == 1) {
+                    mainForm.getLblCurrentMode().setText("Current: autonomous");
+                    mainForm.getLblCurrentMode().setForeground(COLOR_GREEN);
+                    mainForm.getLblCurrentModeAllData().setText("autonomous");
+                    mainForm.getLblCurrentModeAllData().setForeground(COLOR_GREEN);
+                }
+                else if(whichVehicle == 2) {
+                    mainForm.getLblCurrentModeVehicle2().setText("Current: autonomous");
+                    mainForm.getLblCurrentModeVehicle2().setForeground(COLOR_GREEN);
+                    mainForm.getLblCurrentModeAllDataVehicle2().setText("autonomous");
+                    mainForm.getLblCurrentModeAllDataVehicle2().setForeground(COLOR_GREEN);
+                }
             }
             else {
-                mainForm.getLblCurrentMode().setText("Current: manual");
-                mainForm.getLblCurrentMode().setForeground(COLOR_BLUE);
-                mainForm.getLblCurrentModeAllData().setText("manual");
-                mainForm.getLblCurrentModeAllData().setForeground(COLOR_BLUE);
+                if(whichVehicle == 1) {
+                    mainForm.getLblCurrentMode().setText("Current: manual");
+                    mainForm.getLblCurrentMode().setForeground(COLOR_BLUE);
+                    mainForm.getLblCurrentModeAllData().setText("manual");
+                    mainForm.getLblCurrentModeAllData().setForeground(COLOR_BLUE);
+                }
+                else if(whichVehicle == 2) {
+                    mainForm.getLblCurrentModeVehicle2().setText("Current: manual");
+                    mainForm.getLblCurrentModeVehicle2().setForeground(COLOR_BLUE);
+                    mainForm.getLblCurrentModeAllDataVehicle2().setText("manual");
+                    mainForm.getLblCurrentModeAllDataVehicle2().setForeground(COLOR_BLUE);
+                }
             }
         } catch (UnirestException e) {
             e.printStackTrace();
@@ -338,7 +433,7 @@ public class MainFormActions implements Actions {
                 e.printStackTrace();
             }
             try {
-                // TODO - odczyt z listy trzymanej lokalnie zamiast strzalu pod API BE
+                // TODO - read from locally updated list instead of querying BE API
                 LocationDto[] locationDtos = locationDtoListRestHandler.performGetAbsolutePath("http://localhost:8080/location/" + storedVehicleId);
                 frame.add(new VehicleLocationPane(locationDtos));
                 frame.pack();
@@ -399,13 +494,13 @@ public class MainFormActions implements Actions {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            frame.setContentPane(mainForm.getPanelVehicle2()); // TODO add functional components to panelVehicle2 - now only for testing & demonstration purposes
+            frame.setContentPane(mainForm.getPanelVehicle2());
             frame.pack();
             frame.setVisible(true);
         });
     }
 
-    private void createFrameWithAllDataView(int whichVehicle) { // TODO add functional components to panelVehicle2 - now only for testing & demonstration purposes
+    private void createFrameWithAllDataView(int whichVehicle) {
         EventQueue.invokeLater(() -> {
             JFrame frame = new JFrame("All data view - Vehicle " + whichVehicle);
             frame.setSize(1440, 810);
@@ -424,19 +519,19 @@ public class MainFormActions implements Actions {
     private long getVehicleId(int whichVehicle) {
         return Long.parseLong((whichVehicle == 1)
                 ? mainForm.getLblVehicleId().getText().substring(mainForm.getLblVehicleId().getText().indexOf(':') + 2)
-                : /* mainForm.getLblVehicleIdVehicle2().getText().substring(mainForm.getLblVehicleIdVehicle2().getText().indexOf(':') + 2) */ "1"); // TODO - vehicle 2
+                : mainForm.getLblVehicleIdVehicle2().getText().substring(mainForm.getLblVehicleIdVehicle2().getText().indexOf(':') + 2));
     }
 
     private String getVehicleIp(int whichVehicle) {
         return (whichVehicle == 1)
                 ? mainForm.getLblVehicleIp().getText().substring(mainForm.getLblVehicleIp().getText().indexOf(':') + 2)
-                : /* mainForm.getLblVehicleIpVehicle2().getText().substring(mainForm.getLblVehicleIpVehicle2().getText().indexOf(':') + 2) */ "1"; // TODO - vehicle 2
+                : mainForm.getLblVehicleIpVehicle2().getText().substring(mainForm.getLblVehicleIpVehicle2().getText().indexOf(':') + 2);
     }
 
     private String getVehicleName(int whichVehicle) {
         return (whichVehicle == VEHICLE_1)
                 ? mainForm.getLblVehicleName().getText().substring(mainForm.getLblVehicleName().getText().indexOf(':') + 2)
-                : /* mainForm.getLblVehicleNameVehicle2().getText().substring(mainForm.getLblVehicleNameVehicle2().getText().indexOf(':') + 2) */ "1"; // TODO - vehicle 2
+                : mainForm.getLblVehicleNameVehicle2().getText().substring(mainForm.getLblVehicleNameVehicle2().getText().indexOf(':') + 2);
     }
 
     private void setLimitsBatteryAllData() {
