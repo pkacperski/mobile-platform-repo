@@ -100,15 +100,15 @@ public class VideoCaptureHandler {
     public static void handleChangingActiveStream(int whichVehicle, int whichStream) {
         // handling a message about which stream to activate - turn off all streams for the particular vehicle and then turn on the one from the message
         for(int i = 0; i < vehiclesCount; i++) {
-            if(whichVehicle == i+1 && whichStream <= (i+1)*streamsPerVehicleCount) {
+            if(whichVehicle == i+1 && whichStream <= streamsPerVehicleCount) {
                 for(int j = 0; j < streamsPerVehicleCount; j++) {
                     if(videoCaptureImpls[i*streamsPerVehicleCount + j] != null) {
                         videoCaptureImpls[i*streamsPerVehicleCount + j].setStreamActive(false);
                     }
                 }
             }
-            if(videoCaptureImpls[whichStream - 1] != null) {
-                videoCaptureImpls[whichStream - 1].setStreamActive(true);
+            if(videoCaptureImpls[i*streamsPerVehicleCount + whichStream - 1] != null) {
+                videoCaptureImpls[i*streamsPerVehicleCount + whichStream - 1].setStreamActive(true);
             }
         }
     }
