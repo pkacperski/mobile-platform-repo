@@ -71,12 +71,13 @@ public class VideoCaptureHandler {
     public static void createMockLidarAndPointCloudStreams() {
         // create mocked lidar and point cloud streams for vehicle 1 (from given test source) - for testing and demonstration purposes only
         final int VEHICLE_ONE = 1;
-        final int STREAM_NUMBER_ZERO = 0;
+        final int STREAM_NUMBER_SEVEN = 7;
+        final int STREAM_NUMBER_EIGHT = 8;
         final boolean STREAM_ACTIVE = true;
         lidarMockVideoServer = new VideoServer(WEBSOCKET_SERVER_IP_ADDRESS, LIDAR_STREAM_PORT_NUMBER);
         pointCloudMockVideoServer = new VideoServer(WEBSOCKET_SERVER_IP_ADDRESS, POINT_CLOUD_STREAM_PORT_NUMBER);
-        lidarMockVideoCaptureImpl = new VideoCaptureImpl(LIDAR_MOCK_STREAM_ADDRESS, lidarMockVideoServer, VEHICLE_ONE, STREAM_NUMBER_ZERO, STREAM_ACTIVE);
-        pointCloudMockVideoCaptureImpl = new VideoCaptureImpl(POINT_CLOUD_MOCK_STREAM_ADDRESS, pointCloudMockVideoServer, VEHICLE_ONE, STREAM_NUMBER_ZERO, STREAM_ACTIVE);
+        lidarMockVideoCaptureImpl = new VideoCaptureImpl(LIDAR_MOCK_STREAM_ADDRESS, lidarMockVideoServer, VEHICLE_ONE, STREAM_NUMBER_SEVEN, STREAM_ACTIVE);
+        pointCloudMockVideoCaptureImpl = new VideoCaptureImpl(POINT_CLOUD_MOCK_STREAM_ADDRESS, pointCloudMockVideoServer, VEHICLE_ONE, STREAM_NUMBER_EIGHT, STREAM_ACTIVE);
         lidarMockVideoCaptureThread = new Thread(lidarMockVideoCaptureImpl);
         pointCloudMockVideoCaptureThread = new Thread(pointCloudMockVideoCaptureImpl);
 

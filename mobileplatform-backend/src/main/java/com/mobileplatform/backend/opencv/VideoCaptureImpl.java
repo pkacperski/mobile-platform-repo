@@ -35,7 +35,7 @@ public class VideoCaptureImpl implements Runnable {
     private final int whichVehicle;
     private final int streamNumber;
     private boolean isStreamActive;
-    private String videoPath;
+    private static String videoPath;
 
     public VideoCaptureImpl(String streamAddress, VideoServer videoServer, int whichVehicle, int streamNumber, boolean isStreamActive) {
         this.streamAddress = streamAddress;
@@ -51,7 +51,7 @@ public class VideoCaptureImpl implements Runnable {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd--HH-mm-ss");
         String dateTimeNow = dateTimeFormatter.format(LocalDateTime.now());
-        String videoPath = SAVED_VIDEOS_DIRECTORY + File.separator + "saved-videos" + File.separator + dateTimeNow;
+        videoPath = SAVED_VIDEOS_DIRECTORY + File.separator + "saved-videos" + File.separator + dateTimeNow;
         File directory = new File(videoPath);
         if(!directory.exists()){
             try {
