@@ -155,7 +155,8 @@ public class MainFormActions implements Actions {
         String vehicleName = (whichVehicle == 1) ? mainForm.getTxtVehicleName().getText() : mainForm.getTxtVehicleNameVehicle2().getText();
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(vehicleIp)
-                .name(vehicleName + "$" + whichVehicle)
+                .name(vehicleName)
+                .whichVehicle(whichVehicle)
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.CONNECTED)
                 .build();
@@ -187,7 +188,8 @@ public class MainFormActions implements Actions {
             return;
         VehicleDto vehicleDto = VehicleDto.builder()
                 .ipAddress(storedVehicleIp)
-                .name(storedVehicleName + "$" + whichVehicle)
+                .name(storedVehicleName)
+                .whichVehicle(whichVehicle)
                 .connectionDate(LocalDateTime.now())
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
@@ -203,7 +205,7 @@ public class MainFormActions implements Actions {
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
                 disableMockLidarAndPointCloudStreamClients();
-            if(vehicleConnectResponse.getVid() == storedVehicleId) // TODO - spr. dlaczego kiedys przy jakiejs probie strzal pod API sterujace nie zwracal prawidlowego id pojazdu tylko vid=0 (-> performDelete)
+            /*if(vehicleConnectResponse.getVid() == storedVehicleId)*/ // TODO - check why sometimes the response does not contain correct vehicle id but vid=0 instead (-> performDelete)
                 setLabelsAfterDisconnect(whichVehicle);
         } catch (UnirestException e) {
             e.printStackTrace();

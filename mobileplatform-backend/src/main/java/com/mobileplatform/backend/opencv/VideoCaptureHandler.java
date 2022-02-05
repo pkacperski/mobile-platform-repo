@@ -40,6 +40,8 @@ public class VideoCaptureHandler {
         // only accepting ip addresses in form: "http://" + <ip address core> + ":" + <port number> + "/" + <suffix>
         String streamAddressCore = "rtmp://" + extractIpAddressCore(vehicleAddress) + ":1935/live";
         String[] streamKeys = {"/rgb", "/depth", "/third"};
+        if(whichVehicle == 0)
+            whichVehicle = 1; // to avoid ambiguity in indexing vehicle numbers (should be starting from 1 and not from 0)
         for (int i = 0; i < streamsPerVehicleCount; i++) {
             // whichVehicle variable determines on which FE screen the stream will be available. By default, the first streams for both vehicles are active
             videoCaptureImpls[(whichVehicle - 1) * streamsPerVehicleCount + i] = new VideoCaptureImpl(streamAddressCore + streamKeys[i], videoServers.get(whichVehicle - 1),
@@ -51,6 +53,8 @@ public class VideoCaptureHandler {
     }
 
     public static void disableVideoStreams(int whichVehicle) {
+        if(whichVehicle == 0)
+            whichVehicle = 1; // to avoid ambiguity in indexing vehicle numbers (should be starting from 1 and not from 0)
         for (int i = 0; i < streamsPerVehicleCount; i++) {
             videoCaptureImpls[(whichVehicle - 1) * streamsPerVehicleCount + i] = null;
             videoCaptureImplThreads[(whichVehicle - 1) * streamsPerVehicleCount + i].interrupt();
@@ -93,11 +97,13 @@ public class VideoCaptureHandler {
 
     private static String extractIpAddressCore(String vehicleAddress) {
         String ipAddressCore = vehicleAddress.substring(vehicleAddress.indexOf("http://") + "http://".length());
-        ipAddressCore = ipAddressCore.substring(0, ipAddressCore.indexOf(':'));
+        ipAddressCore = (ipAddressCore.indexOf(':') != -1) ? ipAddressCore.substring(0, ipAddressCore.indexOf(':')) : ipAddressCore;
         return ipAddressCore;
     }
 
     public static void handleChangingActiveStream(int whichVehicle, int whichStream) {
+        if(whichVehicle == 0)
+            whichVehicle = 1; // to avoid ambiguity in indexing vehicle numbers (should be starting from 1 and not from 0)
         // handling a message about which stream to activate - turn off all streams for the particular vehicle and then turn on the one from the message
         for(int i = 0; i < vehiclesCount; i++) {
             if(whichVehicle == i+1 && whichStream <= streamsPerVehicleCount) {

@@ -13,6 +13,7 @@ public class VehicleDto implements Serializable {
     private Long id;
     private String name;
     private String ipAddress;
+    private int whichVehicle;
     private LocalDateTime connectionDate;
     private VehicleConnectionStatus connectionStatus;
 }

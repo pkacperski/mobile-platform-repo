@@ -32,16 +32,17 @@ public class VehicleController {
     public Vehicle save(@RequestBody Vehicle vehicle) {
 
         if(vehicle.getConnectionStatus().equals(VehicleConnectionStatus.CONNECTED)) {
-            int whichVehicle = Integer.parseInt(vehicle.getName().substring(vehicle.getName().indexOf('$') + 1));
-            VideoCaptureHandler.createVideoStreams(whichVehicle, vehicle.getIpAddress());
+            VideoCaptureHandler.createVideoStreams(vehicle.getWhichVehicle(), vehicle.getIpAddress());
             if(IS_TEST_LIDAR_AND_PC_STREAMING)
                 VideoCaptureHandler.createMockLidarAndPointCloudStreams();
         }
         else if(vehicle.getConnectionStatus().equals(VehicleConnectionStatus.DISCONNECTED)) {
-            int whichVehicle = Integer.parseInt(vehicle.getName().substring(vehicle.getName().indexOf('$') + 1));
-            VideoCaptureHandler.disableVideoStreams(whichVehicle);
+            VideoCaptureHandler.disableVideoStreams(vehicle.getWhichVehicle());
             if(IS_TEST_LIDAR_AND_PC_STREAMING)
                 VideoCaptureHandler.disableLidarAndPointCloudMockStreams();
+        }
+        else { // another connection status
+            vehicle.setConnectionStatus(VehicleConnectionStatus.UNDEFINED);
         }
 
         return vehicleService.save(vehicle);

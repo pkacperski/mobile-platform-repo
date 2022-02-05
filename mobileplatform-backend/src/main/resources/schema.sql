@@ -12,6 +12,7 @@ CREATE TABLE public.vehicle (
     id bigint NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(255),
     ip_address varchar(255),
+    which_vehicle varchar(8),
     connection_date timestamp without time zone,
     connection_status varchar(32) -- VehicleConnectionStatus class is an enum, but storing the value in a string seems to work
 );

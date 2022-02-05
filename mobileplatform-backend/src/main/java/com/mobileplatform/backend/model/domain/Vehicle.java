@@ -25,6 +25,9 @@ public class Vehicle {
     @Column(name = "ip_address")
     private String ipAddress;
 
+    @Column(name = "which_vehicle")
+    private int whichVehicle;
+
     @Column(name = "connection_date")
     private LocalDateTime connectionDate;
 

@@ -42,7 +42,7 @@ public class TelemetryClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        System.out.println("Received message: " + message);
+        System.out.println("Received message");
 
         if(isDiagnosticData(message))
             handleMessageWithDiagnosticData(message);
