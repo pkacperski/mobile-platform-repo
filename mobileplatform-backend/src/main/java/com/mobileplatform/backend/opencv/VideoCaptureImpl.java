@@ -77,7 +77,7 @@ public class VideoCaptureImpl implements Runnable {
 
         while(!Thread.interrupted() && videoCapture.read(frame)) {
             if(frame.width() > 0 && frame.height() > 0) {
-                if(!IS_TEST_ENV) { // only save videos on local drive when in real environment
+                if(!IS_SAVING_VIDEOS) { // only save videos on local drive when in real environment
                     Mat resizedFrame = new Mat();
                     Imgproc.resize(frame, resizedFrame, videoSaveSize);
                     videoWriter.write(resizedFrame);
