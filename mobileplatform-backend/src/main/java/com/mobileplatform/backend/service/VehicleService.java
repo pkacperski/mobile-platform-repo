@@ -24,9 +24,7 @@ public class VehicleService {
 
     public Vehicle save(Vehicle vehicle) {
 
-        // TODO - handle adding new vehicle - send data to a new address(?), display data in a new tab
         TelemetryServer.getInstance().send(TelemetryServer.getGson().toJson(vehicle));
-
         return vehicleRepository.save(vehicle);
     }
 }

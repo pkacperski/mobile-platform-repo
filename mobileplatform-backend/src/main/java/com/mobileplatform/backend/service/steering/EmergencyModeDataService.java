@@ -17,7 +17,6 @@ public class EmergencyModeDataService {
         return emergencyModeDataRepository.findTopByOrderByIdDesc(vehicleId);
     }
 
-    // return EmergencyModeData object instead of ResponseEntity<String> to make frontend able to parse the returned object (every time frontend executes performPost, a data model object should be returned)
     public EmergencyModeData save(@Valid EmergencyModeData emergencyModeData) {
         return emergencyModeDataRepository.save(emergencyModeData);
     }

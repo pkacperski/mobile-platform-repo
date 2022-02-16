@@ -13,5 +13,12 @@ public class LidarReadingDto implements Serializable {
     private Long id;
     private Long vehicleId;
     private LocalDateTime readingDate;
-    private String lidarDistancesReading; // traktowac jako String rozdzielony np. srednikami (w BD varchar(10000)), zeby uzywac to rozbic na liste za pomoca string.split()
+
+    /*
+     * Similar as with PointCloud - treat this as an enormous string split by newline characters and commas:
+     * PostgreSQL - text - https://www.postgresqltutorial.com/postgresql-char-varchar-text/ https://dba.stackexchange.com/questions/189876/size-limit-of-character-varying-postgresql,
+     * H2 - can handle maximally 1048576 characters in dev mode - http://www.h2database.com/html/datatypes.html
+     * and after receiving, you can split() the received string to a List<Float> or List<Double>
+     * */
+    private String lidarDistancesReading;
 }

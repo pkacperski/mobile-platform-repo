@@ -23,8 +23,8 @@ public class VehicleLocationPane extends JPanel {
 
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.drawLine(getWidth()/2, 0, getWidth()/2, getHeight()); // os Y
-        g2d.drawLine(0, getHeight()/2, getWidth(), getHeight()/2); // os X
+        g2d.drawLine(getWidth()/2, 0, getWidth()/2, getHeight()); // Y axis
+        g2d.drawLine(0, getHeight()/2, getWidth(), getHeight()/2); // X axis
         g2d.dispose();
 
         g2d = (Graphics2D) g.create();
@@ -64,7 +64,7 @@ public class VehicleLocationPane extends JPanel {
     }
 
     private void addPointToPath(Graphics2D g2d, GeneralPath path, double realXCoordinate, double realYCoordinate) {
-        path.lineTo(realXCoordinate, realYCoordinate); // TODO - ujemne wspolrzedne!!!
+        path.lineTo(realXCoordinate, realYCoordinate); // TODO - handle negative coordinates
         Polygon polygon = new Polygon();
         polygon.addPoint((int) realXCoordinate - 3, (int) realYCoordinate - 3);
         polygon.addPoint((int) realXCoordinate + 3, (int) realYCoordinate - 3);

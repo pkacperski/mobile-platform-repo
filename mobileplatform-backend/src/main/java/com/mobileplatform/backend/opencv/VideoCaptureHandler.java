@@ -10,7 +10,6 @@ public class VideoCaptureHandler {
 
     private static int vehiclesCount;
     private static int streamsPerVehicleCount;
-    private static VideoCaptureHandler videoCaptureHandler;
     private static ArrayList<VideoServer> videoServers;
     private static ArrayList<Thread> videoServerThreads;
     private static VideoCaptureImpl[] videoCaptureImpls;
@@ -27,7 +26,7 @@ public class VideoCaptureHandler {
 
     public static void initialize(int vehiclesCnt, int streamsPerVehicleCnt) {
 
-        videoCaptureHandler = new VideoCaptureHandler(vehiclesCnt, streamsPerVehicleCnt);
+        new VideoCaptureHandler(vehiclesCnt, streamsPerVehicleCnt);
 
         for (int i = 0; i < vehiclesCnt; i++) {
             videoServers.add(new VideoServer(WEBSOCKET_SERVER_IP_ADDRESS, VIDEO_STREAMS_PORT_NUMBERS[i]));
@@ -38,14 +37,13 @@ public class VideoCaptureHandler {
 
     public static void createVideoStreams(int whichVehicle, String vehicleAddress) {
         // only accepting ip addresses in form: "http://" + <ip address core> + ":" + <port number> + "/" + <suffix>
-        String streamAddressCore = "rtmp://" + extractIpAddressCore(vehicleAddress) + ":1935/live";
-        String[] streamKeys = {"/rgb", "/depth", "/third"};
+        String streamAddressCore = "rtmp://" + extractIpAddressCore(vehicleAddress) + ":1935/live"; // port 1935 is default for RTMP streams
         if(whichVehicle == 0)
             whichVehicle = 1; // to avoid ambiguity in indexing vehicle numbers (should be starting from 1 and not from 0)
         for (int i = 0; i < streamsPerVehicleCount; i++) {
             // whichVehicle variable determines on which FE screen the stream will be available. By default, the first streams for both vehicles are active
-            videoCaptureImpls[(whichVehicle - 1) * streamsPerVehicleCount + i] = new VideoCaptureImpl(streamAddressCore + streamKeys[i], videoServers.get(whichVehicle - 1),
-                    whichVehicle, (whichVehicle - 1) * streamsPerVehicleCount + i, false);
+            videoCaptureImpls[(whichVehicle - 1) * streamsPerVehicleCount + i] = new VideoCaptureImpl(streamAddressCore + VIDEO_STREAMS_KEYS[i],
+                    videoServers.get(whichVehicle - 1), whichVehicle, (whichVehicle - 1) * streamsPerVehicleCount + i, false);
             videoCaptureImplThreads[(whichVehicle - 1) * streamsPerVehicleCount + i] = new Thread(videoCaptureImpls[(whichVehicle - 1) * streamsPerVehicleCount + i]);
             videoCaptureImplThreads[(whichVehicle - 1) * streamsPerVehicleCount + i].start();
         }
@@ -88,12 +86,16 @@ public class VideoCaptureHandler {
     }
 
     public static void disableLidarAndPointCloudMockStreams() {
-        lidarMockVideoServer = null;
-        pointCloudMockVideoServer = null;
-        lidarMockVideoCaptureImpl = null;
-        pointCloudMockVideoCaptureImpl = null;
         lidarMockVideoCaptureThread.interrupt();
         pointCloudMockVideoCaptureThread.interrupt();
+        try {
+            lidarMockVideoServer.stop();
+            pointCloudMockVideoServer.stop();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        lidarMockVideoCaptureImpl = null;
+        pointCloudMockVideoCaptureImpl = null;
     }
 
     private static String extractIpAddressCore(String vehicleAddress) {
@@ -120,9 +122,4 @@ public class VideoCaptureHandler {
         }
     }
 
-    public static VideoCaptureHandler getInstance(int vehiclesCount, int streamsPerVehicleCount) {
-        if(videoCaptureHandler == null)
-            initialize(vehiclesCount, streamsPerVehicleCount);
-        return videoCaptureHandler;
-    }
 }

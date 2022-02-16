@@ -41,7 +41,7 @@ public class VehicleController {
             if(IS_TEST_LIDAR_AND_PC_STREAMING)
                 VideoCaptureHandler.disableLidarAndPointCloudMockStreams();
         }
-        else { // another connection status
+        else { // another or undefined connection status
             vehicle.setConnectionStatus(VehicleConnectionStatus.UNDEFINED);
         }
 

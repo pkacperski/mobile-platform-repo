@@ -15,7 +15,6 @@ import static com.mobileplatform.frontend.MobileplatformFrontend.*;
 
 public class VideoReceiveHandler {
 
-    private static VideoReceiveHandler videoReceiveHandler;
     private static ArrayList<VideoClient> videoClients;
     private static final MainForm mainForm = MainFormActions.getInstance().getMainForm();
 
@@ -25,7 +24,7 @@ public class VideoReceiveHandler {
 
     public static void initialize(int vehiclesCnt, String[] videoServerNames) {
 
-        videoReceiveHandler = new VideoReceiveHandler();
+        new VideoReceiveHandler();
         ArrayList<Thread> videoClientThreads = new ArrayList<>();
 
         for (int i = 0; i < vehiclesCnt; i++) {
@@ -61,16 +60,10 @@ public class VideoReceiveHandler {
     }
 
     public static void disableMockLidarAndPointCloudStreamClients() {
-        lidarMockVideoClient = null;
-        pointCloudMockVideoClient = null;
         lidarMockVideoReceiveThread.interrupt();
         pointCloudMockVideoReceiveThread.interrupt();
-    }
-
-    public static VideoReceiveHandler getInstance(int vehiclesCount, String[] streamsAddresses) {
-        if(videoReceiveHandler == null)
-            initialize(vehiclesCount, streamsAddresses);
-        return videoReceiveHandler;
+        lidarMockVideoClient.close();
+        pointCloudMockVideoClient.close();
     }
 
     private static void setStreamButtonsActive(int whichVehicle) {
@@ -90,7 +83,7 @@ public class VideoReceiveHandler {
         }
     }
 
-    // only for testing & demonstration purposes
+    // mocked occupancy map and point cloud visualisations - only for testing & demonstration purposes
     @Getter @Setter
     private static ImageIcon lidarImageIcon;
     @Getter @Setter

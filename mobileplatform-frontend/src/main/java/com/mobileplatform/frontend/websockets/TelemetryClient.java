@@ -90,18 +90,11 @@ public class TelemetryClient extends WebSocketClient {
         return telemetryClient;
     }
 
-    public static Gson getGson() {
-        if(gson == null) {
-            gson = Converters.registerLocalDateTime(new GsonBuilder()).create(); // To solve a problem with deserializing java.time.LocalDateTime by gson
-        }
-        return gson;
-    }
-
     public void sendMessage(String message) {
         send(message);
     }
 
-    // TODO zmienic to sprawdzanie - pola sa opcjonalne = dane moga przychodzic niekompletne i takie sprawdzanie nie przejdzie. rozw = obowiazkowa flaga z typem danej?
+    // TODO - extend this "parsing" method as data fields in each reading are optional
     private boolean isDiagnosticData(String message) {
         return message.contains("batteryChargeStatus");
     }
@@ -132,9 +125,11 @@ public class TelemetryClient extends WebSocketClient {
 
     private int findOnWhichTabIsVehicle(Long receivedVehicleId) {
         String firstTabVehicleIdText = mainForm.getLblVehicleId().getText();
-        Long firstTabVehicleId = (!firstTabVehicleIdText.contains("not connected") && !firstTabVehicleIdText.equals("")) ? Long.parseLong(firstTabVehicleIdText.substring(firstTabVehicleIdText.indexOf(':') + 2)) : -1;
+        Long firstTabVehicleId = (!firstTabVehicleIdText.contains("not connected") && !firstTabVehicleIdText.equals(""))
+                ? Long.parseLong(firstTabVehicleIdText.substring(firstTabVehicleIdText.indexOf(':') + 2)) : -1;
         String secondTabVehicleIdText = mainForm.getLblVehicleIdVehicle2().getText();
-        Long secondTabVehicleId = (!secondTabVehicleIdText.contains("not connected") && !secondTabVehicleIdText.equals("")) ? Long.parseLong(secondTabVehicleIdText.substring(secondTabVehicleIdText.indexOf(':') + 2)) : -1;
+        Long secondTabVehicleId = (!secondTabVehicleIdText.contains("not connected") && !secondTabVehicleIdText.equals(""))
+                ? Long.parseLong(secondTabVehicleIdText.substring(secondTabVehicleIdText.indexOf(':') + 2)) : -1;
         return (Objects.equals(receivedVehicleId, firstTabVehicleId) ? 1 : (Objects.equals(receivedVehicleId, secondTabVehicleId) ? 2 : -1));
     }
 
@@ -152,7 +147,8 @@ public class TelemetryClient extends WebSocketClient {
 
     private void setDiagnosticDataValuesOnScreen(DiagnosticDataDto diagnosticDataDto, int whichTabVehicle) {
 
-        if(whichTabVehicle == 1 && (IS_TEST_ENV) || !mainForm.getBtnConnectVehicle().isEnabled()) { // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
+        // only change the information displayed when the connection is active (TODO - do not receive incoming data for inactive vehicles)
+        if(whichTabVehicle == 1 && (IS_TEST_ENV) || !mainForm.getBtnConnectVehicle().isEnabled()) {
 
             int batteryPercentage = (diagnosticDataDto.getBatteryChargeStatus() < 1.0)
                     ? (int)(diagnosticDataDto.getBatteryChargeStatus() * 100) : (diagnosticDataDto.getBatteryChargeStatus() <= 100)
@@ -642,8 +638,7 @@ public class TelemetryClient extends WebSocketClient {
     private void handleMessageWithVehicleData(String message) {
         try {
             VehicleDto vehicleDto = gson.fromJson(message, VehicleDto.class);
-            System.out.println(vehicleDto); // TODO - remove handling message with vehicle data if not necessary (vehicle connection status updated in MainFormActions)
-            // TODO - save vehicle ID somewhere?
+            System.out.println(vehicleDto); // TODO - remove handling message with vehicle data if not necessary (vehicle connection status updated in MainFormActions); save vehicle ID somewhere?
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }

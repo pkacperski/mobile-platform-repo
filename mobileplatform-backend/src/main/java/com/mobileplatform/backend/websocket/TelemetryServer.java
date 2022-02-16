@@ -45,7 +45,7 @@ public class TelemetryServer extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Received message from "	+ conn.getRemoteSocketAddress() + ": " + message);
         // receiving a message about which stream to activate - turn off all streams for the particular vehicle and then turn on the one from the message
-        if(message.contains("stream") && message.contains("vehicle")) {
+        if(message.contains("stream") && message.contains("vehicle") && message.contains(":") && message.contains(".")) {
             int whichVehicle = Integer.parseInt(message.substring(message.indexOf(':') + 2, message.indexOf(':') + 3));
             int whichStream = Integer.parseInt(message.substring(message.indexOf('.') - 1, message.indexOf('.')));
             VideoCaptureHandler.handleChangingActiveStream(whichVehicle, whichStream);

@@ -27,6 +27,7 @@ import static com.mobileplatform.frontend.opencv.VideoReceiveHandler.disableMock
 
 @Log
 public class MainFormActions implements Actions {
+
     private static MainFormActions mainFormActions;
 
     private @Getter MainForm mainForm;
@@ -164,7 +165,7 @@ public class MainFormActions implements Actions {
             VehicleDto vehicleDtoResponse = vehicleDtoRestHandler.performPost(VEHICLE_PATH, gson.toJson(vehicleDto), APPLICATION_JSON_CONTENT_TYPE);
             if(vehicleDtoResponse.getId() != null) {
                 VehicleConnectRequest vehicleConnectRequest = VehicleConnectRequest.builder()
-                        .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD)
+                        .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD) // TODO - check !!!
                         .port(TELEMETRY_API_PORT_NUMBER)
                         .vid(vehicleDtoResponse.getId().intValue())
                         .mgc(60949)
@@ -194,7 +195,7 @@ public class MainFormActions implements Actions {
                 .connectionStatus(VehicleConnectionStatus.DISCONNECTED)
                 .build();
         VehicleConnectRequest vehicleDisconnectRequest = VehicleConnectRequest.builder() // endpoint DELETE /connect has the same body as POST /connect - no need to create a new Dto or a new RestHandler
-                .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD)
+                .addr(IS_TEST_ENV ? TELEMETRY_API_SERVER_IP_TEST : TELEMETRY_API_SERVER_IP_PROD) // TODO - check !!!
                 .port(TELEMETRY_API_PORT_NUMBER)
                 .vid(storedVehicleId)
                 .mgc(15061)
@@ -205,8 +206,7 @@ public class MainFormActions implements Actions {
             VehicleConnectResponse vehicleConnectResponse = vehicleConnectResponseRestHandler.performDelete(storedVehicleIp + "/connect", gson.toJson(vehicleDisconnectRequest), APPLICATION_JSON_CONTENT_TYPE);
             if(IS_TEST_ENV && IS_TEST_LIDAR_AND_PC_STREAMING)
                 disableMockLidarAndPointCloudStreamClients();
-            /*if(vehicleConnectResponse.getVid() == storedVehicleId)*/ // TODO - check why sometimes the response does not contain correct vehicle id but vid=0 instead (-> performDelete)
-                setLabelsAfterDisconnect(whichVehicle);
+            setLabelsAfterDisconnect(whichVehicle); /*if(vehicleConnectResponse.getVid() == storedVehicleId)*/ // TODO - check why sometimes the response does not contain correct vehicle id but vid=0 instead (-> performDelete)
         } catch (UnirestException e) {
             e.printStackTrace();
         }
