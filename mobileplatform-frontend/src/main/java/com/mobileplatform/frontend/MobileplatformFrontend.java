@@ -17,7 +17,7 @@ public class MobileplatformFrontend {
     public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' when working with vehicles in real environment
     public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = true; // only 'true' for testing & demonstration purposes during development
     public final static String TELEMETRY_API_SERVER_IP_TEST = "localhost"; // IP address of the telemetry server for testing purposes
-    public final static String TELEMETRY_API_SERVER_IP_PROD = "10.0.0.201"; // TODO - check !!!
+    public final static String TELEMETRY_API_SERVER_IP_PROD = "10.0.0.201"; // IP address of the telemetry server in target configuration in local network (makes it possible to launch BE & FE on different computers, if needed)
     public final static int TELEMETRY_API_PORT_NUMBER = 8080; // port number used to send steering data to vehicle
     public final static int TELEMETRY_SERVER_PORT_NUMBER = 8081; // by default, port 8080 used for sending steering data, 8081 - for receiving telemetry data, 8082 and above for video streams
     public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams (from more vehicles, simultaneously)

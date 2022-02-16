@@ -72,7 +72,7 @@ public class VideoCaptureImpl implements Runnable {
         Size videoSaveSize = new Size(Math.round(originalVideoRatio * SAVED_VIDEOS_HEIGHT), SAVED_VIDEOS_HEIGHT);
         Mat frame = new Mat();
 
-        String videoFileName = videoPath + File.separator + "video-vehicle-" + whichVehicle + "-stream-" + streamNumber + ".avi"; // TODO - streamNumber+1 i check
+        String videoFileName = videoPath + File.separator + "video-vehicle-" + whichVehicle + "-stream-" + (streamNumber + 1) + ".avi";
         VideoWriter videoWriter = new VideoWriter(videoFileName, fourcc, fps, videoSaveSize, true);
 
         while(!Thread.interrupted() && videoCapture.read(frame)) {
