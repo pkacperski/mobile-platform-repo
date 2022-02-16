@@ -1,6 +1,11 @@
 # Aplikacja kokpitu sterowniczego
 Projekt aplikacji kokpitu sterowniczego, realizowany w Zespole Platformy Mobilnej w Instytucie Automatyki i Informatyki Stosowanej Politechniki Warszawskiej.
 
+## Licencja
+Aplikacja podlega warunkom licencji MIT License (https://choosealicense.com/licenses/mit/).
+
+Treść licencji i jej warunki zostały opisane w pliku LICENSE.txt (https://github.com/pkacperski/mobile-platform-repo/blob/develop/LICENSE.txt).
+
 ### Wymagania do uruchomienia aplikacji
 - Java Development Kit (JDK) w wersji 13 lub wyższej - https://www.oracle.com/java/technologies/downloads/
 - Maven w wersji 3 lub wyższej - https://maven.apache.org/download.cgi 
