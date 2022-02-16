@@ -12,7 +12,7 @@ public class MobileplatformBackendApplication {
 	final static int VEHICLES_COUNT = 1; // TODO - set the appropriate vehicles count
 	final static int STREAMS_PER_VEHICLE_COUNT = 2; // TODO - set the appropriate streams per vehicle count
 	public final static boolean IS_SAVING_VIDEOS = true; // TODO - set to 'true' to save all video data coming from vehicles on hard disk; to 'false' not to save video data
-	public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = true; // only 'true' for testing & demonstration purposes during development
+	public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = false; // only 'true' for testing & demonstration purposes during development
 	public final static String WEBSOCKET_SERVER_IP_ADDRESS = "localhost"; // WebSocket server address for exchanging data between backend and frontend applications
 	public final static int TELEMETRY_SERVER_PORT_NUMBER = 8081; // by default, port 8080 used for serving backend API services, 8081 - for telemetry, 8082 and above for video streams
 	public final static int[] VIDEO_STREAMS_PORT_NUMBERS = {8082, 8083}; // possible to add more ports to handle more video streams (from more vehicles, simultaneously)

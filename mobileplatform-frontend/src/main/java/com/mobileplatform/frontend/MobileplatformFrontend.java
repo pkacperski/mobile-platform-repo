@@ -14,8 +14,8 @@ public class MobileplatformFrontend {
 
     public final static int VEHICLES_COUNT = 1; // TODO - set the appropriate vehicles count (same setting as in BE application)
     public final static int STREAMS_PER_VEHICLE_COUNT = 2; // TODO - set the appropriate streams per vehicle count (same setting as in BE application)
-    public final static boolean IS_TEST_ENV = true; // TODO - set to 'false' when working with vehicles in real environment
-    public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = true; // only 'true' for testing & demonstration purposes during development
+    public final static boolean IS_TEST_ENV = false; // TODO - set to 'false' when working with vehicles in real environment
+    public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = false; // only 'true' for testing & demonstration purposes during development
     public final static String TELEMETRY_API_SERVER_IP_TEST = "localhost"; // IP address of the telemetry server for testing purposes
     public final static String TELEMETRY_API_SERVER_IP_PROD = "10.0.0.201"; // IP address of the telemetry server in target configuration in local network (makes it possible to launch BE & FE on different computers, if needed)
     public final static int TELEMETRY_API_PORT_NUMBER = 8080; // port number used to send steering data to vehicle
