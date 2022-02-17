@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MobileplatformBackendApplication {
 
-	final static int VEHICLES_COUNT = 1; // TODO - set the appropriate vehicles count
+	final static int VEHICLES_COUNT = 2; // TODO - set the appropriate vehicles count
 	final static int STREAMS_PER_VEHICLE_COUNT = 2; // TODO - set the appropriate streams per vehicle count
 	public final static boolean IS_SAVING_VIDEOS = true; // TODO - set to 'true' to save all video data coming from vehicles on hard disk; to 'false' not to save video data
 	public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = false; // only 'true' for testing & demonstration purposes during development

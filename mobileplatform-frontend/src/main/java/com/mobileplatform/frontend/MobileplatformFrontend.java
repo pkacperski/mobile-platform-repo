@@ -12,7 +12,7 @@ import java.util.Objects;
 @Log
 public class MobileplatformFrontend {
 
-    public final static int VEHICLES_COUNT = 1; // TODO - set the appropriate vehicles count (same setting as in BE application)
+    public final static int VEHICLES_COUNT = 2; // TODO - set the appropriate vehicles count (same setting as in BE application)
     public final static int STREAMS_PER_VEHICLE_COUNT = 2; // TODO - set the appropriate streams per vehicle count (same setting as in BE application)
     public final static boolean IS_TEST_ENV = false; // TODO - set to 'false' when working with vehicles in real environment
     public final static boolean IS_TEST_LIDAR_AND_PC_STREAMING = false; // only 'true' for testing & demonstration purposes during development
