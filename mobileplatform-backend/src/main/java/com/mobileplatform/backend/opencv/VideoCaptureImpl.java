@@ -17,17 +17,6 @@ import java.time.format.DateTimeFormatter;
 
 import static com.mobileplatform.backend.MobileplatformBackendApplication.*;
 
-/*
- * Due to the lack of a working, official OpenCV dependency in Maven, the OpenCV module dependencies were added manually to IntelliJ instead of importing a Maven dependency.
- * Configuration steps (following https://www.youtube.com/watch?v=vLf3ZcFotyA):
- * 1) Download OpenCV 4.5.4 library from https://opencv.org/releases/ and extract the archive to a preferred location. Add the location to the PATH
- * 2) In your IDE, add opencv-454.jar file as a dependency and attach to it a .dll file from <your_opencv_installation_folder>/build/java folder:
- * 2.1) <your_opencv_installation_folder>/build/java/x64/opencv_454.dll if you are running on a 64-bit system
- * 2.2) <your_opencv_installation_folder>/build/java/x86/opencv_454.dll if you are running on a 32-bit system
- * You should then be able to run the application with full OpenCV support on your PC.
- * This configuration was tested with IntelliJ IDEA 2021.2.3 under Windows 10 64-bit.
- * */
-
 public class VideoCaptureImpl implements Runnable {
 
     private final String streamAddress;
