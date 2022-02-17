@@ -39,10 +39,9 @@ Następnie jest możliwe dodawanie danych testowych w narzędziu OpenAPI Swagger
 1. Pobranie i instalacja PostgreSQL: https://www.postgresql.org/download, a następnie dodanie folderu `bin` do zmiennej `PATH`  
 2. Utworzenie pustej bazy danych PostgreSQL (np. w programie DBeaver https://dbeaver.io/download)  
 Należy uruchomić program DBeaver i dodać nowe połączenie z bazą danych wybierając kolejno:  
-`File -> New -> DBeaver -> Database Connection -> Next -> PostgreSQL -> Next`  
-W polu `database` należy podać nazwę `mobileplatform`.  
-W polu `password` należy wpisać wybrane hasło do bazy danych i następnie to samo hasło ustawić w pliku `application.properties` w foilderze `mobileplatform-backend\src\main\resources\`. Reszta ustawień pozostaje niezmieniona.  
-Należy utworzyć bazę klikając `Finish`.  
+`File -> New -> DBeaver -> Database Connection -> PostgreSQL -> Next`  
+W polu `password` należy wpisać wybrane hasło do bazy danych i następnie to samo hasło ustawić w pliku `application.properties` w folderze `mobileplatform-backend\src\main\resources\`. Reszta ustawień pozostaje niezmieniona. Należy utworzyć połączenie klikając `Finish`.  
+Następnie należy kliknąć prawym przyciskiem myszy na nowo dodanym połączeniu i wybrać `Create -> Database`, a w polu `Database name:` wpisać `mobileplatform`.
 3. Sklonowanie repozytorium do wybranego folderu (lub pobranie i rozpakowanie paczki .zip z kodem spod adresu `https://github.com/pkacperski/mobile-platform-repo/tree/production`)  
 `git clone https://github.com/pkacperski/mobile-platform-repo.git`  
 4. Przejście do głównego folderu projektu  
