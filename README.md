@@ -1,4 +1,62 @@
-# Aplikacja kokpitu sterowniczego
+# Steering cockpit for an autonomous vehicle
+
+[PL] Wersja polska instrukcji poniżej
+
+Project of the steering cockpit application, made in the Mobile Platform Team at the Institute of Control and Computation Engineering (IAiIS) of the Warsaw University of Technology.
+
+## License
+
+The application is subject to the terms of the [MIT License](https://choosealicense.com/licenses/mit).
+The content of the license and its terms are described in the [LICENSE.txt](https://github.com/pkacperski/mobile-platform-repo/blob/develop/LICENSE.txt) file.
+
+## Requirements to run the application
+
+Before starting the application, install the following:
+- [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads) version 13 or higher
+- [Maven](https://maven.apache.org/download.cgi) version 3 or higher
+- [OpenCV](https://opencv.org/opencv-4-5-1) version 4.5.1
+
+and then add folders containing executable files (for Windows, e.g. `C:\Program Files\Java\jdk-13.0.2\bin` and `C:\Program Files\apache-maven-3.8.2\bin`) to the `PATH` environment variable.
+
+For the OpenCV library, add the following four folders from the installation folder to the `PATH` variable: `...\build\java`, `...\build\java\x64`, `...\build\x64\vc14\bin`, `...\build\x64\vc15\bin` for 64-bit operating system - for 32-bit operating system the last three folders should be selected from the path with the `x86` prefix instead of `x64`.
+To clone the repository in the command line, you must install the version control system [Git](https://git-scm.com/downloads).
+
+### Running the application in development (test) mode
+
+1. Clone the repository to the selected folder (or download and unpack the .zip package with the code)   
+`git clone https://github.com/pkacperski/mobile-platform-repo.git`
+2. Go to the main project folder   
+`cd mobile-platform-repo`
+3. Launch the backend application   
+`cd mobileplatform-backend`   
+`mvn spring-boot: run`
+4. Launch the frontend application (in a new tab / new terminal window)   
+`cd mobileplatform-frontend`   
+`mvn clean install`   
+`java -jar target\mobileplatform-frontend-1.0-SNAPSHOT.jar`
+
+Then it is possible to add test data in [OpenAPI Swagger Editor](https://swagger.io/tools/swagger-editor/download) or using [test data generator] (https://github.com/pawelzakieta97/platforma-mobile-control).
+
+### Running the application in a real environment in 'production' mode
+
+1. Download and install [PostgreSQL](https://www.postgresql.org/download), then add the `bin` folder to the `PATH` variable   
+2. Create an empty PostgreSQL database (e.g. in [DBeaver](https://dbeaver.io/download))   
+Run DBeaver and add a new connection to the database by selecting:   
+`File -> New -> DBeaver -> Database Connection -> PostgreSQL -> Next`   
+In the `password` field, enter the selected database password and then set the same password in the `application.properties` file in the `mobileplatform-backend\src\main\resources\` folder. The rest of the settings remain unchanged. Create a connection by clicking on 'Finish'.   
+Then right-click on the newly added connection and select `Create -> Database`, and in the `Database name:` field enter `mobileplatform`.
+3. Clone the repository to the selected folder (or download and unpack the .zip package with the code from the address `https://github.com/pkacperski/mobile-platform-repo/tree/production`)   
+`git clone https://github.com/pkacperski/mobile-platform-repo.git`
+4. Go to the main project folder   
+`cd mobile-platform-repo`
+5. Move to branch 'production'   
+`git checkout production`
+6. Launch the backend and frontend applications - the steps are the same as steps 3, 4 in the developer mode.
+
+**Before starting the application, please make sure that no process is occupying ports with numbers from 8080 to 8087.**
+Ports with these numbers must be free for the application to function properly
+
+# [PL] Aplikacja kokpitu sterowniczego dla pojazdu autonomicznego
 
 Projekt aplikacji kokpitu sterowniczego, realizowany w Zespole Platformy Mobilnej w Instytucie Automatyki i Informatyki Stosowanej Politechniki Warszawskiej.
 
